@@ -1,0 +1,75 @@
+import {createRequire} from 'node:module';
+import assert from 'node:assert/strict';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import * as C from '../dist/core.mjs';
+const require=createRequire(import.meta.url),{webkit}=require(process.env.BODYTRACK_PLAYWRIGHT??'playwright');
+const browser=await webkit.launch({headless:true});
+const context=await browser.newContext({viewport:{width:393,height:852},locale:'zh-CN',timezoneId:'Asia/Shanghai',acceptDownloads:true});
+const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+const artifacts=new URL('../artifacts/',import.meta.url);await mkdir(artifacts,{recursive:true});
+const nav=async id=>page.locator(`.bottomnav [data-page="${id}"]`).click();
+const click=async action=>page.locator(`[data-action="${action}"]:visible`).first().click();
+const dbRead=key=>page.evaluate(key=>new Promise((resolve,reject)=>{const r=indexedDB.open('bodytrack-local');r.onsuccess=()=>{const db=r.result,q=db.transaction('vault').objectStore('vault').get(key);q.onsuccess=()=>{resolve(q.result);db.close();};q.onerror=()=>reject(q.error);};}),key);
+const saveCardio=async()=>{await page.locator('[data-form="cardio"] [type="submit"]').click();await page.locator('#modal').waitFor({state:'hidden'});};
+try{
+  await page.goto('http://127.0.0.1:4173');await page.waitForSelector('.dashboard');
+  await page.evaluate(async()=>await navigator.serviceWorker.ready);await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
+  const legacy=JSON.parse(await readFile(new URL('../dist/examples/backup-v1.json',import.meta.url),'utf8')).data;
+  legacy.sessions[0].status='inProgress';legacy.sessions[0].completedAt=null;
+  await page.evaluate(data=>new Promise((resolve,reject)=>{const r=indexedDB.open('bodytrack-local');r.onsuccess=()=>{const db=r.result,tx=db.transaction('vault','readwrite'),os=tx.objectStore('vault');os.put(data,'state');os.put([],'checkpoints');tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);};}),legacy);
+  await page.reload();await page.waitForSelector('.dashboard');
+  let state=await dbRead('state');assert.equal(state.dataVersion,2);assert.equal(state.revision,legacy.revision+1);assert.deepEqual(state.cardio,[]);
+  assert.deepEqual(state.sessions,legacy.sessions);assert.deepEqual(state.meals,legacy.meals);assert.deepEqual(state.plans,legacy.plans);
+  const snapshots=await dbRead('checkpoints');assert.equal(snapshots.length,1);assert.deepEqual(snapshots[0].data,legacy);assert.match(snapshots[0].label,/升级前/);
+  console.log('PASS Durable v1 migration preserves existing records and an exact pre-upgrade snapshot');
+  await click('cardio');await page.locator('#f-durationMinutes').fill('20');await saveCardio();
+  state=await dbRead('state');assert.equal(state.cardio.length,1);assert.equal(state.cardio[0].durationMinutes,20);assert.equal(state.cardio[0].floors,null);assert.equal(state.cardio[0].effort,null);
+  assert.deepEqual(state.sessions,legacy.sessions);assert.deepEqual(C.nextOccurrence(state),C.nextOccurrence(legacy));assert.match(await page.locator('.cardio-card').innerText(),/20 分钟/);
+  const original=C.clone(state.cardio[0]);
+  await nav('training');await page.locator('[data-training="cardio"]').click();assert.equal(await page.locator('.cardio-entry').count(),1);
+  await click('edit-cardio');await page.locator('#f-durationMinutes').fill('25.5');await page.locator('#f-mode').selectOption('stair-machine');
+  await page.locator('#modal .inline-help > summary').click();await page.locator('#f-floors').fill('40');await page.locator('#f-level').fill('6');await page.locator('#f-effort').selectOption('moderate');await page.locator('#f-notes').fill('纯虚构有氧验证记录');await saveCardio();
+  state=await dbRead('state');assert.equal(state.cardio[0].id,original.id);assert.equal(state.cardio[0].createdAt,original.createdAt);assert.equal(state.cardio[0].level,6);assert.equal(state.cardio[0].floors,40);
+  assert.deepEqual(state.sessions,legacy.sessions);
+  await page.screenshot({path:fileURLToPath(new URL('cardio-iphone.png',artifacts)),fullPage:true});
+  console.log('PASS Quick duration entry and optional stair-machine details edit without changing the strength cycle');
+  await context.setOffline(true);await page.reload();await page.waitForSelector('.dashboard');assert.match(await page.locator('.cardio-card').innerText(),/25.5 分钟/);
+  await click('cardio');await page.locator('#f-durationMinutes').fill('10');await page.locator('#f-date').fill(C.addDays(C.dateKey(),-1));await saveCardio();
+  await page.reload();await page.waitForSelector('.dashboard');state=await dbRead('state');assert.equal(state.cardio.length,2);assert.equal(state.cardio[1].durationMinutes,10);assert.deepEqual(state.sessions,legacy.sessions);
+  assert.equal((await dbRead('checkpoints')).filter(x=>x.label.includes('升级前')).length,1,'Reopening must not repeat the migration');
+  await context.setOffline(false);await nav('trends');assert.match(await page.locator('body').innerText(),/2 次 · 35.5 分钟/);
+  console.log('PASS Offline reload and cardio writes persist, with actual minutes included in trends');
+  await nav('profile');await click('export-records');await page.locator('#f-format').selectOption('cardio');
+  let pending=page.waitForEvent('download');await page.locator('[data-form="export"] [type="submit"]').click();let downloaded=await pending;const csvPath=fileURLToPath(new URL('cardio-test.csv',artifacts));await downloaded.saveAs(csvPath);
+  const csv=await readFile(csvPath,'utf8');assert.match(csv,new RegExp(original.id));assert.match(csv,/25.5/);assert.match(csv,/楼梯机/);
+  pending=page.waitForEvent('download');await click('backup');downloaded=await pending;const backupPath=fileURLToPath(new URL('cardio-backup-test.json',artifacts));await downloaded.saveAs(backupPath);const backup=C.parseBackup(await readFile(backupPath,'utf8'));assert.equal(backup.cardio.length,2);
+  console.log('PASS Cardio CSV and complete JSON backup contain stable IDs and actual cardio metrics');
+  // Check an independent browser database can restore the new backup.
+  const fresh=await browser.newContext({viewport:{width:393,height:852},locale:'zh-CN'}),restored=await fresh.newPage();
+  await restored.goto('http://127.0.0.1:4173');await restored.waitForSelector('.dashboard');await restored.locator('.bottomnav [data-page="profile"]').click();
+  const chooser=restored.waitForEvent('filechooser');await restored.locator('[data-action="restore"]').click();await (await chooser).setFiles(backupPath);
+  await restored.locator('[name="confirmed"]').check();await restored.locator('[data-form="confirm-restore"] [type="submit"]').click();await restored.locator('#modal').waitFor({state:'hidden'});
+  await restored.locator('.bottomnav [data-page="training"]').click();await restored.locator('[data-training="cardio"]').click();assert.equal(await restored.locator('.cardio-entry').count(),2);await fresh.close();
+  // Deletion updates totals without affecting strength, then restore the old v1 checkpoint.
+  await nav('training');await page.locator('[data-training="cardio"]').click();await click('delete-cardio');await click('delete-cardio-confirm');await page.locator('#modal').waitFor({state:'hidden'});
+  state=await dbRead('state');assert.equal(state.cardio.length,1);assert.deepEqual(state.sessions,legacy.sessions);
+  await nav('profile');await click('checkpoints');await page.locator(`[data-action="restore-checkpoint"][data-id="${snapshots[0].id}"]`).click();
+  await page.locator('[name="confirmed"]').check();await page.locator('[data-form="confirm-restore"] [type="submit"]').click();await page.locator('#modal').waitFor({state:'hidden'});
+  state=await dbRead('state');assert.equal(state.dataVersion,2);assert.deepEqual(state.cardio,[]);assert.deepEqual(state.sessions,legacy.sessions);
+  console.log('PASS New backups restore, delete preserves strength, and pre-upgrade v1 checkpoints remain recoverable');
+  await nav('training');await page.locator('[data-training="cardio"]').click();await click('cardio');await page.locator('#f-mode').selectOption('stair-machine');await page.locator('#modal .inline-help > summary').click();await page.locator('#f-level').fill('7');await page.locator('#f-mode').selectOption('stairs');assert(await page.locator('#f-level').isDisabled());assert.equal(await page.locator('#f-level').inputValue(),'');
+  for(const width of [320,393,430]){await page.setViewportSize({width,height:852});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
+  await page.setViewportSize({width:393,height:852});await page.screenshot({path:fileURLToPath(new URL('cardio-form-iphone.png',artifacts)),fullPage:true});
+  assert.deepEqual(errors,[]);console.log('PASS Mobile layout, independent optional fields and no JavaScript errors');
+  // Invalid legacy data must remain in place rather than being replaced by an empty vault.
+  const failureContext=await browser.newContext(),failurePage=await failureContext.newPage();
+  await failurePage.goto('http://127.0.0.1:4173');await failurePage.waitForSelector('.dashboard');
+  const invalid=C.clone(legacy);invalid.sessions[0].exercises[0].sets[0].reps=-1;
+  await failurePage.evaluate(data=>new Promise((resolve,reject)=>{const r=indexedDB.open('bodytrack-local');r.onsuccess=()=>{const db=r.result,tx=db.transaction('vault','readwrite'),os=tx.objectStore('vault');os.put(data,'state');os.put([],'checkpoints');tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);};}),invalid);
+  await failurePage.reload();await failurePage.waitForSelector('.error-screen');
+  const afterFailure=await failurePage.evaluate(()=>new Promise(resolve=>{const r=indexedDB.open('bodytrack-local');r.onsuccess=()=>{const db=r.result,tx=db.transaction('vault'),os=tx.objectStore('vault'),state=os.get('state'),snapshots=os.get('checkpoints');tx.oncomplete=()=>{resolve({state:state.result,snapshots:snapshots.result});db.close();};};}));
+  assert.deepEqual(afterFailure,{state:invalid,snapshots:[]});await failureContext.close();
+  console.log('PASS Failed migration leaves the original legacy database and snapshots unchanged');
+  await writeFile(new URL('cardio-browser-results.json',artifacts),JSON.stringify({engine:'WebKit',checks:7,legacyMigration:true,preUpgradeSnapshotRestored:true,offline:true,cycleUnchanged:true,errors},null,2));
+}finally{await browser.close();}

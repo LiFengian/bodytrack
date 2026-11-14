@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "BodyTrack records export v1.0",
+  "title": "BodyTrack records export v1.1",
   "description": "用于分析，不可用于恢复。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期，并非当时的历史数据库快照。",
   "type": "object",
   "required": [
@@ -13,6 +13,7 @@
     "cycleAdjustments",
     "cycle",
     "sessions",
+    "cardio",
     "meals",
     "body",
     "nutritionTargets",
@@ -22,7 +23,7 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": "1.0"
+      "const": "1.1"
     },
     "type": {
       "const": "bodytrack.records"
@@ -1174,6 +1175,123 @@
             }
           }
         }
+      },
+      "minItems": 0,
+      "maxItems": 100000
+    },
+    "cardio": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "date",
+          "mode",
+          "durationMinutes",
+          "floors",
+          "level",
+          "effort",
+          "notes",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "type": {
+            "const": "stair-climbing"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "mode": {
+            "enum": [
+              "stairs",
+              "stair-machine"
+            ]
+          },
+          "durationMinutes": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 1440
+          },
+          "floors": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "level": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "effort": {
+            "anyOf": [
+              {
+                "enum": [
+                  "easy",
+                  "moderate",
+                  "hard",
+                  "veryHard"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 10000
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "mode": {
+                  "const": "stairs"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "level": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
       },
       "minItems": 0,
       "maxItems": 100000

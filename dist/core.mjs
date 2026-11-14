@@ -1,6 +1,9 @@
 // Pure domain logic. No browser globals, network, or persistence side effects.
-export const DATA_VERSION = 1;
+export const DATA_VERSION = 2;
 export const SCHEMA_VERSION = '1.0';
+export const RECORDS_SCHEMA_VERSION = '1.1';
+export const BACKUP_SCHEMA_VERSION = '1.1';
+export const CARDIO_EFFORT = {easy:'轻松',moderate:'适中',hard:'吃力',veryHard:'很吃力'};
 export const NUTRIENTS = {
   kcal: ['热量', 'kcal'], protein: ['蛋白质', 'g'], carbs: ['碳水', 'g'], fat: ['脂肪', 'g'],
   fiber: ['膳食纤维', 'g'], sodium: ['钠', 'mg'], calcium: ['钙', 'mg'], iron: ['铁', 'mg'],
@@ -106,7 +109,36 @@ export function initialState(day=dateKey()) {
   const p=builtinPlan(day);
   return {dataVersion:DATA_VERSION,revision:0,createdAt:nowISO(),settings:{theme:'system',introSeen:false,reducedVolume:false,lastBackupAt:null,targets:{kcal:null,protein:null,carbs:null,fat:null,fiber:null,sodium:null}},
     plans:[{key:planKey(p),plan:p,importedAt:nowISO()}],activations:[{id:uid(),planKey:planKey(p),effectiveDate:day,createdAt:nowISO()}],
-    sessions:[],foods:[],meals:[],body:[],adjustments:{}};
+    sessions:[],cardio:[],foods:[],meals:[],body:[],adjustments:{}};
+}
+export function validateCardio(entry) {
+  const errors=[],check=(ok,message)=>{if(!ok)errors.push(message);};
+  if(!object(entry))return ['有氧记录无效'];
+  check(Object.keys(entry).every(k=>['id','type','date','mode','durationMinutes','floors','level','effort','notes','createdAt','updatedAt'].includes(k)),'有氧记录包含未知字段');
+  check(str(entry.id,200)&&entry.type==='stair-climbing','有氧类型或 ID 无效');
+  check(isDate(entry.date),'请选择有效的有氧日期');
+  check(['stairs','stair-machine'].includes(entry.mode),'请选择楼梯或楼梯机');
+  check(finite(entry.durationMinutes,.1,1440),'有氧时长需为 0.1–1440 分钟');
+  check(entry.floors===null||integer(entry.floors,1,10000),'累计层数需为 1–10000 的整数，或留空');
+  check(entry.level===null||entry.mode==='stair-machine'&&integer(entry.level,1,100),'器械档位仅用于楼梯机，范围 1–100');
+  check(entry.effort===null||Object.hasOwn(CARDIO_EFFORT,entry.effort),'吃力程度无效');
+  check(typeof entry.notes==='string'&&entry.notes.length<=10000,'有氧备注过长');
+  for(const key of ['createdAt','updatedAt'])check(typeof entry[key]==='string'&&/^\d{4}-\d{2}-\d{2}T/.test(entry[key])&&Number.isFinite(Date.parse(entry[key])),'有氧时间戳无效');
+  return errors;
+}
+export function saveCardio(state,values,id=null,today=dateKey()) {
+  const old=id===null?null:state.cardio.find(x=>x.id===id);
+  assert(id===null||old,'找不到这条有氧记录');
+  const stamp=nowISO(),entry={id:old?.id??uid(),type:'stair-climbing',date:values.date,mode:values.mode,durationMinutes:values.durationMinutes,
+    floors:values.floors??null,level:values.level??null,effort:values.effort??null,notes:values.notes??'',createdAt:old?.createdAt??stamp,updatedAt:stamp};
+  const errors=validateCardio(entry);assert(!errors.length,errors.join('\n'));assert(entry.date<=today,'有氧记录日期不能晚于今天');
+  if(old)state.cardio[state.cardio.indexOf(old)]=entry;else state.cardio.push(entry);
+  return entry;
+}
+export function cardioSummary(entries) {
+  const days=new Map();let totalMinutes=0;
+  for(const x of entries){totalMinutes+=x.durationMinutes;days.set(x.date,(days.get(x.date)??0)+x.durationMinutes);}
+  return {count:entries.length,totalMinutes,daily:[...days].sort(([a],[b])=>a.localeCompare(b)).map(([date,minutes])=>({date,minutes}))};
 }
 export function activeActivation(state, day=dateKey()) {
   return state.activations.filter(a=>a.effectiveDate<=day).sort((a,b)=>a.effectiveDate.localeCompare(b.effectiveDate)).at(-1) ?? null;
@@ -250,8 +282,8 @@ export function composeRecipe(name,source,ingredients,finalGrams) {
 }
 export function validateState(s) {
   assert(object(s)&&s.dataVersion===DATA_VERSION,'不支持的数据版本');
-  assert(Object.keys(s).every(k=>['dataVersion','revision','createdAt','settings','plans','activations','sessions','foods','meals','body','adjustments'].includes(k)),'备份包含无法识别的顶层字段，请检查数据版本');
-  for(const key of ['plans','activations','sessions','foods','meals','body']) assert(Array.isArray(s[key])&&s[key].length<=100000,`${key} 数据无效或过多`);
+  assert(Object.keys(s).every(k=>['dataVersion','revision','createdAt','settings','plans','activations','sessions','cardio','foods','meals','body','adjustments'].includes(k)),'备份包含无法识别的顶层字段，请检查数据版本');
+  for(const key of ['plans','activations','sessions','cardio','foods','meals','body']) assert(Array.isArray(s[key])&&s[key].length<=100000,`${key} 数据无效或过多`);
   assert(s.plans.length>0&&s.activations.length>0&&integer(s.revision,0,1e12),'备份缺少计划、启用记录或修订号');
   assert(object(s.settings)&&['light','dark','system'].includes(s.settings.theme)&&typeof s.settings.introSeen==='boolean'&&typeof s.settings.reducedVolume==='boolean'&&object(s.settings.targets),'设置无效');
   for(const [k,v] of Object.entries(s.settings.targets)) assert(k in NUTRIENTS && (v===null||finite(v)), '营养目标无效');
@@ -260,6 +292,7 @@ export function validateState(s) {
   const allIds=[];
   const addId = id => {assert(str(id,200),'记录缺少唯一 ID');allIds.push(id);};
   const keys=new Set();
+  for(const entry of s.cardio){addId(entry.id);const errors=validateCardio(entry);assert(!errors.length,errors.join('\n'));}
   for(const p of s.plans) {assert(object(p)&&!validatePlan(p.plan).length&&p.key===planKey(p.plan),'备份内计划无效');assert(!keys.has(p.key),'计划版本重复');keys.add(p.key);}
   for(const a of s.activations) {addId(a.id);assert(keys.has(a.planKey)&&isDate(a.effectiveDate),'启用记录无效');}
   for(const item of s.sessions) {
@@ -299,15 +332,21 @@ export function validateState(s) {
   return s;
 }
 export function migrateState(s) {
-  // v1 is the initial schema. Future migrations must be sequential and lossless.
-  assert(s?.dataVersion===1,'数据版本高于或不同于当前版本，请升级应用；未修改本地数据');
+  assert(s?.dataVersion===1||s?.dataVersion===DATA_VERSION,'数据版本高于或不同于当前版本，请升级应用；未修改本地数据');
+  if(s.dataVersion===1){
+    assert(!Object.hasOwn(s,'cardio'),'版本 1 数据不应包含有氧字段，请检查备份版本');
+    // Never mutate the supplied backup or the pre-upgrade snapshot.
+    return validateState({...clone(s),dataVersion:2,cardio:[]});
+  }
   return validateState(s);
 }
-export function createBackup(state) {validateState(state);return {schemaVersion:SCHEMA_VERSION,type:'bodytrack.backup',exportedAt:nowISO(),data:clone(state)};}
+export function createBackup(state) {validateState(state);return {schemaVersion:BACKUP_SCHEMA_VERSION,type:'bodytrack.backup',exportedAt:nowISO(),data:clone(state)};}
 export function parseBackup(text) {
   assert(typeof text==='string'&&text.length<=50_000_000,'备份超过 50 MB');
   let data;try{data=JSON.parse(text);}catch{throw new Error('备份 JSON 格式无效');}
-  assert(data?.type==='bodytrack.backup'&&data.schemaVersion===SCHEMA_VERSION,'请选择 BodyTrack 完整备份，分析导出不能用于恢复');
+  assert(data?.type==='bodytrack.backup'&&['1.0',BACKUP_SCHEMA_VERSION].includes(data.schemaVersion),'请选择 BodyTrack 完整备份，分析导出不能用于恢复');
+  assert(data.schemaVersion!=='1.0'||data.data?.dataVersion===1,'旧备份 Schema 与数据版本不匹配');
+  assert(data.schemaVersion!=='1.1'||data.data?.dataVersion===2,'备份 Schema 与数据版本不匹配');
   return migrateState(data.data);
 }
 export function exportRecords(state,from,to) {
@@ -318,9 +357,9 @@ export function exportRecords(state,from,to) {
   const dates=[...new Set(meals.map(x=>x.date))].sort();
   const planned=sessions.filter(s=>s.dayId&&!s.makeupFor&&s.status!=='inProgress');
   const completed=planned.filter(s=>s.status==='completed').length;
-  return {schemaVersion:SCHEMA_VERSION,type:'bodytrack.records',exportedAt:nowISO(),range:{from,to},
+  return {schemaVersion:RECORDS_SCHEMA_VERSION,type:'bodytrack.records',exportedAt:nowISO(),range:{from,to},
     plans:clone(state.plans),activations:clone(state.activations),cycleAdjustments:clone(state.adjustments),
-    cycle:{asOf:to,next:nextOccurrence(state,to)},sessions,meals:clone(meals),body:clone(state.body.filter(within)),nutritionTargets:clone(state.settings.targets),
+    cycle:{asOf:to,next:nextOccurrence(state,to)},sessions,cardio:clone(state.cardio.filter(within)),meals:clone(meals),body:clone(state.body.filter(within)),nutritionTargets:clone(state.settings.targets),
     dailyNutrition:dates.map(date=>({date,nutrients:aggregateNutrition(meals.filter(x=>x.date===date))})),
     completion:{completed,plannedResolved:planned.length,ratio:planned.length?completed/planned.length:null,definition:'仅统计范围内已结束或明确跳过的周期训练日；休息、补练及未处理日期不进入分母。逐组完成率另列。'},
     mediaIncluded:false};
@@ -346,10 +385,17 @@ export function nutritionCSV(records) {
   return csv([['日期','餐次','食物','重量g','生熟','来源','来源链接','记录方式','重量依据',...keys.map(k=>`${NUTRIENTS[k][0]}(${NUTRIENTS[k][1]})`)],
     ...records.meals.map(m=>{const n=calculateNutrition(m.per100,m.grams);return [m.date,m.meal,m.name,m.grams,m.state,m.source,m.sourceUrl??'',m.entryMethod??'手动',m.portionBasis??'未注明',...keys.map(k=>n[k]??'未知')];})]);
 }
+export function cardioCSV(records) {
+  return csv([['有氧ID','日期','项目','场景','时长分钟','累计层数','器械档位','吃力程度','备注','创建时间','更新时间'],
+    ...(records.cardio??[]).map(x=>[x.id,x.date,'爬楼梯',x.mode==='stairs'?'楼梯':'楼梯机',x.durationMinutes,x.floors,x.level,CARDIO_EFFORT[x.effort]??'',x.notes,x.createdAt,x.updatedAt])]);
+}
 export function summaryReport(r) {
   const lines=[`# BodyTrack 个人记录 ${r.range.from} 至 ${r.range.to}`,'','数据为用户自报记录，不能据此诊断脊柱、颈椎结构或治疗效果。','',
     `已结束训练 ${r.completion.completed}/${r.completion.plannedResolved}（${r.completion.definition}）`,`计划版本：${r.plans.map(x=>x.key).join('、')}`,'','## 每次训练'];
   for(const s of r.sessions) lines.push(`${s.date} ${s.name} · ${s.status}${s.makeupFor?' · 补练':''} · 已打卡 ${s.completion.done}/${s.completion.total} 组`,...s.exercises.map(e=>`- ${e.target.name}：${e.sets.filter(x=>x.done).map(x=>`${x.side} ${x.reps}次/${x.weight??'未知'}kg RPE${x.rpe??'?'} RIR${x.rir??'?'}`).join('；')||'未打卡'}；备注：${e.notes}；左右差异：${e.sideDifference}`),`训练感受：${JSON.stringify(s.journal)}`,'');
+  const cardio=cardioSummary(r.cardio??[]);
+  lines.push('## 有氧 · 爬楼梯',`共 ${cardio.count} 次，${cardio.totalMinutes} 分钟；独立记录，不推进力量训练周期。`,
+    ...(r.cardio??[]).map(x=>`${x.date} ${x.mode==='stairs'?'楼梯':'楼梯机'} ${x.durationMinutes} 分钟${x.floors===null?'':` · ${x.floors} 层`}${x.level===null?'':` · 档位 ${x.level}`}${x.effort===null?'':` · ${CARDIO_EFFORT[x.effort]}`} · 备注：${x.notes}`),'');
   lines.push('## 每日营养（不完整数据仅为已知部分，未知不作 0）');
   for(const d of r.dailyNutrition) lines.push(`${d.date}：${REQUIRED_NUTRIENTS.map(k=>`${NUTRIENTS[k][0]} ${d.nutrients[k].value??'未知'}${NUTRIENTS[k][1]}${d.nutrients[k].complete?'':'（有缺失）'}`).join('，')}`);
   lines.push('','## 食物来源与份量依据','营养为数据库或标签参考值，非照片实测。照片辅助条目经用户确认；参考份量和用户估重都属于估算。',...r.meals.map(m=>`${m.date} ${m.meal} ${m.name} ${m.grams}g · ${m.portionBasis??'重量依据未注明'} · ${m.entryMethod??'手动'} · ${m.source}`));

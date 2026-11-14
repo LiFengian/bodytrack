@@ -18,7 +18,19 @@ export class LocalStore {
     await new Promise((resolve,reject)=>{
       const tx=this.db.transaction(STORE,'readwrite'),os=tx.objectStore(STORE),req=os.get('state');
       req.onsuccess=()=>{
-        try {this.state=req.result?migrateState(req.result):initialState();if(!req.result)os.put(this.state,'state');}
+        try {
+          this.state=req.result?migrateState(req.result):initialState();
+          if(!req.result)os.put(this.state,'state');
+          else if(req.result.dataVersion!==this.state.dataVersion){
+            this.state.revision++;
+            const snapshots=os.get('checkpoints');
+            snapshots.onsuccess=()=>{
+              const previous=snapshots.result??[];
+              previous.push({id:uid(),createdAt:new Date().toISOString(),day:dateKey(),label:`升级前（数据版本 ${req.result.dataVersion}）`,data:clone(req.result)});
+              os.put(previous.slice(-14),'checkpoints');os.put(this.state,'state');
+            };
+          }
+        }
         catch(e){tx.abort();reject(e);}
       };
       tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error??new Error('读取本地数据失败'));
@@ -63,7 +75,7 @@ export class LocalStore {
     this.state=next;this.checkpoints=checkpoints;return result;
   }
   async restore(data,label='恢复备份前'){
-    validateState(data);
-    return this.change(next=>{const revision=next.revision;for(const key of Object.keys(next))delete next[key];Object.assign(next,clone(data),{revision});},label);
+    const restored=migrateState(data);
+    return this.change(next=>{const revision=next.revision;for(const key of Object.keys(next))delete next[key];Object.assign(next,clone(restored),{revision});},label);
   }
 }

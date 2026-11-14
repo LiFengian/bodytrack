@@ -1,12 +1,14 @@
-# BodyTrack 数据协议 1.0
+# BodyTrack 数据协议：计划 1.0 / 记录与备份 1.1
 
 三个独立文件类型：
 
 | 用途 | 类型标记 | Schema | 示例 |
 | --- | --- | --- | --- |
 | 导入训练建议 | `schemaVersion: "1.0"`，无 type | `dist/schemas/plan.schema.json` | `dist/examples/plan-v1.json`、`plan-v2.json` |
-| 导出分析记录 | `type: "bodytrack.records"` | `dist/schemas/records.schema.json` | `dist/examples/records-v1.json` |
-| 完整备份恢复 | `type: "bodytrack.backup"` | `dist/schemas/backup.schema.json` | `dist/examples/backup-v1.json` |
+| 导出分析记录 | `type: "bodytrack.records"`，Schema 1.1 | `dist/schemas/records.schema.json` | `dist/examples/records-v1.1.json` |
+| 完整备份恢复 | `type: "bodytrack.backup"`，Schema 1.1 | `dist/schemas/backup.schema.json` | `dist/examples/backup-v2.json` |
+
+旧版 `records-v1.json`、`backup-v1.json` 保留为兼容测试样本。备份 Schema 同时描述旧版 1.0 / 数据版本 1 和新版 1.1 / 数据版本 2；版本不匹配会拒绝恢复。
 
 记录和备份示例是纯虚构测试数据，不是用户记录，食品数值不应作为营养参考。示例不会自动导入应用。`invalid-plan.json` 是必须拒绝的测试文件。
 
@@ -56,7 +58,7 @@ JSON Schema 检查形状、范围和必填；`parsePlan`/`validatePlan` 另外�
 `range` 是闭区间 YYYY-MM-DD 本地日历日期；`generatedAt`、`createdAt`、`exportedAt` 等使用 ISO 时间戳。
 
 - `plans`、`activations`、`cycleAdjustments` 保留全部版本与时间线，便于解析训练引用。
-- `sessions`、`meals`、`body` 按记录日期过滤。不会把未记录的数据填充成 0 或伪造缺失训练。
+- `sessions`、`cardio`、`meals`、`body` 按记录日期过滤。不会把未记录的数据填充成 0 或伪造缺失训练。
 - 每条 session 的 `planKey`、`activationId` 和 `occurrenceIndex` 唯一定位周期；`makeupFor` 引用原跳过记录，原记录可能在导出范围之外。
 - `exercises[].target` 为当时完整目标快照；`targetSets` 为当次实际采用的目标组数，可能低于计划完整组数。`sets[]` 保存每组唯一 ID、目标次数、实际值、侧别和完成状态。
 - `journal` 保存主观感受。未录入数值使用 null 或省略；0 分疼痛不等于未知。
@@ -68,11 +70,37 @@ JSON Schema 检查形状、范围和必填；`parsePlan`/`validatePlan` 另外�
 
 CSV 使用 UTF-8 BOM、CRLF、双引号转义，防止以 `= + - @` 开头的文本在表格应用中被当成公式。训练 CSV 一行对应一个侧别的一组，含训练日记 JSON；休息日也保留一行。饮食 CSV 的未知值写「未知」。JSON 保留未舍入的数值，CSV 也不在计算阶段截断。
 
+## 爬楼梯有氧
+
+`cardio` 是独立的已完成实际记录，不使用力量训练的 `activationId`、`occurrenceIndex`、组数或计划快照，不进入力量完成率分母。它可以与进行中的力量训练并存，不改变休息日或漏练周期。
+
+```json
+{
+  "id": "a7d039bc-a343-43ee-a2ce-4d905139fc46",
+  "type": "stair-climbing",
+  "date": "2026-11-14",
+  "mode": "stair-machine",
+  "durationMinutes": 20,
+  "floors": 35,
+  "level": 5,
+  "effort": "moderate",
+  "notes": "虚构示例，不是训练建议",
+  "createdAt": "2026-11-14T10:00:00.000Z",
+  "updatedAt": "2026-11-14T10:00:00.000Z"
+}
+```
+
+`mode` 为 `stairs`（楼梯）或 `stair-machine`（楼梯机）。`durationMinutes` 必填，范围 0.1–1440；`floors` 为累计层数，1–10000 整数或 null；`level` 为楼梯机档位，1–100 整数或 null，普通楼梯必须为 null。`effort` 可为 `easy`、`moderate`、`hard`、`veryHard` 或 null，表示主观感受，不是自动换算的 RPE/RIR。备注最多 10000 字符。
+
+每条记录有稳定 ID；修改保留 ID 和 `createdAt`，更新 `updatedAt`。保存时拒绝未来日期；未填写指标保留 null，不估算热量、楼层或档位。有氧 CSV 单独导出，一行一次记录；JSON 和简明报告同时保留有氧及力量数据。每日趋势按记录日期合计分钟，不补零未记录日。
+
 ## 完整备份
 
 恢复仅接受 `bodytrack.backup`，最大 50 MB。先 `parseBackup` → `migrateState` → `validateState`，预览记录数量，确认后原子替换。ID、计划/启用引用、侧别组序号、实际次数、RPE/RIR、营养数据、生熟状态、来源和设置都必须有效。
 
-当前首次数据版本是 1，无旧版本需要转换。未来迁移应逐个版本执行，先保留迁移前快照，完成后重新校验；不得捕获迁移失败后偷偷初始化空数据库。备份内不包含设备内快照，以免递归膨胀。
+当前数据版本是 2。从版本 1 迁移时只补充空 `cardio` 列表并更新 `dataVersion`，不改写已有记录或 ID。首次打开旧数据库时，原始数据作为「升级前」快照与新状态在同一事务中写入，修订号加一，仍最多保留 14 份快照。失败会中止事务，绝不初始化空库。纯 `migrateState` 和旧备份预览不修改输入对象；实际恢复仍需用户确认。旧版本 1 快照恢复时同样迁移，升级后的新记录在恢复前另留快照。
+
+完整备份不包含设备内快照，以免递归膨胀。新版备份 Schema 1.1 / 数据版本 2 无法由旧版应用恢复，需更新应用。
 
 ## 发给 ChatGPT 的建议提示词
 

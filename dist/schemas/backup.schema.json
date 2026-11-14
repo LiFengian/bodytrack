@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "BodyTrack full backup v1.0",
-  "description": "恢复前还必须通过 validateState 的引用、数值、唯一 ID 与关系校验。设备内回退快照不包含在外部备份中。",
+  "title": "BodyTrack full backup v1.1 / legacy v1.0",
+  "description": "新版备份包含独立有氧记录；旧版通过迁移补充空有氧列表。运行时还校验唯一 ID 和引用。设备内快照不包含在外部备份中。",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -11,7 +11,10 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": "1.0"
+      "enum": [
+        "1.0",
+        "1.1"
+      ]
     },
     "type": {
       "const": "bodytrack.backup"
@@ -37,7 +40,10 @@
       ],
       "properties": {
         "dataVersion": {
-          "const": 1
+          "enum": [
+            1,
+            2
+          ]
         },
         "revision": {
           "type": "integer",
@@ -780,6 +786,123 @@
           "minItems": 0,
           "maxItems": 100000
         },
+        "cardio": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "type",
+              "date",
+              "mode",
+              "durationMinutes",
+              "floors",
+              "level",
+              "effort",
+              "notes",
+              "createdAt",
+              "updatedAt"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "type": {
+                "const": "stair-climbing"
+              },
+              "date": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "mode": {
+                "enum": [
+                  "stairs",
+                  "stair-machine"
+                ]
+              },
+              "durationMinutes": {
+                "type": "number",
+                "minimum": 0.1,
+                "maximum": 1440
+              },
+              "floors": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "level": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "effort": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "easy",
+                      "moderate",
+                      "hard",
+                      "veryHard"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "mode": {
+                      "const": "stairs"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "level": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 100000
+        },
         "foods": {
           "type": "array",
           "items": {
@@ -1335,7 +1458,64 @@
             "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
           }
         }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "dataVersion": {
+                "const": 2
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "cardio"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "cardio"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": "1.0"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "data": {
+            "properties": {
+              "dataVersion": {
+                "const": 1
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "data": {
+            "properties": {
+              "dataVersion": {
+                "const": 2
+              }
+            }
+          }
+        }
       }
     }
-  }
+  ]
 }

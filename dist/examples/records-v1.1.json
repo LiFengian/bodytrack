@@ -1,0 +1,1805 @@
+{
+  "schemaVersion": "1.1",
+  "type": "bodytrack.records",
+  "exportedAt": "2026-11-14T12:16:55.457Z",
+  "range": {
+    "from": "2026-11-14",
+    "to": "2026-11-30"
+  },
+  "plans": [
+    {
+      "key": "bodytrack-foundation@1",
+      "plan": {
+        "schemaVersion": "1.0",
+        "planId": "bodytrack-foundation",
+        "planVersion": 1,
+        "generatedAt": "2026-11-14T00:00:00.000Z",
+        "effectiveDate": "2026-11-14",
+        "name": "体态与力量 · 基础计划",
+        "instructions": "练两天、休一天，15 天为一循环。前 14 天可选 75% 组数；后续逐渐采用完整训练量。抗阻训练通常保留 2–4 次余力。",
+        "precautions": "本计划用于一般健身与动作控制记录，不诊断或治疗疾病。脊柱侧弯专项矫正需专业评估；不据照片判断结构异常，不擅自指定单侧矫正。出现疼痛时停止相关动作并根据情况寻求专业评估。",
+        "cycleDefinition": {
+          "name": "五分化 · 练二休一",
+          "length": 15,
+          "trainingDayIds": [
+            "chest",
+            "shoulder",
+            null,
+            "back",
+            "arms",
+            null,
+            "legs",
+            "chest",
+            null,
+            "shoulder",
+            "back",
+            null,
+            "arms",
+            "legs",
+            null
+          ]
+        },
+        "trainingDays": [
+          {
+            "id": "chest",
+            "name": "胸部日",
+            "focus": "上胸形态 · 前锯肌 · 颈胸姿势控制",
+            "exercises": [
+              {
+                "id": "chest-chin",
+                "name": "下巴回收 Chin Tuck",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 5,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+                "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+              },
+              {
+                "id": "chest-thoracic",
+                "name": "胸椎伸展",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+                "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+              },
+              {
+                "id": "chest-incline",
+                "name": "上斜推胸机",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-flat",
+                "name": "平板器械推胸",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-fly",
+                "name": "低位绳索夹胸",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-plus",
+                "name": "俯卧撑 Plus",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-deadbug",
+                "name": "死虫式",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "shoulder",
+            "name": "肩部日",
+            "focus": "肩胛控制 · 肩袖稳定 · 头前倾改善",
+            "exercises": [
+              {
+                "id": "shoulder-chin",
+                "name": "下巴回收 Chin Tuck",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 5,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+                "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+              },
+              {
+                "id": "shoulder-thoracic",
+                "name": "胸椎伸展",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+                "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+              },
+              {
+                "id": "shoulder-wall",
+                "name": "靠墙滑手",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-rotation",
+                "name": "绳索肩袖外旋",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-lateral",
+                "name": "绳索侧平举",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-y",
+                "name": "俯卧 Y 字抬手",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-reverse",
+                "name": "反向蝴蝶机",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "back",
+            "name": "背部日",
+            "focus": "肩背力量 · 躯干稳定 · 颈胸姿势控制",
+            "exercises": [
+              {
+                "id": "back-chin",
+                "name": "下巴回收 Chin Tuck",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 5,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+                "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+              },
+              {
+                "id": "back-thoracic",
+                "name": "胸椎伸展",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+                "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+              },
+              {
+                "id": "back-row",
+                "name": "胸托划船",
+                "sets": 4,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-pulldown",
+                "name": "中立握高位下拉",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-single",
+                "name": "单臂绳索划船",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-reverse",
+                "name": "反向蝴蝶机",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-birddog",
+                "name": "鸟狗式",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "arms",
+            "name": "手臂日",
+            "focus": "上肢力量 · 躯干抗旋转",
+            "exercises": [
+              {
+                "id": "arms-curl",
+                "name": "哑铃弯举",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-hammer",
+                "name": "锤式弯举",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-pushdown",
+                "name": "绳索三头下压",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-extension",
+                "name": "过顶绳索臂屈伸",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-facepull",
+                "name": "绳索面拉",
+                "sets": 2,
+                "repetitions": 15,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-pallof",
+                "name": "Pallof Press",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "legs",
+            "name": "腿部日",
+            "focus": "髋膝稳定 · 下肢力量",
+            "exercises": [
+              {
+                "id": "legs-press",
+                "name": "坐姿蹬腿",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-split",
+                "name": "扶支撑分腿蹲",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-thrust",
+                "name": "臀推",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-curl",
+                "name": "坐姿腿弯举",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-step",
+                "name": "台阶下踩",
+                "sets": 2,
+                "repetitions": 8,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-calf",
+                "name": "站姿提踵",
+                "sets": 2,
+                "repetitions": 15,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          }
+        ]
+      },
+      "importedAt": "2026-11-14T12:16:55.452Z"
+    }
+  ],
+  "activations": [
+    {
+      "id": "34d31a44-ca0a-439a-a45b-cf8c4ed3950d",
+      "planKey": "bodytrack-foundation@1",
+      "effectiveDate": "2026-11-14",
+      "createdAt": "2026-11-14T12:16:55.456Z"
+    }
+  ],
+  "cycleAdjustments": {},
+  "cycle": {
+    "asOf": "2026-11-30",
+    "next": {
+      "activation": {
+        "id": "34d31a44-ca0a-439a-a45b-cf8c4ed3950d",
+        "planKey": "bodytrack-foundation@1",
+        "effectiveDate": "2026-11-14",
+        "createdAt": "2026-11-14T12:16:55.456Z"
+      },
+      "plan": {
+        "schemaVersion": "1.0",
+        "planId": "bodytrack-foundation",
+        "planVersion": 1,
+        "generatedAt": "2026-11-14T00:00:00.000Z",
+        "effectiveDate": "2026-11-14",
+        "name": "体态与力量 · 基础计划",
+        "instructions": "练两天、休一天，15 天为一循环。前 14 天可选 75% 组数；后续逐渐采用完整训练量。抗阻训练通常保留 2–4 次余力。",
+        "precautions": "本计划用于一般健身与动作控制记录，不诊断或治疗疾病。脊柱侧弯专项矫正需专业评估；不据照片判断结构异常，不擅自指定单侧矫正。出现疼痛时停止相关动作并根据情况寻求专业评估。",
+        "cycleDefinition": {
+          "name": "五分化 · 练二休一",
+          "length": 15,
+          "trainingDayIds": [
+            "chest",
+            "shoulder",
+            null,
+            "back",
+            "arms",
+            null,
+            "legs",
+            "chest",
+            null,
+            "shoulder",
+            "back",
+            null,
+            "arms",
+            "legs",
+            null
+          ]
+        },
+        "trainingDays": [
+          {
+            "id": "chest",
+            "name": "胸部日",
+            "focus": "上胸形态 · 前锯肌 · 颈胸姿势控制",
+            "exercises": [
+              {
+                "id": "chest-chin",
+                "name": "下巴回收 Chin Tuck",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 5,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+                "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+              },
+              {
+                "id": "chest-thoracic",
+                "name": "胸椎伸展",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+                "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+              },
+              {
+                "id": "chest-incline",
+                "name": "上斜推胸机",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-flat",
+                "name": "平板器械推胸",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-fly",
+                "name": "低位绳索夹胸",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-plus",
+                "name": "俯卧撑 Plus",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "chest-deadbug",
+                "name": "死虫式",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "shoulder",
+            "name": "肩部日",
+            "focus": "肩胛控制 · 肩袖稳定 · 头前倾改善",
+            "exercises": [
+              {
+                "id": "shoulder-chin",
+                "name": "下巴回收 Chin Tuck",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 5,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+                "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+              },
+              {
+                "id": "shoulder-thoracic",
+                "name": "胸椎伸展",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+                "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+              },
+              {
+                "id": "shoulder-wall",
+                "name": "靠墙滑手",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-rotation",
+                "name": "绳索肩袖外旋",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-lateral",
+                "name": "绳索侧平举",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-y",
+                "name": "俯卧 Y 字抬手",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "shoulder-reverse",
+                "name": "反向蝴蝶机",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "back",
+            "name": "背部日",
+            "focus": "肩背力量 · 躯干稳定 · 颈胸姿势控制",
+            "exercises": [
+              {
+                "id": "back-chin",
+                "name": "下巴回收 Chin Tuck",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 5,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+                "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+              },
+              {
+                "id": "back-thoracic",
+                "name": "胸椎伸展",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "warmup",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+                "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+              },
+              {
+                "id": "back-row",
+                "name": "胸托划船",
+                "sets": 4,
+                "repetitions": 10,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-pulldown",
+                "name": "中立握高位下拉",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-single",
+                "name": "单臂绳索划船",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-reverse",
+                "name": "反向蝴蝶机",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "back-birddog",
+                "name": "鸟狗式",
+                "sets": 2,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "arms",
+            "name": "手臂日",
+            "focus": "上肢力量 · 躯干抗旋转",
+            "exercises": [
+              {
+                "id": "arms-curl",
+                "name": "哑铃弯举",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-hammer",
+                "name": "锤式弯举",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-pushdown",
+                "name": "绳索三头下压",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-extension",
+                "name": "过顶绳索臂屈伸",
+                "sets": 2,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-facepull",
+                "name": "绳索面拉",
+                "sets": 2,
+                "repetitions": 15,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "arms-pallof",
+                "name": "Pallof Press",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          },
+          {
+            "id": "legs",
+            "name": "腿部日",
+            "focus": "髋膝稳定 · 下肢力量",
+            "exercises": [
+              {
+                "id": "legs-press",
+                "name": "坐姿蹬腿",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-split",
+                "name": "扶支撑分腿蹲",
+                "sets": 3,
+                "repetitions": 10,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-thrust",
+                "name": "臀推",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-curl",
+                "name": "坐姿腿弯举",
+                "sets": 3,
+                "repetitions": 12,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-step",
+                "name": "台阶下踩",
+                "sets": 2,
+                "repetitions": 8,
+                "perSide": true,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              },
+              {
+                "id": "legs-calf",
+                "name": "站姿提踵",
+                "sets": 2,
+                "repetitions": 15,
+                "perSide": false,
+                "module": "main",
+                "holdSeconds": 0,
+                "intensity": {
+                  "rirMin": 2,
+                  "rirMax": 4
+                },
+                "instructions": "以可控速度完成，动作全程保持舒适。",
+                "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+              }
+            ]
+          }
+        ]
+      },
+      "index": 1,
+      "cycleNumber": 1,
+      "dayNumber": 2,
+      "trainingDay": {
+        "id": "shoulder",
+        "name": "肩部日",
+        "focus": "肩胛控制 · 肩袖稳定 · 头前倾改善",
+        "exercises": [
+          {
+            "id": "shoulder-chin",
+            "name": "下巴回收 Chin Tuck",
+            "sets": 2,
+            "repetitions": 10,
+            "perSide": false,
+            "module": "warmup",
+            "holdSeconds": 5,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+            "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+          },
+          {
+            "id": "shoulder-thoracic",
+            "name": "胸椎伸展",
+            "sets": 2,
+            "repetitions": 10,
+            "perSide": false,
+            "module": "warmup",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+            "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+          },
+          {
+            "id": "shoulder-wall",
+            "name": "靠墙滑手",
+            "sets": 2,
+            "repetitions": 12,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          {
+            "id": "shoulder-rotation",
+            "name": "绳索肩袖外旋",
+            "sets": 3,
+            "repetitions": 12,
+            "perSide": true,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          {
+            "id": "shoulder-lateral",
+            "name": "绳索侧平举",
+            "sets": 3,
+            "repetitions": 12,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          {
+            "id": "shoulder-y",
+            "name": "俯卧 Y 字抬手",
+            "sets": 2,
+            "repetitions": 12,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          {
+            "id": "shoulder-reverse",
+            "name": "反向蝴蝶机",
+            "sets": 3,
+            "repetitions": 12,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          }
+        ]
+      },
+      "plannedDate": "2026-11-15"
+    }
+  },
+  "sessions": [
+    {
+      "id": "c8845186-5cd9-46a4-8b23-bb9bbbdd94a3",
+      "activationId": "34d31a44-ca0a-439a-a45b-cf8c4ed3950d",
+      "planKey": "bodytrack-foundation@1",
+      "occurrenceIndex": 0,
+      "dayId": "chest",
+      "name": "胸部日",
+      "date": "2026-11-14",
+      "scheduledDate": "2026-11-14",
+      "status": "completed",
+      "createdAt": "2026-11-14T12:16:55.456Z",
+      "completedAt": "2026-11-14T12:16:55.456Z",
+      "reducedVolume": false,
+      "makeupFor": null,
+      "exercises": [
+        {
+          "id": "c5b557b5-f491-42f4-a551-03df3d398316",
+          "exerciseId": "chest-chin",
+          "target": {
+            "id": "chest-chin",
+            "name": "下巴回收 Chin Tuck",
+            "sets": 2,
+            "repetitions": 10,
+            "perSide": false,
+            "module": "warmup",
+            "holdSeconds": 5,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "轻轻收回下巴，保持呼吸；每次保持 5 秒。",
+            "precautions": "不强迫颈部后仰，不用力挤压颈部。"
+          },
+          "targetSets": 2,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "8ee490dd-4b59-40d5-aba9-2d542dc81d7a",
+              "number": 1,
+              "side": "both",
+              "targetReps": 10,
+              "reps": 10,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": true
+            },
+            {
+              "id": "d69f83d4-67fd-44a2-84e5-06b43ca4f95a",
+              "number": 2,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "e20ef3e8-b441-4fcc-86bc-360f503fec06",
+          "exerciseId": "chest-thoracic",
+          "target": {
+            "id": "chest-thoracic",
+            "name": "胸椎伸展",
+            "sets": 2,
+            "repetitions": 10,
+            "perSide": false,
+            "module": "warmup",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "在舒适范围内缓慢伸展胸椎，保持肋骨与骨盆稳定。",
+            "precautions": "不强迫腰部代偿，不追求最大伸展幅度。"
+          },
+          "targetSets": 2,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "feadda81-eb69-49b9-9440-f1649e244607",
+              "number": 1,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "88931a19-cf38-4aed-984d-5749c32aba60",
+              "number": 2,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "584cdd1a-0df9-4b7c-985d-4b3ef8476147",
+          "exerciseId": "chest-incline",
+          "target": {
+            "id": "chest-incline",
+            "name": "上斜推胸机",
+            "sets": 3,
+            "repetitions": 10,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          "targetSets": 3,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "19e4c46d-3cd1-4e89-8de1-d199dd10468e",
+              "number": 1,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "eb3b640b-947e-45c3-80ff-8a8bf879cd3f",
+              "number": 2,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "478f49ee-7e83-4ad6-a826-1a742456060d",
+              "number": 3,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "d25fde61-af31-4119-adae-f82af28327ce",
+          "exerciseId": "chest-flat",
+          "target": {
+            "id": "chest-flat",
+            "name": "平板器械推胸",
+            "sets": 2,
+            "repetitions": 10,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          "targetSets": 2,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "200cb94b-2768-4090-b273-1d263aaf994f",
+              "number": 1,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "9e26edcf-40aa-470c-bc92-f6e186f965a9",
+              "number": 2,
+              "side": "both",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "6e4fc3a8-daa9-4157-8e9e-50890ef520cd",
+          "exerciseId": "chest-fly",
+          "target": {
+            "id": "chest-fly",
+            "name": "低位绳索夹胸",
+            "sets": 2,
+            "repetitions": 12,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          "targetSets": 2,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "48f54e9b-fe58-47fc-8502-e8db6da95e44",
+              "number": 1,
+              "side": "both",
+              "targetReps": 12,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "91fb5952-6a55-449c-801d-26510e99e920",
+              "number": 2,
+              "side": "both",
+              "targetReps": 12,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "0ffd27cb-9d75-4e8d-8a0f-398c4469e919",
+          "exerciseId": "chest-plus",
+          "target": {
+            "id": "chest-plus",
+            "name": "俯卧撑 Plus",
+            "sets": 3,
+            "repetitions": 12,
+            "perSide": false,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          "targetSets": 3,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "60edbc19-756d-4b98-966f-4428f68f1837",
+              "number": 1,
+              "side": "both",
+              "targetReps": 12,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "a64f02cc-8d67-44db-98cb-40e38dbc6fe7",
+              "number": 2,
+              "side": "both",
+              "targetReps": 12,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "0ab7513c-1af9-48bd-a10d-8a12d35d3ce9",
+              "number": 3,
+              "side": "both",
+              "targetReps": 12,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        },
+        {
+          "id": "3fb43ccc-e7be-4ee2-ab96-f4d0fb5f6f1e",
+          "exerciseId": "chest-deadbug",
+          "target": {
+            "id": "chest-deadbug",
+            "name": "死虫式",
+            "sets": 2,
+            "repetitions": 10,
+            "perSide": true,
+            "module": "main",
+            "holdSeconds": 0,
+            "intensity": {
+              "rirMin": 2,
+              "rirMax": 4
+            },
+            "instructions": "以可控速度完成，动作全程保持舒适。",
+            "precautions": "避免疼痛与明显代偿，按实际能力调整负荷。"
+          },
+          "targetSets": 2,
+          "notes": "",
+          "sideDifference": "",
+          "sets": [
+            {
+              "id": "fcbfb2a8-33ce-412d-8026-4196f3f1c548",
+              "number": 1,
+              "side": "left",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "670b321b-05b4-43c7-b30d-a32a1d2c37a2",
+              "number": 1,
+              "side": "right",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "13c8f7bc-4cf0-43d9-80c2-e942666ecff3",
+              "number": 2,
+              "side": "left",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            },
+            {
+              "id": "534e9c0d-06fc-4dbf-a803-36c3ffb50348",
+              "number": 2,
+              "side": "right",
+              "targetReps": 10,
+              "reps": null,
+              "weight": null,
+              "rpe": null,
+              "rir": null,
+              "done": false
+            }
+          ]
+        }
+      ],
+      "journal": {
+        "neck": 2,
+        "fatigue": 4,
+        "pain": 0,
+        "diary": "纯虚构测试记录，不代表用户真实训练。"
+      },
+      "completion": {
+        "done": 1,
+        "total": 18,
+        "ratio": 0.05555555555555555
+      }
+    }
+  ],
+  "cardio": [
+    {
+      "id": "fa5b8de1-5437-4318-9eeb-2eac00af7706",
+      "type": "stair-climbing",
+      "date": "2026-11-14",
+      "mode": "stair-machine",
+      "durationMinutes": 20,
+      "floors": 35,
+      "level": 5,
+      "effort": "moderate",
+      "notes": "纯虚构有氧测试记录，不是训练建议。",
+      "createdAt": "2026-11-14T12:16:55.456Z",
+      "updatedAt": "2026-11-14T12:16:55.456Z"
+    }
+  ],
+  "meals": [
+    {
+      "id": "4140ef72-d2d3-4c09-b8b3-32aefdb1505a",
+      "date": "2026-11-14",
+      "meal": "早餐",
+      "foodId": "ba896265-6e44-4c18-9169-7d8319d92b09",
+      "name": "虚构测试食品（不可用作营养参考）",
+      "state": "packaged",
+      "source": "软件测试夹具，非真实食品数据",
+      "per100": {
+        "kcal": 120,
+        "protein": 8,
+        "carbs": 15,
+        "fat": 3,
+        "fiber": null,
+        "sodium": 50
+      },
+      "grams": 75,
+      "createdAt": "2026-11-14T12:16:55.456Z"
+    }
+  ],
+  "body": [
+    {
+      "id": "3874abad-c186-45b1-9a26-b7ec30922ff5",
+      "date": "2026-11-14",
+      "weight": 70,
+      "notes": "纯虚构测试体重",
+      "createdAt": "2026-11-14T12:16:55.456Z"
+    }
+  ],
+  "nutritionTargets": {
+    "kcal": null,
+    "protein": null,
+    "carbs": null,
+    "fat": null,
+    "fiber": null,
+    "sodium": null
+  },
+  "dailyNutrition": [
+    {
+      "date": "2026-11-14",
+      "nutrients": {
+        "kcal": {
+          "value": 90,
+          "unknownCount": 0,
+          "complete": true
+        },
+        "protein": {
+          "value": 6,
+          "unknownCount": 0,
+          "complete": true
+        },
+        "carbs": {
+          "value": 11.25,
+          "unknownCount": 0,
+          "complete": true
+        },
+        "fat": {
+          "value": 2.25,
+          "unknownCount": 0,
+          "complete": true
+        },
+        "fiber": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "sodium": {
+          "value": 37.5,
+          "unknownCount": 0,
+          "complete": true
+        },
+        "calcium": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "iron": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "zinc": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "magnesium": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "potassium": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "vitaminC": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        },
+        "vitaminD": {
+          "value": null,
+          "unknownCount": 1,
+          "complete": false
+        }
+      }
+    }
+  ],
+  "completion": {
+    "completed": 1,
+    "plannedResolved": 1,
+    "ratio": 1,
+    "definition": "仅统计范围内已结束或明确跳过的周期训练日；休息、补练及未处理日期不进入分母。逐组完成率另列。"
+  },
+  "mediaIncluded": false
+}
