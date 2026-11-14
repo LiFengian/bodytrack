@@ -1,0 +1,2104 @@
+{
+  "version": 1,
+  "dataset": "USDA FoodData Central SR Legacy, April 2018",
+  "license": "CC0-1.0",
+  "sourceUrl": "https://fdc.nal.usda.gov/download-datasets/",
+  "archiveSha256": "b80817294b8850530aaedf2e515c02593b1824f763a0ff356e5c2081643e6fd0",
+  "note": "一般食物平均参考值，不等同于具体品牌或实际菜肴；可食部克重。烹调油、盐和酱料另记。",
+  "foods": [
+    {
+      "id": "usda-sr-171477",
+      "name": "去皮鸡胸肉 · 烤熟",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "chicken",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171477",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171477/nutrients",
+      "sourceDescription": "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
+      "per100": {
+        "kcal": 165.0,
+        "protein": 31.02,
+        "carbs": 0.0,
+        "fat": 3.57,
+        "fiber": 0.0,
+        "sodium": 74.0,
+        "calcium": 15.0,
+        "iron": 1.04,
+        "zinc": 1.0,
+        "magnesium": 29.0,
+        "potassium": 256.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.1
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 切碎 or diced",
+          "originalLabel": "cup, chopped or diced",
+          "grams": 140.0,
+          "sourcePortionId": "88817"
+        },
+        {
+          "label": "0.5 breast, bone and skin removed",
+          "originalLabel": "breast, bone and skin removed",
+          "grams": 86.0,
+          "sourcePortionId": "88819"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171478",
+      "name": "去皮鸡胸肉 · 炖熟",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "chicken",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171478",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171478/nutrients",
+      "sourceDescription": "Chicken, broilers or fryers, breast, meat only, cooked, stewed",
+      "per100": {
+        "kcal": 151.0,
+        "protein": 28.98,
+        "carbs": 0.0,
+        "fat": 3.03,
+        "fiber": 0.0,
+        "sodium": 63.0,
+        "calcium": 13.0,
+        "iron": 0.88,
+        "zinc": 0.97,
+        "magnesium": 24.0,
+        "potassium": 187.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.1
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 切碎 or diced",
+          "originalLabel": "cup, chopped or diced",
+          "grams": 140.0,
+          "sourcePortionId": "88820"
+        },
+        {
+          "label": "0.5 breast, bone and skin removed",
+          "originalLabel": "breast, bone and skin removed",
+          "grams": 95.0,
+          "sourcePortionId": "88822"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-173424",
+      "name": "鸡蛋 · 水煮全蛋",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "eggs",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 173424",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/173424/nutrients",
+      "sourceDescription": "Egg, whole, cooked, hard-boiled",
+      "per100": {
+        "kcal": 155.0,
+        "protein": 12.58,
+        "carbs": 1.12,
+        "fat": 10.61,
+        "fiber": 0.0,
+        "sodium": 124.0,
+        "calcium": 50.0,
+        "iron": 1.19,
+        "zinc": 1.05,
+        "magnesium": 10.0,
+        "potassium": 126.0,
+        "vitaminC": 0.0,
+        "vitaminD": 2.2
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 切碎",
+          "originalLabel": "cup, chopped",
+          "grams": 136.0,
+          "sourcePortionId": "92498"
+        },
+        {
+          "label": "1 汤匙",
+          "originalLabel": "tbsp",
+          "grams": 8.5,
+          "sourcePortionId": "92499"
+        },
+        {
+          "label": "1 大号",
+          "originalLabel": "large",
+          "grams": 50.0,
+          "sourcePortionId": "92500"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171287",
+      "name": "鸡蛋 · 生全蛋",
+      "state": "raw",
+      "category": "优质蛋白",
+      "visualGroup": "eggs",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171287",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171287/nutrients",
+      "sourceDescription": "Egg, whole, raw, fresh",
+      "per100": {
+        "kcal": 143.0,
+        "protein": 12.56,
+        "carbs": 0.72,
+        "fat": 9.51,
+        "fiber": 0.0,
+        "sodium": 142.0,
+        "calcium": 56.0,
+        "iron": 1.75,
+        "zinc": 1.29,
+        "magnesium": 12.0,
+        "potassium": 138.0,
+        "vitaminC": 0.0,
+        "vitaminD": 2.0
+      },
+      "portions": [
+        {
+          "label": "1 大号",
+          "originalLabel": "large",
+          "grams": 50.0,
+          "sourcePortionId": "88374"
+        },
+        {
+          "label": "1 特大号",
+          "originalLabel": "extra large",
+          "grams": 56.0,
+          "sourcePortionId": "88375"
+        },
+        {
+          "label": "1 超大号",
+          "originalLabel": "jumbo",
+          "grams": 63.0,
+          "sourcePortionId": "88376"
+        },
+        {
+          "label": "1 量杯 (4.86 大号 鸡蛋s)",
+          "originalLabel": "cup (4.86 large eggs)",
+          "grams": 243.0,
+          "sourcePortionId": "88377"
+        },
+        {
+          "label": "1 中等",
+          "originalLabel": "medium",
+          "grams": 44.0,
+          "sourcePortionId": "88378"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-172183",
+      "name": "蛋清 · 生",
+      "state": "raw",
+      "category": "优质蛋白",
+      "visualGroup": "eggwhite",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 172183",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/172183/nutrients",
+      "sourceDescription": "Egg, white, raw, fresh",
+      "per100": {
+        "kcal": 52.0,
+        "protein": 10.9,
+        "carbs": 0.73,
+        "fat": 0.17,
+        "fiber": 0.0,
+        "sodium": 166.0,
+        "calcium": 7.0,
+        "iron": 0.08,
+        "zinc": 0.03,
+        "magnesium": 11.0,
+        "potassium": 163.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 大号",
+          "originalLabel": "large",
+          "grams": 33.0,
+          "sourcePortionId": "90043"
+        },
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 243.0,
+          "sourcePortionId": "90044"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-174030",
+      "name": "牛肉糜 · 90% 瘦肉 · 生",
+      "state": "raw",
+      "category": "优质蛋白",
+      "visualGroup": "beef",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 174030",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/174030/nutrients",
+      "sourceDescription": "Beef, ground, 90% lean meat / 10% fat, raw",
+      "per100": {
+        "kcal": 176.0,
+        "protein": 20.0,
+        "carbs": 0.0,
+        "fat": 10.0,
+        "fiber": 0.0,
+        "sodium": 66.0,
+        "calcium": 12.0,
+        "iron": 2.24,
+        "zinc": 4.79,
+        "magnesium": 20.0,
+        "potassium": 321.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.1
+      },
+      "portions": [
+        {
+          "label": "4 盎司",
+          "originalLabel": "oz",
+          "grams": 113.0,
+          "sourcePortionId": "93663"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-174031",
+      "name": "牛肉糜 · 90% 瘦肉 · 烤熟",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "beef",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 174031",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/174031/nutrients",
+      "sourceDescription": "Beef, ground, 90% lean meat / 10% fat, patty, cooked, broiled",
+      "per100": {
+        "kcal": 217.0,
+        "protein": 26.11,
+        "carbs": 0.0,
+        "fat": 11.75,
+        "fiber": 0.0,
+        "sodium": 68.0,
+        "calcium": 13.0,
+        "iron": 2.71,
+        "zinc": 6.37,
+        "magnesium": 22.0,
+        "potassium": 333.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "3 盎司",
+          "originalLabel": "oz",
+          "grams": 85.0,
+          "sourcePortionId": "93664"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-172173",
+      "name": "西冷牛肉 · 去可见脂肪 · 生",
+      "state": "raw",
+      "category": "优质蛋白",
+      "visualGroup": "beef",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 172173",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/172173/nutrients",
+      "sourceDescription": "Beef, loin, top sirloin cap steak, boneless, separable lean only, trimmed to 1/8\" fat, all grades, raw",
+      "per100": {
+        "kcal": 134.0,
+        "protein": 21.38,
+        "carbs": 0.0,
+        "fat": 5.36,
+        "fiber": 0.0,
+        "sodium": 55.0,
+        "calcium": 5.0,
+        "iron": 2.0,
+        "zinc": 5.3,
+        "magnesium": 25.0,
+        "potassium": 375.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.1
+      },
+      "portions": [
+        {
+          "label": "4 盎司",
+          "originalLabel": "oz",
+          "grams": 113.0,
+          "sourcePortionId": "90013"
+        },
+        {
+          "label": "1 steak",
+          "originalLabel": "steak",
+          "grams": 223.0,
+          "sourcePortionId": "90014"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-172170",
+      "name": "西冷牛肉 · 去可见脂肪 · 烤熟",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "beef",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 172170",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/172170/nutrients",
+      "sourceDescription": "Beef, loin, top sirloin cap steak, boneless, separable lean only, trimmed to 1/8\" fat, all grades, cooked, grilled",
+      "per100": {
+        "kcal": 181.0,
+        "protein": 28.26,
+        "carbs": 0.73,
+        "fat": 7.23,
+        "fiber": 0.0,
+        "sodium": 62.0,
+        "calcium": 17.0,
+        "iron": 2.02,
+        "zinc": 5.61,
+        "magnesium": 25.0,
+        "potassium": 371.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.1
+      },
+      "portions": [
+        {
+          "label": "3 盎司",
+          "originalLabel": "oz",
+          "grams": 85.0,
+          "sourcePortionId": "90007"
+        },
+        {
+          "label": "1 steak",
+          "originalLabel": "steak",
+          "grams": 161.0,
+          "sourcePortionId": "90008"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-175167",
+      "name": "大西洋三文鱼 · 养殖 · 生",
+      "state": "raw",
+      "category": "优质蛋白",
+      "visualGroup": "salmon",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 175167",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/175167/nutrients",
+      "sourceDescription": "Fish, salmon, Atlantic, farmed, raw",
+      "per100": {
+        "kcal": 208.0,
+        "protein": 20.42,
+        "carbs": 0.0,
+        "fat": 13.42,
+        "fiber": 0.0,
+        "sodium": 59.0,
+        "calcium": 9.0,
+        "iron": 0.34,
+        "zinc": 0.36,
+        "magnesium": 27.0,
+        "potassium": 363.0,
+        "vitaminC": 3.9,
+        "vitaminD": 11.0
+      },
+      "portions": [
+        {
+          "label": "3 盎司",
+          "originalLabel": "oz",
+          "grams": 85.0,
+          "sourcePortionId": "95786"
+        },
+        {
+          "label": "0.5 fillet",
+          "originalLabel": "fillet",
+          "grams": 198.0,
+          "sourcePortionId": "95787"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-175168",
+      "name": "大西洋三文鱼 · 养殖 · 烤熟",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "salmon",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 175168",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/175168/nutrients",
+      "sourceDescription": "Fish, salmon, Atlantic, farmed, cooked, dry heat",
+      "per100": {
+        "kcal": 206.0,
+        "protein": 22.1,
+        "carbs": 0.0,
+        "fat": 12.35,
+        "fiber": 0.0,
+        "sodium": 61.0,
+        "calcium": 15.0,
+        "iron": 0.34,
+        "zinc": 0.43,
+        "magnesium": 30.0,
+        "potassium": 384.0,
+        "vitaminC": 3.7,
+        "vitaminD": 13.1
+      },
+      "portions": [
+        {
+          "label": "3 盎司",
+          "originalLabel": "oz",
+          "grams": 85.0,
+          "sourcePortionId": "95788"
+        },
+        {
+          "label": "0.5 fillet",
+          "originalLabel": "fillet",
+          "grams": 178.0,
+          "sourcePortionId": "95789"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-175180",
+      "name": "虾仁 · 熟",
+      "state": "cooked",
+      "category": "优质蛋白",
+      "visualGroup": "shrimp",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 175180",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/175180/nutrients",
+      "sourceDescription": "Crustaceans, shrimp, cooked",
+      "per100": {
+        "kcal": 99.0,
+        "protein": 23.98,
+        "carbs": 0.2,
+        "fat": 0.28,
+        "fiber": null,
+        "sodium": 111.0,
+        "calcium": 70.0,
+        "iron": 0.51,
+        "zinc": 1.64,
+        "magnesium": 39.0,
+        "potassium": 259.0,
+        "vitaminC": null,
+        "vitaminD": null
+      },
+      "portions": [
+        {
+          "label": "3 盎司",
+          "originalLabel": "oz",
+          "grams": 85.0,
+          "sourcePortionId": "95807"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-173709",
+      "name": "金枪鱼罐头 · 水浸沥干",
+      "state": "packaged",
+      "category": "优质蛋白",
+      "visualGroup": "tuna",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 173709",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/173709/nutrients",
+      "sourceDescription": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)",
+      "per100": {
+        "kcal": 86.0,
+        "protein": 19.44,
+        "carbs": 0.0,
+        "fat": 0.96,
+        "fiber": 0.0,
+        "sodium": 247.0,
+        "calcium": 17.0,
+        "iron": 1.63,
+        "zinc": 0.69,
+        "magnesium": 23.0,
+        "potassium": 179.0,
+        "vitaminC": 0.0,
+        "vitaminD": 1.2
+      },
+      "portions": [
+        {
+          "label": "1 盎司",
+          "originalLabel": "oz",
+          "grams": 28.35,
+          "sourcePortionId": "93154"
+        },
+        {
+          "label": "3 盎司",
+          "originalLabel": "oz",
+          "grams": 85.0,
+          "sourcePortionId": "93155"
+        },
+        {
+          "label": "1 can",
+          "originalLabel": "can",
+          "grams": 165.0,
+          "sourcePortionId": "93156"
+        },
+        {
+          "label": "1 量杯, solid or chunks",
+          "originalLabel": "cup, solid or chunks",
+          "grams": 154.0,
+          "sourcePortionId": "93157"
+        },
+        {
+          "label": "1 can (12.5 盎司), 沥干",
+          "originalLabel": "can (12.5 oz), drained",
+          "grams": 315.0,
+          "sourcePortionId": "93158"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-172475",
+      "name": "硬豆腐 · 硫酸钙凝固 · 未烹调",
+      "state": "raw",
+      "category": "豆类乳品",
+      "visualGroup": "tofu",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 172475",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/172475/nutrients",
+      "sourceDescription": "Tofu, raw, firm, prepared with calcium sulfate",
+      "per100": {
+        "kcal": 144.0,
+        "protein": 17.27,
+        "carbs": 2.78,
+        "fat": 8.72,
+        "fiber": 2.3,
+        "sodium": 14.0,
+        "calcium": 683.0,
+        "iron": 2.66,
+        "zinc": 1.57,
+        "magnesium": 58.0,
+        "potassium": 237.0,
+        "vitaminC": 0.2,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "0.5 量杯",
+          "originalLabel": "cup",
+          "grams": 126.0,
+          "sourcePortionId": "90683"
+        },
+        {
+          "label": "0.25 block",
+          "originalLabel": "block",
+          "grams": 81.0,
+          "sourcePortionId": "90684"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171269",
+      "name": "脱脂牛奶 · 强化维生素 A/D",
+      "state": "packaged",
+      "category": "豆类乳品",
+      "visualGroup": "milk",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171269",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171269/nutrients",
+      "sourceDescription": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+      "per100": {
+        "kcal": 34.0,
+        "protein": 3.37,
+        "carbs": 4.96,
+        "fat": 0.08,
+        "fiber": 0.0,
+        "sodium": 42.0,
+        "calcium": 122.0,
+        "iron": 0.03,
+        "zinc": 0.42,
+        "magnesium": 11.0,
+        "potassium": 156.0,
+        "vitaminC": 0.0,
+        "vitaminD": 1.2
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 245.0,
+          "sourcePortionId": "88325"
+        },
+        {
+          "label": "1 液量盎司",
+          "originalLabel": "fl oz",
+          "grams": 30.6,
+          "sourcePortionId": "88326"
+        },
+        {
+          "label": "1 quart",
+          "originalLabel": "quart",
+          "grams": 980.0,
+          "sourcePortionId": "88327"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171267",
+      "name": "低脂牛奶 · 2% 脂肪 · 强化 A/D",
+      "state": "packaged",
+      "category": "豆类乳品",
+      "visualGroup": "milk",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171267",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171267/nutrients",
+      "sourceDescription": "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D",
+      "per100": {
+        "kcal": 50.0,
+        "protein": 3.3,
+        "carbs": 4.8,
+        "fat": 1.98,
+        "fiber": 0.0,
+        "sodium": 47.0,
+        "calcium": 120.0,
+        "iron": 0.02,
+        "zinc": 0.48,
+        "magnesium": 11.0,
+        "potassium": 140.0,
+        "vitaminC": 0.2,
+        "vitaminD": 1.2
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 244.0,
+          "sourcePortionId": "88320"
+        },
+        {
+          "label": "1 液量盎司",
+          "originalLabel": "fl oz",
+          "grams": 30.5,
+          "sourcePortionId": "88321"
+        },
+        {
+          "label": "1 quart",
+          "originalLabel": "quart",
+          "grams": 976.0,
+          "sourcePortionId": "88322"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-170894",
+      "name": "希腊酸奶 · 原味脱脂",
+      "state": "packaged",
+      "category": "豆类乳品",
+      "visualGroup": "yogurt",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 170894",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/170894/nutrients",
+      "sourceDescription": "Yogurt, Greek, plain, nonfat (Includes foods for USDA's Food Distribution Program)",
+      "per100": {
+        "kcal": 59.0,
+        "protein": 10.19,
+        "carbs": 3.6,
+        "fat": 0.39,
+        "fiber": 0.0,
+        "sodium": 36.0,
+        "calcium": 110.0,
+        "iron": 0.07,
+        "zinc": 0.52,
+        "magnesium": 11.0,
+        "potassium": 141.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 container",
+          "originalLabel": "container",
+          "grams": 170.0,
+          "sourcePortionId": "87513"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169283",
+      "name": "毛豆 · 水煮无盐",
+      "state": "cooked",
+      "category": "豆类乳品",
+      "visualGroup": "edamame",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169283",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169283/nutrients",
+      "sourceDescription": "Soybeans, green, cooked, boiled, drained, without salt",
+      "per100": {
+        "kcal": 141.0,
+        "protein": 12.35,
+        "carbs": 11.05,
+        "fat": 6.4,
+        "fiber": 4.2,
+        "sodium": 14.0,
+        "calcium": 145.0,
+        "iron": 2.5,
+        "zinc": 0.91,
+        "magnesium": 60.0,
+        "potassium": 539.0,
+        "vitaminC": 17.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 180.0,
+          "sourcePortionId": "84595"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169757",
+      "name": "白米饭 · 长粒米 · 无盐",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "rice",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169757",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169757/nutrients",
+      "sourceDescription": "Rice, white, long-grain, regular, unenriched, cooked without salt",
+      "per100": {
+        "kcal": 130.0,
+        "protein": 2.69,
+        "carbs": 28.17,
+        "fat": 0.28,
+        "fiber": 0.4,
+        "sodium": 1.0,
+        "calcium": 10.0,
+        "iron": 0.2,
+        "zinc": 0.49,
+        "magnesium": 12.0,
+        "potassium": 35.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 158.0,
+          "sourcePortionId": "85462"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169756",
+      "name": "白米 · 长粒米 · 生",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "rice",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169756",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169756/nutrients",
+      "sourceDescription": "Rice, white, long-grain, regular, raw, unenriched",
+      "per100": {
+        "kcal": 365.0,
+        "protein": 7.13,
+        "carbs": 79.95,
+        "fat": 0.66,
+        "fiber": 1.3,
+        "sodium": 5.0,
+        "calcium": 28.0,
+        "iron": 0.8,
+        "zinc": 1.09,
+        "magnesium": 25.0,
+        "potassium": 115.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 185.0,
+          "sourcePortionId": "85461"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169704",
+      "name": "糙米饭 · 长粒米",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "rice",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169704",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169704/nutrients",
+      "sourceDescription": "Rice, brown, long-grain, cooked (Includes foods for USDA's Food Distribution Program)",
+      "per100": {
+        "kcal": 123.0,
+        "protein": 2.74,
+        "carbs": 25.58,
+        "fat": 0.97,
+        "fiber": 1.6,
+        "sodium": 4.0,
+        "calcium": 3.0,
+        "iron": 0.56,
+        "zinc": 0.71,
+        "magnesium": 39.0,
+        "potassium": 86.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 202.0,
+          "sourcePortionId": "85378"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169703",
+      "name": "糙米 · 长粒米 · 生",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "rice",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169703",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169703/nutrients",
+      "sourceDescription": "Rice, brown, long-grain, raw (Includes foods for USDA's Food Distribution Program)",
+      "per100": {
+        "kcal": 367.0,
+        "protein": 7.54,
+        "carbs": 76.25,
+        "fat": 3.2,
+        "fiber": 3.6,
+        "sodium": 5.0,
+        "calcium": 9.0,
+        "iron": 1.29,
+        "zinc": 2.13,
+        "magnesium": 116.0,
+        "potassium": 250.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 185.0,
+          "sourcePortionId": "85377"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-173904",
+      "name": "原味燕麦片 · 干",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "oats",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 173904",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/173904/nutrients",
+      "sourceDescription": "Cereals, oats, regular and quick, not fortified, dry",
+      "per100": {
+        "kcal": 379.0,
+        "protein": 13.15,
+        "carbs": 67.7,
+        "fat": 6.52,
+        "fiber": 10.1,
+        "sodium": 6.0,
+        "calcium": 52.0,
+        "iron": 4.25,
+        "zinc": 3.64,
+        "magnesium": 138.0,
+        "potassium": 362.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 81.0,
+          "sourcePortionId": "93454"
+        },
+        {
+          "label": "0.33 量杯",
+          "originalLabel": "cup",
+          "grams": 27.0,
+          "sourcePortionId": "93455"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-173905",
+      "name": "燕麦粥 · 清水煮无盐",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "oatmeal",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 173905",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/173905/nutrients",
+      "sourceDescription": "Cereals, oats, regular and quick, unenriched, cooked with water (includes boiling and microwaving), without salt",
+      "per100": {
+        "kcal": 71.0,
+        "protein": 2.54,
+        "carbs": 12.0,
+        "fat": 1.52,
+        "fiber": 1.7,
+        "sodium": 4.0,
+        "calcium": 9.0,
+        "iron": 0.9,
+        "zinc": 1.0,
+        "magnesium": 27.0,
+        "potassium": 70.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 234.0,
+          "sourcePortionId": "93456"
+        },
+        {
+          "label": "1 汤匙",
+          "originalLabel": "tbsp",
+          "grams": 14.6,
+          "sourcePortionId": "93457"
+        },
+        {
+          "label": "0.75 量杯",
+          "originalLabel": "cup",
+          "grams": 175.0,
+          "sourcePortionId": "93458"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168482",
+      "name": "红薯 · 生",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "sweetpotato",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168482",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168482/nutrients",
+      "sourceDescription": "Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program)",
+      "per100": {
+        "kcal": 86.0,
+        "protein": 1.57,
+        "carbs": 20.12,
+        "fat": 0.05,
+        "fiber": 3.0,
+        "sodium": 55.0,
+        "calcium": 30.0,
+        "iron": 0.61,
+        "zinc": 0.3,
+        "magnesium": 25.0,
+        "potassium": 337.0,
+        "vitaminC": 2.4,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 切块",
+          "originalLabel": "cup, cubes",
+          "grams": 133.0,
+          "sourcePortionId": "83166"
+        },
+        {
+          "label": "1 sweetpotato, 5\" long",
+          "originalLabel": "sweetpotato, 5\" long",
+          "grams": 130.0,
+          "sourcePortionId": "83167"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168484",
+      "name": "红薯 · 去皮水煮无盐",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "sweetpotato",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168484",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168484/nutrients",
+      "sourceDescription": "Sweet potato, cooked, boiled, without skin",
+      "per100": {
+        "kcal": 76.0,
+        "protein": 1.37,
+        "carbs": 17.72,
+        "fat": 0.14,
+        "fiber": 2.5,
+        "sodium": 27.0,
+        "calcium": 27.0,
+        "iron": 0.72,
+        "zinc": 0.2,
+        "magnesium": 18.0,
+        "potassium": 230.0,
+        "vitaminC": 12.8,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 压泥",
+          "originalLabel": "cup, mashed",
+          "grams": 328.0,
+          "sourcePortionId": "83172"
+        },
+        {
+          "label": "1 中等",
+          "originalLabel": "medium",
+          "grams": 151.0,
+          "sourcePortionId": "83173"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-170440",
+      "name": "土豆 · 去皮水煮无盐",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "potato",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 170440",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/170440/nutrients",
+      "sourceDescription": "Potatoes, boiled, cooked without skin, flesh, without salt",
+      "per100": {
+        "kcal": 86.0,
+        "protein": 1.71,
+        "carbs": 20.01,
+        "fat": 0.1,
+        "fiber": 1.8,
+        "sodium": 5.0,
+        "calcium": 8.0,
+        "iron": 0.31,
+        "zinc": 0.27,
+        "magnesium": 20.0,
+        "potassium": 328.0,
+        "vitaminC": 7.4,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "0.5 量杯",
+          "originalLabel": "cup",
+          "grams": 78.0,
+          "sourcePortionId": "86651"
+        },
+        {
+          "label": "1 大号 (3\" to 4-1/4\" dia.)",
+          "originalLabel": "large (3\" to 4-1/4\" dia.)",
+          "grams": 300.0,
+          "sourcePortionId": "86652"
+        },
+        {
+          "label": "1 中等 (2-1/4\" to 3-1/4\" dia.)",
+          "originalLabel": "medium (2-1/4\" to 3-1/4\" dia.)",
+          "grams": 167.0,
+          "sourcePortionId": "86653"
+        },
+        {
+          "label": "1 小号 (1-3/4\" to 2-1/2\" dia.)",
+          "originalLabel": "small (1-3/4\" to 2-1/2\" dia.)",
+          "grams": 125.0,
+          "sourcePortionId": "86654"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169999",
+      "name": "甜玉米粒 · 水煮无盐",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "corn",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169999",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169999/nutrients",
+      "sourceDescription": "Corn, sweet, yellow, cooked, boiled, drained, without salt",
+      "per100": {
+        "kcal": 96.0,
+        "protein": 3.41,
+        "carbs": 20.98,
+        "fat": 1.5,
+        "fiber": 2.4,
+        "sodium": 1.0,
+        "calcium": 3.0,
+        "iron": 0.45,
+        "zinc": 0.62,
+        "magnesium": 26.0,
+        "potassium": 218.0,
+        "vitaminC": 5.5,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 ear 小号 (5-1/2\" to 6-1/2\" long)",
+          "originalLabel": "ear small (5-1/2\" to 6-1/2\" long)",
+          "grams": 89.0,
+          "sourcePortionId": "85850"
+        },
+        {
+          "label": "1 ear 中等 (6-3/4\" to 7-1/2\" long)",
+          "originalLabel": "ear medium (6-3/4\" to 7-1/2\" long)",
+          "grams": 103.0,
+          "sourcePortionId": "85851"
+        },
+        {
+          "label": "1 ear 大号 (7-3/4\" to 9\" long)",
+          "originalLabel": "ear large (7-3/4\" to 9\" long)",
+          "grams": 118.0,
+          "sourcePortionId": "85852"
+        },
+        {
+          "label": "1 量杯 cut",
+          "originalLabel": "cup cut",
+          "grams": 149.0,
+          "sourcePortionId": "85853"
+        },
+        {
+          "label": "1 baby ear",
+          "originalLabel": "baby ear",
+          "grams": 8.0,
+          "sourcePortionId": "85854"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169998",
+      "name": "甜玉米粒 · 生",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "corn",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169998",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169998/nutrients",
+      "sourceDescription": "Corn, sweet, yellow, raw",
+      "per100": {
+        "kcal": 86.0,
+        "protein": 3.27,
+        "carbs": 18.7,
+        "fat": 1.35,
+        "fiber": 2.0,
+        "sodium": 15.0,
+        "calcium": 2.0,
+        "iron": 0.52,
+        "zinc": 0.46,
+        "magnesium": 37.0,
+        "potassium": 270.0,
+        "vitaminC": 6.8,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 145.0,
+          "sourcePortionId": "85846"
+        },
+        {
+          "label": "1 ear, 小号 (5-1/2\" to 6-1/2\" long)",
+          "originalLabel": "ear, small (5-1/2\" to 6-1/2\" long)",
+          "grams": 73.0,
+          "sourcePortionId": "85849"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-172688",
+      "name": "全麦面包 · 商售通用条目",
+      "state": "packaged",
+      "category": "主食碳水",
+      "visualGroup": "bread",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 172688",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/172688/nutrients",
+      "sourceDescription": "Bread, whole-wheat, commercially prepared",
+      "per100": {
+        "kcal": 252.0,
+        "protein": 12.45,
+        "carbs": 42.71,
+        "fat": 3.5,
+        "fiber": 6.0,
+        "sodium": 455.0,
+        "calcium": 161.0,
+        "iron": 2.47,
+        "zinc": 1.77,
+        "magnesium": 75.0,
+        "potassium": 254.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 片",
+          "originalLabel": "slice",
+          "grams": 32.0,
+          "sourcePortionId": "91108"
+        },
+        {
+          "label": "1 盎司",
+          "originalLabel": "oz",
+          "grams": 28.35,
+          "sourcePortionId": "91109"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168928",
+      "name": "意大利面 · 清水煮无盐",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "pasta",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168928",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168928/nutrients",
+      "sourceDescription": "Pasta, cooked, unenriched, without added salt",
+      "per100": {
+        "kcal": 158.0,
+        "protein": 5.8,
+        "carbs": 30.86,
+        "fat": 0.93,
+        "fiber": 1.8,
+        "sodium": 1.0,
+        "calcium": 7.0,
+        "iron": 0.5,
+        "zinc": 0.51,
+        "magnesium": 18.0,
+        "potassium": 44.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯 spaghetti not packed",
+          "originalLabel": "cup spaghetti not packed",
+          "grams": 124.0,
+          "sourcePortionId": "84008"
+        },
+        {
+          "label": "1 量杯 spaghetti packed",
+          "originalLabel": "cup spaghetti packed",
+          "grams": 151.0,
+          "sourcePortionId": "84009"
+        },
+        {
+          "label": "1 量杯 elbows not packed",
+          "originalLabel": "cup elbows not packed",
+          "grams": 120.0,
+          "sourcePortionId": "84010"
+        },
+        {
+          "label": "1 量杯 elbows packed",
+          "originalLabel": "cup elbows packed",
+          "grams": 132.0,
+          "sourcePortionId": "84011"
+        },
+        {
+          "label": "1 量杯 penne",
+          "originalLabel": "cup penne",
+          "grams": 107.0,
+          "sourcePortionId": "84012"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168927",
+      "name": "意大利面 · 干",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "pasta",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168927",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168927/nutrients",
+      "sourceDescription": "Pasta, dry, unenriched",
+      "per100": {
+        "kcal": 371.0,
+        "protein": 13.04,
+        "carbs": 74.67,
+        "fat": 1.51,
+        "fiber": 3.2,
+        "sodium": 6.0,
+        "calcium": 21.0,
+        "iron": 1.3,
+        "zinc": 1.41,
+        "magnesium": 53.0,
+        "potassium": 223.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯 spaghetti",
+          "originalLabel": "cup spaghetti",
+          "grams": 91.0,
+          "sourcePortionId": "84000"
+        },
+        {
+          "label": "2 盎司",
+          "originalLabel": "oz",
+          "grams": 57.0,
+          "sourcePortionId": "84001"
+        },
+        {
+          "label": "1 量杯 elbows",
+          "originalLabel": "cup elbows",
+          "grams": 122.0,
+          "sourcePortionId": "84002"
+        },
+        {
+          "label": "1 量杯 penne",
+          "originalLabel": "cup penne",
+          "grams": 95.0,
+          "sourcePortionId": "84003"
+        },
+        {
+          "label": "1 量杯 farfalle",
+          "originalLabel": "cup farfalle",
+          "grams": 81.0,
+          "sourcePortionId": "84004"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168917",
+      "name": "藜麦 · 煮熟",
+      "state": "cooked",
+      "category": "主食碳水",
+      "visualGroup": "quinoa",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168917",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168917/nutrients",
+      "sourceDescription": "Quinoa, cooked",
+      "per100": {
+        "kcal": 120.0,
+        "protein": 4.4,
+        "carbs": 21.3,
+        "fat": 1.92,
+        "fiber": 2.8,
+        "sodium": 7.0,
+        "calcium": 17.0,
+        "iron": 1.49,
+        "zinc": 1.09,
+        "magnesium": 64.0,
+        "potassium": 172.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 185.0,
+          "sourcePortionId": "83990"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168874",
+      "name": "藜麦 · 生",
+      "state": "raw",
+      "category": "主食碳水",
+      "visualGroup": "quinoa",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168874",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168874/nutrients",
+      "sourceDescription": "Quinoa, uncooked",
+      "per100": {
+        "kcal": 368.0,
+        "protein": 14.12,
+        "carbs": 64.16,
+        "fat": 6.07,
+        "fiber": 7.0,
+        "sodium": 5.0,
+        "calcium": 47.0,
+        "iron": 4.57,
+        "zinc": 3.1,
+        "magnesium": 197.0,
+        "potassium": 563.0,
+        "vitaminC": null,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 170.0,
+          "sourcePortionId": "83924"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-173944",
+      "name": "香蕉 · 去皮可食部",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "banana",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 173944",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/173944/nutrients",
+      "sourceDescription": "Bananas, raw",
+      "per100": {
+        "kcal": 89.0,
+        "protein": 1.09,
+        "carbs": 22.84,
+        "fat": 0.33,
+        "fiber": 2.6,
+        "sodium": 1.0,
+        "calcium": 5.0,
+        "iron": 0.26,
+        "zinc": 0.15,
+        "magnesium": 27.0,
+        "potassium": 358.0,
+        "vitaminC": 8.7,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 压泥",
+          "originalLabel": "cup, mashed",
+          "grams": 225.0,
+          "sourcePortionId": "93511"
+        },
+        {
+          "label": "1 量杯, 切片",
+          "originalLabel": "cup, sliced",
+          "grams": 150.0,
+          "sourcePortionId": "93512"
+        },
+        {
+          "label": "1 extra 小号 (less than 6\" long)",
+          "originalLabel": "extra small (less than 6\" long)",
+          "grams": 81.0,
+          "sourcePortionId": "93513"
+        },
+        {
+          "label": "1 小号 (6\" to 6-7/8\" long)",
+          "originalLabel": "small (6\" to 6-7/8\" long)",
+          "grams": 101.0,
+          "sourcePortionId": "93514"
+        },
+        {
+          "label": "1 中等 (7\" to 7-7/8\" long)",
+          "originalLabel": "medium (7\" to 7-7/8\" long)",
+          "grams": 118.0,
+          "sourcePortionId": "93515"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171688",
+      "name": "苹果 · 带皮可食部",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "apple",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171688",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171688/nutrients",
+      "sourceDescription": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+      "per100": {
+        "kcal": 52.0,
+        "protein": 0.26,
+        "carbs": 13.81,
+        "fat": 0.17,
+        "fiber": 2.4,
+        "sodium": 1.0,
+        "calcium": 6.0,
+        "iron": 0.12,
+        "zinc": 0.04,
+        "magnesium": 5.0,
+        "potassium": 107.0,
+        "vitaminC": 4.6,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, quartered or 切碎",
+          "originalLabel": "cup, quartered or chopped",
+          "grams": 125.0,
+          "sourcePortionId": "89190"
+        },
+        {
+          "label": "1 量杯 片s",
+          "originalLabel": "cup slices",
+          "grams": 109.0,
+          "sourcePortionId": "89191"
+        },
+        {
+          "label": "1 大号 (3-1/4\" dia)",
+          "originalLabel": "large (3-1/4\" dia)",
+          "grams": 223.0,
+          "sourcePortionId": "89192"
+        },
+        {
+          "label": "1 中等 (3\" dia)",
+          "originalLabel": "medium (3\" dia)",
+          "grams": 182.0,
+          "sourcePortionId": "89193"
+        },
+        {
+          "label": "1 小号 (2-3/4\" dia)",
+          "originalLabel": "small (2-3/4\" dia)",
+          "grams": 149.0,
+          "sourcePortionId": "89194"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171705",
+      "name": "牛油果 · 去皮去核可食部",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "avocado",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171705",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171705/nutrients",
+      "sourceDescription": "Avocados, raw, all commercial varieties",
+      "per100": {
+        "kcal": 160.0,
+        "protein": 2.0,
+        "carbs": 8.53,
+        "fat": 14.66,
+        "fiber": 6.7,
+        "sodium": 7.0,
+        "calcium": 12.0,
+        "iron": 0.55,
+        "zinc": 0.64,
+        "magnesium": 29.0,
+        "potassium": 485.0,
+        "vitaminC": 10.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 切块",
+          "originalLabel": "cup, cubes",
+          "grams": 150.0,
+          "sourcePortionId": "89223"
+        },
+        {
+          "label": "1 量杯, pureed",
+          "originalLabel": "cup, pureed",
+          "grams": 230.0,
+          "sourcePortionId": "89224"
+        },
+        {
+          "label": "1 量杯, 切片",
+          "originalLabel": "cup, sliced",
+          "grams": 146.0,
+          "sourcePortionId": "89225"
+        },
+        {
+          "label": "1 avocado, ns as to florida or california",
+          "originalLabel": "avocado, NS as to Florida or California",
+          "grams": 201.0,
+          "sourcePortionId": "89226"
+        },
+        {
+          "label": "1 nlea serving",
+          "originalLabel": "NLEA Serving",
+          "grams": 50.0,
+          "sourcePortionId": "89227"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-169967",
+      "name": "西兰花 · 水煮沥干无盐",
+      "state": "cooked",
+      "category": "蔬菜水果",
+      "visualGroup": "broccoli",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 169967",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/169967/nutrients",
+      "sourceDescription": "Broccoli, cooked, boiled, drained, without salt",
+      "per100": {
+        "kcal": 35.0,
+        "protein": 2.38,
+        "carbs": 7.18,
+        "fat": 0.41,
+        "fiber": 3.3,
+        "sodium": 41.0,
+        "calcium": 40.0,
+        "iron": 0.67,
+        "zinc": 0.45,
+        "magnesium": 21.0,
+        "potassium": 293.0,
+        "vitaminC": 64.9,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "0.5 量杯, 切碎",
+          "originalLabel": "cup, chopped",
+          "grams": 78.0,
+          "sourcePortionId": "85772"
+        },
+        {
+          "label": "1 stalk, 大号 (11\"-12\" long)",
+          "originalLabel": "stalk, large (11\"-12\" long)",
+          "grams": 280.0,
+          "sourcePortionId": "85773"
+        },
+        {
+          "label": "1 stalk, 中等 (7-1/2\" - 8\" long)",
+          "originalLabel": "stalk, medium (7-1/2\" - 8\" long)",
+          "grams": 180.0,
+          "sourcePortionId": "85774"
+        },
+        {
+          "label": "1 stalk, 小号 (5\" long)",
+          "originalLabel": "stalk, small (5\" long)",
+          "grams": 140.0,
+          "sourcePortionId": "85775"
+        },
+        {
+          "label": "1 spear (about 5\" long)",
+          "originalLabel": "spear (about 5\" long)",
+          "grams": 37.0,
+          "sourcePortionId": "85776"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-170379",
+      "name": "西兰花 · 生",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "broccoli",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 170379",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/170379/nutrients",
+      "sourceDescription": "Broccoli, raw",
+      "per100": {
+        "kcal": 34.0,
+        "protein": 2.82,
+        "carbs": 6.64,
+        "fat": 0.37,
+        "fiber": 2.6,
+        "sodium": 33.0,
+        "calcium": 47.0,
+        "iron": 0.73,
+        "zinc": 0.41,
+        "magnesium": 21.0,
+        "potassium": 316.0,
+        "vitaminC": 89.2,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯 切碎",
+          "originalLabel": "cup chopped",
+          "grams": 91.0,
+          "sourcePortionId": "86528"
+        },
+        {
+          "label": "1 bunch",
+          "originalLabel": "bunch",
+          "grams": 608.0,
+          "sourcePortionId": "86529"
+        },
+        {
+          "label": "1 spear (about 5\" long)",
+          "originalLabel": "spear (about 5\" long)",
+          "grams": 31.0,
+          "sourcePortionId": "86530"
+        },
+        {
+          "label": "1 stalk",
+          "originalLabel": "stalk",
+          "grams": 151.0,
+          "sourcePortionId": "86531"
+        },
+        {
+          "label": "0.5 量杯, 切碎 or diced",
+          "originalLabel": "cup, chopped or diced",
+          "grams": 44.0,
+          "sourcePortionId": "86532"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168462",
+      "name": "菠菜 · 生",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "spinach",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168462",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168462/nutrients",
+      "sourceDescription": "Spinach, raw",
+      "per100": {
+        "kcal": 23.0,
+        "protein": 2.86,
+        "carbs": 3.63,
+        "fat": 0.39,
+        "fiber": 2.2,
+        "sodium": 79.0,
+        "calcium": 99.0,
+        "iron": 2.71,
+        "zinc": 0.53,
+        "magnesium": 79.0,
+        "potassium": 558.0,
+        "vitaminC": 28.1,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 30.0,
+          "sourcePortionId": "83132"
+        },
+        {
+          "label": "1 bunch",
+          "originalLabel": "bunch",
+          "grams": 340.0,
+          "sourcePortionId": "83133"
+        },
+        {
+          "label": "1 leaf",
+          "originalLabel": "leaf",
+          "grams": 10.0,
+          "sourcePortionId": "83134"
+        },
+        {
+          "label": "1 package (10 盎司)",
+          "originalLabel": "package (10 oz)",
+          "grams": 284.0,
+          "sourcePortionId": "83135"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168463",
+      "name": "菠菜 · 水煮沥干无盐",
+      "state": "cooked",
+      "category": "蔬菜水果",
+      "visualGroup": "spinach",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168463",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168463/nutrients",
+      "sourceDescription": "Spinach, cooked, boiled, drained, without salt",
+      "per100": {
+        "kcal": 23.0,
+        "protein": 2.97,
+        "carbs": 3.75,
+        "fat": 0.26,
+        "fiber": 2.4,
+        "sodium": 70.0,
+        "calcium": 136.0,
+        "iron": 3.57,
+        "zinc": 0.76,
+        "magnesium": 87.0,
+        "potassium": 466.0,
+        "vitaminC": 9.8,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 180.0,
+          "sourcePortionId": "83136"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-170457",
+      "name": "番茄 · 生",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "tomato",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 170457",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/170457/nutrients",
+      "sourceDescription": "Tomatoes, red, ripe, raw, year round average",
+      "per100": {
+        "kcal": 18.0,
+        "protein": 0.88,
+        "carbs": 3.89,
+        "fat": 0.2,
+        "fiber": 1.2,
+        "sodium": 5.0,
+        "calcium": 10.0,
+        "iron": 0.27,
+        "zinc": 0.17,
+        "magnesium": 11.0,
+        "potassium": 237.0,
+        "vitaminC": 13.7,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯 cherry tomatoes",
+          "originalLabel": "cup cherry tomatoes",
+          "grams": 149.0,
+          "sourcePortionId": "86681"
+        },
+        {
+          "label": "1 量杯, 切碎 or 切片",
+          "originalLabel": "cup, chopped or sliced",
+          "grams": 180.0,
+          "sourcePortionId": "86682"
+        },
+        {
+          "label": "1 italian tomato",
+          "originalLabel": "Italian tomato",
+          "grams": 62.0,
+          "sourcePortionId": "86683"
+        },
+        {
+          "label": "1 cherry",
+          "originalLabel": "cherry",
+          "grams": 17.0,
+          "sourcePortionId": "86684"
+        },
+        {
+          "label": "1 大号 整个 (3\" dia)",
+          "originalLabel": "large whole (3\" dia)",
+          "grams": 182.0,
+          "sourcePortionId": "86685"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-168409",
+      "name": "黄瓜 · 带皮生",
+      "state": "raw",
+      "category": "蔬菜水果",
+      "visualGroup": "cucumber",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 168409",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/168409/nutrients",
+      "sourceDescription": "Cucumber, with peel, raw",
+      "per100": {
+        "kcal": 15.0,
+        "protein": 0.65,
+        "carbs": 3.63,
+        "fat": 0.11,
+        "fiber": 0.5,
+        "sodium": 2.0,
+        "calcium": 16.0,
+        "iron": 0.28,
+        "zinc": 0.2,
+        "magnesium": 13.0,
+        "potassium": 147.0,
+        "vitaminC": 2.8,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "0.5 量杯 片s",
+          "originalLabel": "cup slices",
+          "grams": 52.0,
+          "sourcePortionId": "83049"
+        },
+        {
+          "label": "1 cucumber (8-1/4\")",
+          "originalLabel": "cucumber (8-1/4\")",
+          "grams": 301.0,
+          "sourcePortionId": "83050"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-170567",
+      "name": "杏仁 · 原味",
+      "state": "raw",
+      "category": "坚果油脂",
+      "visualGroup": "almond",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 170567",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/170567/nutrients",
+      "sourceDescription": "Nuts, almonds",
+      "per100": {
+        "kcal": 579.0,
+        "protein": 21.15,
+        "carbs": 21.55,
+        "fat": 49.93,
+        "fiber": 12.5,
+        "sodium": 1.0,
+        "calcium": 269.0,
+        "iron": 3.71,
+        "zinc": 3.12,
+        "magnesium": 270.0,
+        "potassium": 733.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 整个",
+          "originalLabel": "cup, whole",
+          "grams": 143.0,
+          "sourcePortionId": "86863"
+        },
+        {
+          "label": "1 量杯, 切片",
+          "originalLabel": "cup, sliced",
+          "grams": 92.0,
+          "sourcePortionId": "86864"
+        },
+        {
+          "label": "1 量杯, slivered",
+          "originalLabel": "cup, slivered",
+          "grams": 108.0,
+          "sourcePortionId": "86865"
+        },
+        {
+          "label": "1 量杯, ground",
+          "originalLabel": "cup, ground",
+          "grams": 95.0,
+          "sourcePortionId": "86866"
+        },
+        {
+          "label": "1 盎司 (23 整个 kernels)",
+          "originalLabel": "oz (23 whole kernels)",
+          "grams": 28.35,
+          "sourcePortionId": "86867"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-170187",
+      "name": "核桃仁 · 原味",
+      "state": "raw",
+      "category": "坚果油脂",
+      "visualGroup": "walnut",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 170187",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/170187/nutrients",
+      "sourceDescription": "Nuts, walnuts, english",
+      "per100": {
+        "kcal": 654.0,
+        "protein": 15.23,
+        "carbs": 13.71,
+        "fat": 65.21,
+        "fiber": 6.7,
+        "sodium": 2.0,
+        "calcium": 98.0,
+        "iron": 2.91,
+        "zinc": 3.09,
+        "magnesium": 158.0,
+        "potassium": 441.0,
+        "vitaminC": 1.3,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 量杯, 切碎",
+          "originalLabel": "cup, chopped",
+          "grams": 117.0,
+          "sourcePortionId": "86201"
+        },
+        {
+          "label": "1 量杯, ground",
+          "originalLabel": "cup, ground",
+          "grams": 80.0,
+          "sourcePortionId": "86202"
+        },
+        {
+          "label": "1 量杯 去壳 (50 halves)",
+          "originalLabel": "cup shelled (50 halves)",
+          "grams": 100.0,
+          "sourcePortionId": "86204"
+        },
+        {
+          "label": "1 量杯 pieces or chips",
+          "originalLabel": "cup pieces or chips",
+          "grams": 120.0,
+          "sourcePortionId": "86205"
+        },
+        {
+          "label": "1 盎司 (14 halves)",
+          "originalLabel": "oz (14 halves)",
+          "grams": 28.35,
+          "sourcePortionId": "86206"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-172470",
+      "name": "花生酱 · 顺滑无盐",
+      "state": "packaged",
+      "category": "坚果油脂",
+      "visualGroup": "peanutbutter",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 172470",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/172470/nutrients",
+      "sourceDescription": "Peanut butter, smooth style, without salt",
+      "per100": {
+        "kcal": 598.0,
+        "protein": 22.21,
+        "carbs": 22.31,
+        "fat": 51.36,
+        "fiber": 5.0,
+        "sodium": 17.0,
+        "calcium": 49.0,
+        "iron": 1.74,
+        "zinc": 2.51,
+        "magnesium": 168.0,
+        "potassium": 558.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "2 汤匙",
+          "originalLabel": "tbsp",
+          "grams": 32.0,
+          "sourcePortionId": "90673"
+        },
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 258.0,
+          "sourcePortionId": "90674"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171413",
+      "name": "橄榄油",
+      "state": "packaged",
+      "category": "坚果油脂",
+      "visualGroup": "oliveoil",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171413",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171413/nutrients",
+      "sourceDescription": "Oil, olive, salad or cooking",
+      "per100": {
+        "kcal": 884.0,
+        "protein": 0.0,
+        "carbs": 0.0,
+        "fat": 100.0,
+        "fiber": 0.0,
+        "sodium": 2.0,
+        "calcium": 1.0,
+        "iron": 0.56,
+        "zinc": 0.0,
+        "magnesium": 0.0,
+        "potassium": 1.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 汤匙",
+          "originalLabel": "tablespoon",
+          "grams": 13.5,
+          "sourcePortionId": "88667"
+        },
+        {
+          "label": "1 量杯",
+          "originalLabel": "cup",
+          "grams": 216.0,
+          "sourcePortionId": "88668"
+        },
+        {
+          "label": "1 茶匙",
+          "originalLabel": "tsp",
+          "grams": 4.5,
+          "sourcePortionId": "88669"
+        }
+      ]
+    },
+    {
+      "id": "usda-sr-171890",
+      "name": "黑咖啡 · 冲煮无糖无奶",
+      "state": "cooked",
+      "category": "饮品",
+      "visualGroup": "coffee",
+      "source": "USDA FoodData Central · SR Legacy 2018 · FDC 171890",
+      "sourceUrl": "https://fdc.nal.usda.gov/food-details/171890/nutrients",
+      "sourceDescription": "Beverages, coffee, brewed, prepared with tap water",
+      "per100": {
+        "kcal": 1.0,
+        "protein": 0.12,
+        "carbs": 0.0,
+        "fat": 0.02,
+        "fiber": 0.0,
+        "sodium": 2.0,
+        "calcium": 2.0,
+        "iron": 0.01,
+        "zinc": 0.02,
+        "magnesium": 3.0,
+        "potassium": 49.0,
+        "vitaminC": 0.0,
+        "vitaminD": 0.0
+      },
+      "portions": [
+        {
+          "label": "1 液量盎司",
+          "originalLabel": "fl oz",
+          "grams": 29.6,
+          "sourcePortionId": "89518"
+        },
+        {
+          "label": "6 液量盎司",
+          "originalLabel": "fl oz",
+          "grams": 178.0,
+          "sourcePortionId": "89519"
+        },
+        {
+          "label": "1 量杯 (8 液量盎司)",
+          "originalLabel": "cup (8 fl oz)",
+          "grams": 237.0,
+          "sourcePortionId": "89520"
+        }
+      ]
+    }
+  ]
+}

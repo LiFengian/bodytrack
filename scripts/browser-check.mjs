@@ -44,7 +44,7 @@ try{
   await click('finish');await page.locator('#f-energy').selectOption('4');await page.locator('#f-neck').selectOption('2');await page.locator('#f-warmup').fill('轻柔完成，无颈部后仰');await page.locator('#f-diary').fill('自动化验证记录');await page.locator('#modal [type=submit]').click();
   await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.sessions[0].status,'completed');assert.equal(data.sessions[0].journal.neck,2);assert.deepEqual(data.sessions[0].exercises.at(-1).sets.slice(0,2).map(x=>x.reps),[9,10]);
   checkpoint('Set actuals, left/right differences and neck diary persist across reload');
-  await nav('diet');await click('add-meal');
+  await nav('diet');await click('add-meal');await click('new-food-quick');
   await page.locator('#f-name').fill('测试标签食物');await page.locator('#f-source').fill('测试夹具，非真实食品');await page.locator('#f-n-kcal').fill('120');await page.locator('#f-n-protein').fill('8');await page.locator('#f-n-carbs').fill('15');await page.locator('#f-n-fat').fill('3');await page.locator('#f-n-sodium').fill('50');await page.locator('#f-grams').fill('75');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});
   data=await dbState();assert.equal(data.meals.length,1);assert.equal(C.calculateNutrition(data.meals[0].per100,data.meals[0].grams).kcal,90);assert.equal(data.meals[0].per100.fiber,null);
   await page.screenshot({path:fileURLToPath(new URL('diet-iphone.png',root)),fullPage:true});
@@ -75,7 +75,7 @@ try{
   await nav('profile');await page.locator('[data-pref="theme"]').selectOption('dark');await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()),'#131d20');await page.screenshot({path:fileURLToPath(new URL('profile-dark-iphone.png',root)),fullPage:true});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   checkpoint('Trends and dark mode render within the mobile viewport');
-  await context.setOffline(true);await page.reload();await page.waitForSelector('.page-title');await nav('diet');assert.match(await page.locator('body').innerText(),/测试标签食物|我的食物/);await click('add-meal');await page.locator('#f-grams').fill('100');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.meals.length,2);await context.setOffline(false);
+  await context.setOffline(true);await page.reload();await page.waitForSelector('.page-title');await nav('diet');assert.match(await page.locator('body').innerText(),/测试标签食物|我的食物/);await click('add-meal');await page.locator(`#picker-results [data-action="pick-food"][data-id="${data.foods[0].id}"]`).click();await page.locator('#f-grams').fill('100');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.meals.length,2);await context.setOffline(false);
   checkpoint('Offline reload, navigation and new nutrition writes work');
   const atomic=await page.evaluate(async()=>{
     const {LocalStore}=await import('./store.mjs');

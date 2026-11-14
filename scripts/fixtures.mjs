@@ -4,6 +4,7 @@ import * as C from '../dist/core.mjs';
 const out=new URL('../dist/examples/',import.meta.url),schemas=new URL('../dist/schemas/',import.meta.url);
 await mkdir(out,{recursive:true});await mkdir(schemas,{recursive:true});
 const write=(dir,name,data)=>writeFile(new URL(name,dir),JSON.stringify(data,null,2)+'\n');
+if(!process.argv.includes('--schemas-only')){
 const plan=C.builtinPlan('2026-11-14');
 await write(out,'plan-v1.json',plan);
 const v2=C.clone(plan);v2.planVersion=2;v2.effectiveDate='2026-11-30';v2.name='基础计划 · 示例调整版';v2.trainingDays[0].exercises[2].repetitions=12;
@@ -16,6 +17,7 @@ data.meals.push(C.mealFromFood(data.foods[0],75,'2026-11-14','早餐'));
 data.body.push({id:C.uid(),date:'2026-11-14',weight:70,notes:'纯虚构测试体重',createdAt:new Date().toISOString()});
 await write(out,'records-v1.json',C.exportRecords(data,'2026-11-14','2026-11-30'));
 await write(out,'backup-v1.json',C.createBackup(data));
+}
 
 const text=(maxLength=2000)=>({type:'string',minLength:1,maxLength});
 const date={type:'string',format:'date',pattern:'^\\d{4}-\\d{2}-\\d{2}$'};
@@ -34,6 +36,11 @@ const nutrients={...obj(nutrientProperties,C.REQUIRED_NUTRIENTS),additionalPrope
 const foodProperties={id,name:text(150),state:{enum:['raw','cooked','packaged']},source:text(1000),per100:nutrients};
 const food=obj(foodProperties);
 const meal=obj({...foodProperties,date,meal:{enum:C.MEALS},grams:{type:'number',exclusiveMinimum:0,maximum:100000},foodId:nullable(id),createdAt:datetime});
+Object.assign(meal.properties,{
+ sourceUrl:{type:'string',format:'uri',pattern:'^https://'},sourceDescription:{type:'string'},catalogVersion:{type:'integer',minimum:1},
+ entryMethod:{enum:['catalog','custom','photo-confirmed']},portionBasis:{enum:['weighed','manual-estimate','household-estimate']},
+ portionReference:obj({label:text(200),originalLabel:{type:'string'},grams:{type:'number',minimum:.1,maximum:100000},sourcePortionId:{type:'string'}},['label','grams'])
+});
 const set=obj({id,number:{type:'integer',minimum:1,maximum:12},side:{enum:['both','left','right']},targetReps:{type:'integer',minimum:1,maximum:100},reps:nullable({type:'number',minimum:0,maximum:1000}),weight:nullable({type:'number',minimum:0,maximum:10000}),rpe:nullable({type:'number',minimum:0,maximum:10}),rir:nullable({type:'number',minimum:0,maximum:10}),done:{type:'boolean'}});
 const score=(min,max)=>nullable({type:'number',minimum:min,maximum:max});
 const journal={...obj({energy:score(1,5),fatigue:score(1,10),satisfaction:score(1,5),pain:score(0,10),neck:score(0,10),...Object.fromEntries(['painLocation','soreness','scapula','trunk','warmup','diary'].map(k=>[k,{type:'string',maxLength:10000}]))},[]),additionalProperties:false};
@@ -43,10 +50,10 @@ const sessionDef=obj(sessionProperties);
 const version=obj({key:id,plan:obj(planProperties),importedAt:datetime});
 const activation=obj({id,planKey:id,effectiveDate:date,createdAt:datetime});
 const body=obj({id,date,weight:{type:'number',minimum:1,maximum:500},notes:{type:'string'},createdAt:datetime});
-const totals=obj(Object.fromEntries(Object.keys(C.NUTRIENTS).map(k=>[k,obj({value:nullable(nonnegative),unknownCount:{type:'integer',minimum:0},complete:{type:'boolean'}})])));
+const totals=obj(Object.fromEntries(Object.keys(C.NUTRIENTS).map(k=>[k,obj({value:nullable({type:'number',minimum:0}),unknownCount:{type:'integer',minimum:0},complete:{type:'boolean'}})])));
 const adjustments={type:'object',additionalProperties:date};
 const records=obj({schemaVersion:{const:'1.0'},type:{const:'bodytrack.records'},exportedAt:datetime,range:obj({from:date,to:date}),plans:arr(version,1),activations:arr(activation,1),cycleAdjustments:adjustments,cycle:obj({asOf:date,next:nullable(obj({activation,plan:obj(planProperties),index:{type:'integer',minimum:0},cycleNumber:{type:'integer',minimum:1},dayNumber:{type:'integer',minimum:1},trainingDay:nullable(obj({id:text(100),name:text(100),focus:text(1000),exercises:arr(exercise,1,40)})),plannedDate:date}))}),sessions:arr(obj({...sessionProperties,completion})),meals:arr(meal),body:arr(body),nutritionTargets:{type:'object',additionalProperties:nullable(nonnegative)},dailyNutrition:arr(obj({date,nutrients:totals})),completion:obj({completed:{type:'integer',minimum:0},plannedResolved:{type:'integer',minimum:0},ratio:nullable({type:'number',minimum:0,maximum:1}),definition:text()}),mediaIncluded:{const:false}});
 await write(schemas,'records.schema.json',{...header('BodyTrack records export v1.0','用于分析，不可用于恢复。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期，并非当时的历史数据库快照。'),...records});
 const state=obj({dataVersion:{const:1},revision:{type:'integer',minimum:0},createdAt:datetime,settings:obj({theme:{enum:['system','light','dark']},introSeen:{type:'boolean'},reducedVolume:{type:'boolean'},lastBackupAt:nullable(datetime),targets:{type:'object',additionalProperties:nullable(nonnegative)}}),plans:arr(version,1),activations:arr(activation,1),sessions:arr(sessionDef),foods:arr(food),meals:arr(meal),body:arr(body),adjustments});
 await write(schemas,'backup.schema.json',{...header('BodyTrack full backup v1.0','恢复前还必须通过 validateState 的引用、数值、唯一 ID 与关系校验。设备内回退快照不包含在外部备份中。'),...obj({schemaVersion:{const:'1.0'},type:{const:'bodytrack.backup'},exportedAt:datetime,data:state})});
-console.log('Generated 5 example fixtures and 3 separate JSON schemas. All sample records are fictitious.');
+console.log(process.argv.includes('--schemas-only')?'Updated 3 JSON schemas; existing sample files preserved.':'Generated 5 example fixtures and 3 separate JSON schemas. All sample records are fictitious.');

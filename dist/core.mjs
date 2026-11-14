@@ -217,6 +217,8 @@ export function validateFood(f) {
   if(!str(f.name,150)) errors.push('请填写食物名称');
   if(!['raw','cooked','packaged'].includes(f.state)) errors.push('请选择生食、熟食或包装即食');
   if(!str(f.source,1000)) errors.push('请填写营养数据来源');
+  if(f.sourceUrl!==undefined&&!(typeof f.sourceUrl==='string'&&/^https:\/\//.test(f.sourceUrl)))errors.push('数据来源链接必须为 HTTPS');
+  if(f.portions!==undefined&&!(Array.isArray(f.portions)&&f.portions.length<=100&&f.portions.every(p=>object(p)&&str(p.label,200)&&finite(p.grams,.1,100000))))errors.push('参考份量数据无效');
   if(!object(f.per100)) errors.push('每 100 g 营养数据无效');
   else {
     for(const k of REQUIRED_NUTRIENTS) if(!(k in f.per100)) errors.push(`缺少 ${k}，未知请用 null`);
@@ -238,7 +240,7 @@ export function aggregateNutrition(meals) {
 export function mealFromFood(food,grams,date,meal) {
   assert(!validateFood(food).length,'食物数据无效'); assert(finite(grams,.1,100000),'食用重量需大于 0');
   assert(isDate(date)&&MEALS.includes(meal),'用餐日期或餐次无效');
-  return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:clone(food.per100),grams,createdAt:nowISO()};
+  return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:clone(food.per100),grams,createdAt:nowISO(),...(food.sourceUrl?{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:1}:{})};
 }
 export function composeRecipe(name,source,ingredients,finalGrams) {
   assert(str(name,150)&&str(source,1000)&&ingredients.length>0,'菜谱名称、来源及食材必填');
@@ -286,7 +288,12 @@ export function validateState(s) {
   for(const x of s.sessions.filter(x=>x.makeupFor)) assert(s.sessions.some(y=>y.id===x.makeupFor&&y.status==='skipped'&&y.planKey===x.planKey&&y.occurrenceIndex===x.occurrenceIndex),'补练引用无效');
   assert(unique(s.sessions.filter(x=>x.makeupFor).map(x=>x.makeupFor)),'补练记录重复');
   for(const x of [...s.foods,...s.meals]) {addId(x.id);assert(!validateFood(x).length,'食物营养数据无效');}
-  for(const x of s.meals) assert(isDate(x.date)&&MEALS.includes(x.meal)&&finite(x.grams,.1,100000),'饮食记录无效');
+  for(const x of s.meals){
+    assert(isDate(x.date)&&MEALS.includes(x.meal)&&finite(x.grams,.1,100000),'饮食记录无效');
+    if(x.entryMethod!==undefined)assert(['catalog','custom','photo-confirmed'].includes(x.entryMethod),'饮食记录方式无效');
+    if(x.portionBasis!==undefined)assert(['weighed','manual-estimate','household-estimate'].includes(x.portionBasis),'份量依据无效');
+    if(x.portionReference!==undefined)assert(object(x.portionReference)&&str(x.portionReference.label,200)&&finite(x.portionReference.grams,.1,100000),'参考份量快照无效');
+  }
   for(const x of s.body) {addId(x.id);assert(isDate(x.date)&&finite(x.weight,1,500)&&typeof x.notes==='string','体重记录无效');}
   assert(unique(allIds),'备份内的记录 ID 重复');
   return s;
@@ -336,8 +343,8 @@ export function trainingCSV(records) {
 }
 export function nutritionCSV(records) {
   const keys=Object.keys(NUTRIENTS);
-  return csv([['日期','餐次','食物','重量g','生熟','来源',...keys.map(k=>`${NUTRIENTS[k][0]}(${NUTRIENTS[k][1]})`)],
-    ...records.meals.map(m=>{const n=calculateNutrition(m.per100,m.grams);return [m.date,m.meal,m.name,m.grams,m.state,m.source,...keys.map(k=>n[k]??'未知')];})]);
+  return csv([['日期','餐次','食物','重量g','生熟','来源','来源链接','记录方式','重量依据',...keys.map(k=>`${NUTRIENTS[k][0]}(${NUTRIENTS[k][1]})`)],
+    ...records.meals.map(m=>{const n=calculateNutrition(m.per100,m.grams);return [m.date,m.meal,m.name,m.grams,m.state,m.source,m.sourceUrl??'',m.entryMethod??'手动',m.portionBasis??'未注明',...keys.map(k=>n[k]??'未知')];})]);
 }
 export function summaryReport(r) {
   const lines=[`# BodyTrack 个人记录 ${r.range.from} 至 ${r.range.to}`,'','数据为用户自报记录，不能据此诊断脊柱、颈椎结构或治疗效果。','',
@@ -345,6 +352,7 @@ export function summaryReport(r) {
   for(const s of r.sessions) lines.push(`${s.date} ${s.name} · ${s.status}${s.makeupFor?' · 补练':''} · 已打卡 ${s.completion.done}/${s.completion.total} 组`,...s.exercises.map(e=>`- ${e.target.name}：${e.sets.filter(x=>x.done).map(x=>`${x.side} ${x.reps}次/${x.weight??'未知'}kg RPE${x.rpe??'?'} RIR${x.rir??'?'}`).join('；')||'未打卡'}；备注：${e.notes}；左右差异：${e.sideDifference}`),`训练感受：${JSON.stringify(s.journal)}`,'');
   lines.push('## 每日营养（不完整数据仅为已知部分，未知不作 0）');
   for(const d of r.dailyNutrition) lines.push(`${d.date}：${REQUIRED_NUTRIENTS.map(k=>`${NUTRIENTS[k][0]} ${d.nutrients[k].value??'未知'}${NUTRIENTS[k][1]}${d.nutrients[k].complete?'':'（有缺失）'}`).join('，')}`);
+  lines.push('','## 食物来源与份量依据','营养为数据库或标签参考值，非照片实测。照片辅助条目经用户确认；参考份量和用户估重都属于估算。',...r.meals.map(m=>`${m.date} ${m.meal} ${m.name} ${m.grams}g · ${m.portionBasis??'重量依据未注明'} · ${m.entryMethod??'手动'} · ${m.source}`));
   lines.push('','## 体重与用户描述',...r.body.map(x=>`${x.date} ${x.weight}kg ${x.notes}`),'','分析建议：结合实际完成率、疲劳、疼痛、颈部紧张及动作感受调整一般训练。新的训练建议请遵守 plan.schema.json；不要自动指定单侧脊柱矫正。');
   return lines.join('\n');
 }

@@ -1231,6 +1231,57 @@
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
+              },
+              "sourceUrl": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "sourceDescription": {
+                "type": "string"
+              },
+              "catalogVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "entryMethod": {
+                "enum": [
+                  "catalog",
+                  "custom",
+                  "photo-confirmed"
+                ]
+              },
+              "portionBasis": {
+                "enum": [
+                  "weighed",
+                  "manual-estimate",
+                  "household-estimate"
+                ]
+              },
+              "portionReference": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "grams"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "originalLabel": {
+                    "type": "string"
+                  },
+                  "grams": {
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 100000
+                  },
+                  "sourcePortionId": {
+                    "type": "string"
+                  }
+                }
               }
             }
           },
