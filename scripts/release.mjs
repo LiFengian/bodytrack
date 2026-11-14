@@ -1,0 +1,12 @@
+import {createHash} from 'node:crypto';
+import {readFile,writeFile} from 'node:fs/promises';
+const root=new URL('../dist/',import.meta.url),swURL=new URL('sw.js',root);
+let sw=await readFile(swURL,'utf8');
+const names=['index.html','styles.css','app.mjs','core.mjs','store.mjs','manifest.webmanifest','icons/icon.svg','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png'];
+const hash=createHash('sha256');
+for(const name of names)hash.update(name).update(await readFile(new URL(name,root)));
+hash.update(sw.replace(/const CACHE='[^']+';/,"const CACHE='bodytrack-shell-RELEASE';"));
+const version=hash.digest('hex').slice(0,12);
+sw=sw.replace(/const CACHE='[^']+';/,`const CACHE='bodytrack-shell-${version}';`);
+await writeFile(swURL,sw);
+console.log(`Offline shell release: ${version}`);

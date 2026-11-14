@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BodyTrack plan import v1.0",
+  "description": "训练建议；语义校验另检查唯一 ID、周期长度、引用及 RIR 下界不高于上界。用户确认后才可启用。",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "planId",
+    "planVersion",
+    "generatedAt",
+    "effectiveDate",
+    "name",
+    "instructions",
+    "precautions",
+    "cycleDefinition",
+    "trainingDays"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "planId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "planVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effectiveDate": {
+      "type": "string",
+      "format": "date",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "instructions": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 6000
+    },
+    "precautions": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 6000
+    },
+    "cycleDefinition": {
+      "type": "object",
+      "required": [
+        "name",
+        "length",
+        "trainingDayIds"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 90
+        },
+        "trainingDayIds": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 90
+        }
+      }
+    },
+    "trainingDays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "focus",
+          "exercises"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "focus": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "module",
+                "sets",
+                "repetitions",
+                "perSide",
+                "holdSeconds",
+                "intensity",
+                "instructions",
+                "precautions"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 150
+                },
+                "module": {
+                  "enum": [
+                    "warmup",
+                    "main"
+                  ]
+                },
+                "sets": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "repetitions": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "perSide": {
+                  "type": "boolean"
+                },
+                "holdSeconds": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 300
+                },
+                "intensity": {
+                  "type": "object",
+                  "required": [
+                    "rirMin",
+                    "rirMax"
+                  ],
+                  "properties": {
+                    "rirMin": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "rirMax": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 10
+                    }
+                  }
+                },
+                "instructions": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "precautions": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                }
+              }
+            },
+            "minItems": 1,
+            "maxItems": 40
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 30
+    }
+  }
+}

@@ -1,0 +1,1939 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BodyTrack records export v1.0",
+  "description": "用于分析，不可用于恢复。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期，并非当时的历史数据库快照。",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "type",
+    "exportedAt",
+    "range",
+    "plans",
+    "activations",
+    "cycleAdjustments",
+    "cycle",
+    "sessions",
+    "meals",
+    "body",
+    "nutritionTargets",
+    "dailyNutrition",
+    "completion",
+    "mediaIncluded"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "type": {
+      "const": "bodytrack.records"
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "range": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "to": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      }
+    },
+    "plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "plan",
+          "importedAt"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "plan": {
+            "type": "object",
+            "required": [
+              "schemaVersion",
+              "planId",
+              "planVersion",
+              "generatedAt",
+              "effectiveDate",
+              "name",
+              "instructions",
+              "precautions",
+              "cycleDefinition",
+              "trainingDays"
+            ],
+            "properties": {
+              "schemaVersion": {
+                "const": "1.0"
+              },
+              "planId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "planVersion": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000000
+              },
+              "generatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "effectiveDate": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "instructions": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 6000
+              },
+              "precautions": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 6000
+              },
+              "cycleDefinition": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "length",
+                  "trainingDayIds"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "length": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 90
+                  },
+                  "trainingDayIds": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 100
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 90
+                  }
+                }
+              },
+              "trainingDays": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "focus",
+                    "exercises"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "focus": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
+                    "exercises": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "module",
+                          "sets",
+                          "repetitions",
+                          "perSide",
+                          "holdSeconds",
+                          "intensity",
+                          "instructions",
+                          "precautions"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 150
+                          },
+                          "module": {
+                            "enum": [
+                              "warmup",
+                              "main"
+                            ]
+                          },
+                          "sets": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 12
+                          },
+                          "repetitions": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                          },
+                          "perSide": {
+                            "type": "boolean"
+                          },
+                          "holdSeconds": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 300
+                          },
+                          "intensity": {
+                            "type": "object",
+                            "required": [
+                              "rirMin",
+                              "rirMax"
+                            ],
+                            "properties": {
+                              "rirMin": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 10
+                              },
+                              "rirMax": {
+                                "type": "number",
+                                "minimum": 0,
+                                "maximum": 10
+                              }
+                            }
+                          },
+                          "instructions": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 2000
+                          },
+                          "precautions": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 2000
+                          }
+                        }
+                      },
+                      "minItems": 1,
+                      "maxItems": 40
+                    }
+                  }
+                },
+                "minItems": 1,
+                "maxItems": 30
+              }
+            }
+          },
+          "importedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 100000
+    },
+    "activations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "planKey",
+          "effectiveDate",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "planKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "effectiveDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 100000
+    },
+    "cycleAdjustments": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      }
+    },
+    "cycle": {
+      "type": "object",
+      "required": [
+        "asOf",
+        "next"
+      ],
+      "properties": {
+        "asOf": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "next": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [
+                "activation",
+                "plan",
+                "index",
+                "cycleNumber",
+                "dayNumber",
+                "trainingDay",
+                "plannedDate"
+              ],
+              "properties": {
+                "activation": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "planKey",
+                    "effectiveDate",
+                    "createdAt"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "planKey": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "effectiveDate": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "plan": {
+                  "type": "object",
+                  "required": [
+                    "schemaVersion",
+                    "planId",
+                    "planVersion",
+                    "generatedAt",
+                    "effectiveDate",
+                    "name",
+                    "instructions",
+                    "precautions",
+                    "cycleDefinition",
+                    "trainingDays"
+                  ],
+                  "properties": {
+                    "schemaVersion": {
+                      "const": "1.0"
+                    },
+                    "planId": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "planVersion": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 1000000
+                    },
+                    "generatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "effectiveDate": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 6000
+                    },
+                    "precautions": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 6000
+                    },
+                    "cycleDefinition": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "length",
+                        "trainingDayIds"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "length": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 90
+                        },
+                        "trainingDayIds": {
+                          "type": "array",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 100
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "minItems": 1,
+                          "maxItems": 90
+                        }
+                      }
+                    },
+                    "trainingDays": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "focus",
+                          "exercises"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100
+                          },
+                          "name": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100
+                          },
+                          "focus": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 1000
+                          },
+                          "exercises": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "id",
+                                "name",
+                                "module",
+                                "sets",
+                                "repetitions",
+                                "perSide",
+                                "holdSeconds",
+                                "intensity",
+                                "instructions",
+                                "precautions"
+                              ],
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 150
+                                },
+                                "module": {
+                                  "enum": [
+                                    "warmup",
+                                    "main"
+                                  ]
+                                },
+                                "sets": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 12
+                                },
+                                "repetitions": {
+                                  "type": "integer",
+                                  "minimum": 1,
+                                  "maximum": 100
+                                },
+                                "perSide": {
+                                  "type": "boolean"
+                                },
+                                "holdSeconds": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 300
+                                },
+                                "intensity": {
+                                  "type": "object",
+                                  "required": [
+                                    "rirMin",
+                                    "rirMax"
+                                  ],
+                                  "properties": {
+                                    "rirMin": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 10
+                                    },
+                                    "rirMax": {
+                                      "type": "number",
+                                      "minimum": 0,
+                                      "maximum": 10
+                                    }
+                                  }
+                                },
+                                "instructions": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 2000
+                                },
+                                "precautions": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 2000
+                                }
+                              }
+                            },
+                            "minItems": 1,
+                            "maxItems": 40
+                          }
+                        }
+                      },
+                      "minItems": 1,
+                      "maxItems": 30
+                    }
+                  }
+                },
+                "index": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "cycleNumber": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "dayNumber": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "trainingDay": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "name",
+                        "focus",
+                        "exercises"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 100
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 100
+                        },
+                        "focus": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 1000
+                        },
+                        "exercises": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "name",
+                              "module",
+                              "sets",
+                              "repetitions",
+                              "perSide",
+                              "holdSeconds",
+                              "intensity",
+                              "instructions",
+                              "precautions"
+                            ],
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 100
+                              },
+                              "name": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 150
+                              },
+                              "module": {
+                                "enum": [
+                                  "warmup",
+                                  "main"
+                                ]
+                              },
+                              "sets": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 12
+                              },
+                              "repetitions": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100
+                              },
+                              "perSide": {
+                                "type": "boolean"
+                              },
+                              "holdSeconds": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 300
+                              },
+                              "intensity": {
+                                "type": "object",
+                                "required": [
+                                  "rirMin",
+                                  "rirMax"
+                                ],
+                                "properties": {
+                                  "rirMin": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 10
+                                  },
+                                  "rirMax": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 10
+                                  }
+                                }
+                              },
+                              "instructions": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 2000
+                              },
+                              "precautions": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 2000
+                              }
+                            }
+                          },
+                          "minItems": 1,
+                          "maxItems": 40
+                        }
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "plannedDate": {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "sessions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "activationId",
+          "planKey",
+          "occurrenceIndex",
+          "dayId",
+          "name",
+          "date",
+          "scheduledDate",
+          "status",
+          "createdAt",
+          "completedAt",
+          "reducedVolume",
+          "makeupFor",
+          "exercises",
+          "journal",
+          "completion"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "activationId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "planKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "occurrenceIndex": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          "dayId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "scheduledDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "status": {
+            "enum": [
+              "inProgress",
+              "completed",
+              "skipped"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reducedVolume": {
+            "type": "boolean"
+          },
+          "makeupFor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "exerciseId",
+                "target",
+                "targetSets",
+                "notes",
+                "sideDifference",
+                "sets"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "exerciseId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "target": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "module",
+                    "sets",
+                    "repetitions",
+                    "perSide",
+                    "holdSeconds",
+                    "intensity",
+                    "instructions",
+                    "precautions"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 150
+                    },
+                    "module": {
+                      "enum": [
+                        "warmup",
+                        "main"
+                      ]
+                    },
+                    "sets": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 12
+                    },
+                    "repetitions": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 100
+                    },
+                    "perSide": {
+                      "type": "boolean"
+                    },
+                    "holdSeconds": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 300
+                    },
+                    "intensity": {
+                      "type": "object",
+                      "required": [
+                        "rirMin",
+                        "rirMax"
+                      ],
+                      "properties": {
+                        "rirMin": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10
+                        },
+                        "rirMax": {
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 10
+                        }
+                      }
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2000
+                    },
+                    "precautions": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 2000
+                    }
+                  }
+                },
+                "targetSets": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 12
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "sideDifference": {
+                  "type": "string"
+                },
+                "sets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "number",
+                      "side",
+                      "targetReps",
+                      "reps",
+                      "weight",
+                      "rpe",
+                      "rir",
+                      "done"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                      },
+                      "number": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 12
+                      },
+                      "side": {
+                        "enum": [
+                          "both",
+                          "left",
+                          "right"
+                        ]
+                      },
+                      "targetReps": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 100
+                      },
+                      "reps": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1000
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "weight": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10000
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "rpe": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "rir": {
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 10
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "done": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "minItems": 1,
+                  "maxItems": 24
+                }
+              }
+            },
+            "minItems": 0,
+            "maxItems": 40
+          },
+          "journal": {
+            "type": "object",
+            "required": [],
+            "properties": {
+              "energy": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fatigue": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 10
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "satisfaction": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "pain": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "neck": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "painLocation": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "soreness": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "scapula": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "trunk": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "warmup": {
+                "type": "string",
+                "maxLength": 10000
+              },
+              "diary": {
+                "type": "string",
+                "maxLength": 10000
+              }
+            },
+            "additionalProperties": false
+          },
+          "completion": {
+            "type": "object",
+            "required": [
+              "done",
+              "total",
+              "ratio"
+            ],
+            "properties": {
+              "done": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "ratio": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 100000
+    },
+    "meals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "state",
+          "source",
+          "per100",
+          "date",
+          "meal",
+          "grams",
+          "foodId",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150
+          },
+          "state": {
+            "enum": [
+              "raw",
+              "cooked",
+              "packaged"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "per100": {
+            "type": "object",
+            "required": [
+              "kcal",
+              "protein",
+              "carbs",
+              "fat",
+              "fiber",
+              "sodium"
+            ],
+            "properties": {
+              "kcal": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "protein": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "carbs": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fat": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "fiber": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sodium": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "calcium": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "iron": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "zinc": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "magnesium": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "potassium": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "vitaminC": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "vitaminD": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "meal": {
+            "enum": [
+              "早餐",
+              "午餐",
+              "晚餐",
+              "加餐"
+            ]
+          },
+          "grams": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100000
+          },
+          "foodId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 100000
+    },
+    "body": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "date",
+          "weight",
+          "notes",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 500
+          },
+          "notes": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 100000
+    },
+    "nutritionTargets": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10000000
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "dailyNutrition": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "date",
+          "nutrients"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "nutrients": {
+            "type": "object",
+            "required": [
+              "kcal",
+              "protein",
+              "carbs",
+              "fat",
+              "fiber",
+              "sodium",
+              "calcium",
+              "iron",
+              "zinc",
+              "magnesium",
+              "potassium",
+              "vitaminC",
+              "vitaminD"
+            ],
+            "properties": {
+              "kcal": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "protein": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "carbs": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "fat": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "fiber": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "sodium": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "calcium": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "iron": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "zinc": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "magnesium": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "potassium": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "vitaminC": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "vitaminD": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 10000000
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "minItems": 0,
+      "maxItems": 100000
+    },
+    "completion": {
+      "type": "object",
+      "required": [
+        "completed",
+        "plannedResolved",
+        "ratio",
+        "definition"
+      ],
+      "properties": {
+        "completed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plannedResolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ratio": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "definition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      }
+    },
+    "mediaIncluded": {
+      "const": false
+    }
+  }
+}

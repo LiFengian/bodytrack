@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7f9">
+  <meta name="description" content="BodyTrack，你的训练、营养与体态成长记录。离线可用，数据保存在设备本地。">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="BodyTrack">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>BodyTrack · 每一次，向更好的自己</title>
+</head>
+<body>
+  <div id="app"><div class="loading"><div class="brand-mark">b.</div><h1>BodyTrack</h1><p>正在打开你的本地记录…</p></div></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="modal" aria-label="编辑内容"></dialog>
+  <noscript>BodyTrack 需要启用 JavaScript 才能在设备本地计算和保存记录。</noscript>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
