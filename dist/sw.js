@@ -1,6 +1,6 @@
 // Update this version whenever shell resources change. Old caches survive until
 // the next worker activates, allowing an interrupted update to keep working.
-const CACHE='bodytrack-shell-1e4821b5ee74';
+const CACHE='bodytrack-shell-8dcceb87a8c3';
 const ASSETS=['./','./index.html','./styles.css','./app.mjs','./core.mjs','./store.mjs','./food-utils.mjs','./foods.json','./photo.mjs','./manifest.webmanifest','./icons/icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
