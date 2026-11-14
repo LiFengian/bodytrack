@@ -36,7 +36,7 @@ try{
   let data=await dbState();assert.equal(data.sessions[0].exercises[0].sets[0].reps,10);assert.equal(data.sessions[0].exercises[0].sets[0].done,true);
   await page.reload();await page.waitForSelector('.dashboard');await nav('training');
   assert.equal(await page.locator('[data-set][data-key="reps"]:visible').first().inputValue(),'10');
-  const last=page.locator('.exercise-card').last();await last.locator('summary').click();
+  const last=page.locator('.exercise-card').last();await last.locator(':scope > summary').click();
   await last.locator('[data-key="reps"]').nth(0).fill('9');await last.locator('[data-key="reps"]').nth(0).blur();
   await last.locator('[data-key="reps"]').nth(1).fill('10');await last.locator('[data-key="reps"]').nth(1).blur();
   await last.locator('[data-key="sideDifference"]').fill('左侧控制略难（自动化测试）');await last.locator('[data-key="sideDifference"]').blur();
@@ -69,7 +69,7 @@ try{
   const fresh=await browser.newContext({viewport:{width:393,height:852},timezoneId:'Asia/Shanghai'}),p2=await fresh.newPage();
   await p2.goto('http://127.0.0.1:4173');await p2.waitForSelector('.dashboard');await p2.locator('.bottomnav [data-page="profile"]').click();
   const restoreChooser=p2.waitForEvent('filechooser');await p2.locator('[data-action="restore"]').click();await (await restoreChooser).setFiles(backupPath);await p2.waitForSelector('[data-form="confirm-restore"]');await p2.locator('[name="confirmed"]').check();await p2.locator('#modal [type=submit]').click();await p2.waitForSelector('#modal', {state:'hidden'});
-  assert.match(await p2.locator('body').innerText(),/v2/);await p2.locator('.bottomnav [data-page="training"]').click();await p2.locator('[data-training="history"]').click();assert.match(await p2.locator('body').innerText(),/已结束/);
+  assert.match(await p2.locator('body').innerText(),/版本 2/);await p2.locator('.bottomnav [data-page="training"]').click();await p2.locator('[data-training="history"]').click();assert.match(await p2.locator('body').innerText(),/已结束/);
   await fresh.close();checkpoint('Complete backup downloads and restores in a clean browser database');
   await nav('trends');await page.screenshot({path:fileURLToPath(new URL('trends-iphone.png',root)),fullPage:true});
   await nav('profile');await page.locator('[data-pref="theme"]').selectOption('dark');await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()),'#131d20');await page.screenshot({path:fileURLToPath(new URL('profile-dark-iphone.png',root)),fullPage:true});
