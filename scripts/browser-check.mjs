@@ -72,7 +72,7 @@ try{
   assert.match(await p2.locator('body').innerText(),/v2/);await p2.locator('.bottomnav [data-page="training"]').click();await p2.locator('[data-training="history"]').click();assert.match(await p2.locator('body').innerText(),/已结束/);
   await fresh.close();checkpoint('Complete backup downloads and restores in a clean browser database');
   await nav('trends');await page.screenshot({path:fileURLToPath(new URL('trends-iphone.png',root)),fullPage:true});
-  await nav('profile');await page.locator('[data-pref="theme"]').selectOption('dark');await page.screenshot({path:fileURLToPath(new URL('profile-dark-iphone.png',root)),fullPage:true});
+  await nav('profile');await page.locator('[data-pref="theme"]').selectOption('dark');await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()),'#131d20');await page.screenshot({path:fileURLToPath(new URL('profile-dark-iphone.png',root)),fullPage:true});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   checkpoint('Trends and dark mode render within the mobile viewport');
   await context.setOffline(true);await page.reload();await page.waitForSelector('.page-title');await nav('diet');assert.match(await page.locator('body').innerText(),/测试标签食物|我的食物/);await click('add-meal');await page.locator('#f-grams').fill('100');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.meals.length,2);await context.setOffline(false);
