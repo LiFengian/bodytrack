@@ -1,7 +1,7 @@
 import * as C from './core.mjs';
 import {LocalStore} from './store.mjs';
 import {combineFoods,searchFoods} from './food-utils.mjs';
-import {photoReady,preparePhoto,decodePhoto,recognizePhoto} from './photo.mjs';
+import {photoReady,preparePhoto,decodePhoto,recognizePhoto,cancelPhotoRecognition} from './photo.mjs';
 let builtInFoods=[];
 const allFoods=()=>combineFoods(builtInFoods,store.state?.foods??[]);
 
@@ -25,7 +25,15 @@ const numeric=(name,label,value='',extra='')=>field(name,label,value??'','number
 const callout=(text,orange=false)=>`<div class="callout ${orange?'orange':''}">${icon('info',17)}<p>${text}</p></div>`;
 const formFooter=(label='保存')=>`<div class="modal-footer">${btn('close','取消','outline')}<button type="submit" class="btn primary">${label}</button></div>`;
 function formModal(title,name,body,label='保存',attrs='') {openModal(`<div class="modal-header"><h2>${title}</h2>${ibtn('close','close','关闭')}</div><form data-form="${name}" ${attrs}><div class="modal-body">${body}</div>${formFooter(label)}</form>`);}
-function openModal(html){modal.innerHTML=html;if(!modal.open)modal.showModal();}
+function releasePhotoInput(){
+  if(ui.photoPixels)ui.photoPixels.fill(0);ui.photoPixels=null;ui.photoPreview=null;
+  modal.querySelectorAll('[data-photo-file]').forEach(input=>input.value='');
+  const preview=modal.querySelector('#photo-preview');if(preview){preview.querySelectorAll('img').forEach(img=>img.removeAttribute('src'));preview.replaceChildren();preview.hidden=true;}
+  const run=modal.querySelector('[data-action="run-photo"]');if(run)run.disabled=true;
+}
+let photoTask=0;
+function clearTransientPhoto(){photoTask++;cancelPhotoRecognition();releasePhotoInput();}
+function openModal(html){clearTransientPhoto();modal.innerHTML=html;if(!modal.open)modal.showModal();}
 function toast(message){const el=document.querySelector('#toast');el.textContent=message;el.classList.add('visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('visible'),4500);}
 let queue=Promise.resolve();
 async function save(mutator,label=null,redraw=true){
@@ -123,25 +131,27 @@ function showFoodPicker(meal='加餐'){
 function effortHelp(){openModal(`<div class="modal-header"><h2>这组，有多吃力？</h2>${ibtn('close','close','关闭')}</div><div class="modal-body"><h3>还能做几次（RIR）</h3><p>完成这一组后，感觉还能用同样动作质量再做几次。例如做了 10 次，觉得还能做 3 次，就填 <strong>3</strong>。一般抗阻训练目标保留 2–4 次余力。</p><h3 style="margin:20px 0 10px">吃力程度（RPE）</h3><p>你对这一组的主观吃力评分，0–10 分；数值越高越吃力。抗阻训练中可用下面的近似关系理解：</p><div class="effort-examples">${[['约 6 分','还能做约 4 次'],['约 7 分','还能做约 3 次'],['约 8 分','还能做约 2 次'],['约 9 分','还能做约 1 次'],['约 10 分','已经无法再做一次']].map(([a,b])=>`<div class="row between"><strong>${a}</strong><span>${b}</span></div>`).join('')}</div>${callout('两项都选填，不会自动互相换算，也不要求你做到力竭。热身和控制类动作不必强行打分；不知道就留空。')}<p>例如：上斜推胸做 10 次、重量 30 kg，结束时感觉还能做 3 次。可以只填「次数 10、重量 30」，也可以再填「还能做 3 次」。</p></div><div class="modal-footer">${btn('close','明白了','primary')}</div>`);}
 async function showPhotoFood(){
   if(ui.page!=='diet')ui.date=C.dateKey();
-  ui.photoMeal=ui.pickerMeal??'加餐';ui.photoResult=null;ui.photoPixels=null;
+  ui.photoMeal=ui.pickerMeal??'加餐';ui.photoResult=null;
   const ready=await photoReady();
-  openModal(`<div class="modal-header"><h2>拍照，先找可能的食物</h2>${ibtn('close','close','关闭')}</div><div class="modal-body"><p>照片在本机识别，不上传、不按次收费。一次识别照片中央的主要食物；一盘多种食物可分别近拍，或搜索补充。</p><div class="photo-pick-actions"><label class="btn primary" for="camera-food">${icon('camera',18)} 拍一张<input class="sr-only" id="camera-food" type="file" accept="image/*" capture="environment" data-photo-file></label><label class="btn outline" for="album-food">${icon('upload',18)} 选照片<input class="sr-only" id="album-food" type="file" accept="image/*" data-photo-file></label></div><div id="photo-preview" class="photo-preview" hidden></div><p id="photo-status" class="small muted" role="status" aria-live="polite" style="margin:15px 0">${ready?'本机识别资源已准备好，可离线使用。':'首次使用将下载约 36 MB 识别资源，建议使用 Wi-Fi。'}</p><div id="photo-results"></div>${callout('照片不能可靠判断克数、生熟、用油或含盐量。识别仅推荐候选，你确认食物条目与份量后才会记录摄入。')}</div><div class="modal-footer">${btn('run-photo',ready?'开始识别':'下载并识别','primary','disabled')}${btn('search-from-photo','直接搜索食物','outline')}</div>`);
+  openModal(`<div class="modal-header"><h2>拍照，先找可能的食物</h2>${ibtn('close','close','关闭')}</div><div class="modal-body"><p>照片仅临时用于本机识别，不上传、不保存；结束或关闭后自动清理。约 36 MB 模型保留供下次使用。一次识别照片中央的主要食物；一盘多种食物可分别近拍，或搜索补充。</p><div class="photo-pick-actions"><label class="btn primary" for="camera-food">${icon('camera',18)} 拍一张<input class="sr-only" id="camera-food" type="file" accept="image/*" capture="environment" data-photo-file></label><label class="btn outline" for="album-food">${icon('upload',18)} 选照片<input class="sr-only" id="album-food" type="file" accept="image/*" data-photo-file></label></div><div id="photo-preview" class="photo-preview" hidden></div><p id="photo-status" class="small muted" role="status" aria-live="polite" style="margin:15px 0">${ready?'本机识别资源已准备好，可离线使用。':'首次使用将下载约 36 MB 识别资源，建议使用 Wi-Fi。'}</p><div id="photo-results"></div>${callout('照片不能可靠判断克数、生熟、用油或含盐量。识别仅推荐候选，你确认食物条目与份量后才会记录摄入。')}</div><div class="modal-footer">${btn('run-photo',ready?'开始识别':'下载并识别','primary','disabled')}${btn('search-from-photo','直接搜索食物','outline')}</div>`);
 }
 async function runPhoto(){
   if(!ui.photoPixels)throw new Error('请先拍摄或选择照片');
+  const task=photoTask;
   const status=modal.querySelector('#photo-status');
   const pickers=[...modal.querySelectorAll('[data-photo-file]')];pickers.forEach(input=>input.disabled=true);
   modal.querySelector('#photo-results').innerHTML='';
   try{
   status.textContent='正在准备本机识别资源…';
   await preparePhoto((done,total)=>{if(status.isConnected)status.textContent=`下载与检查资源 ${done}/${total}，照片始终留在本机…`;});
+  if(task!==photoTask||!modal.open||!status.isConnected)return;
   status.textContent='正在本机分析，首次加载可能需要几十秒…';
   const result=await recognizePhoto(ui.photoPixels.slice());ui.photoResult=result;
-  if(!status.isConnected)return;
-  status.textContent=result.uncertain?'这张照片无法可靠匹配，请自行确认或搜索食物。':'请确认照片里的食物，不正确时可直接搜索。';
+  if(task!==photoTask||!modal.open||!status.isConnected)return;
+  status.textContent=(result.uncertain?'这张照片无法可靠匹配，请自行确认或搜索食物。':'请确认照片里的食物，不正确时可直接搜索。')+' 本次照片已清理，只保留候选结果。';
   modal.querySelector('#photo-results').innerHTML=`<h3 style="margin:20px 0 10px">${result.uncertain?'也可以手动选择':'可能是这些食物'}</h3><p class="tiny muted">候选排序不是准确率，也不代表照片里同时有这些食物。</p>${result.candidates.map(c=>`<button class="photo-candidate" data-action="photo-candidate" data-id="${esc(c.group)}"><span>${esc(c.name)}</span><span>选状态与份量 ${icon('chevron',14)}</span></button>`).join('')}`;
-  modal.querySelector('[data-action="run-photo"]').textContent='再次识别';
-  }catch(error){if(status.isConnected)status.textContent=error.message;throw error;}finally{pickers.forEach(input=>input.disabled=false);}
+  modal.querySelector('[data-action="run-photo"]').textContent='请重新拍摄或选照片';
+  }catch(error){if(task===photoTask&&modal.open&&status.isConnected)status.textContent=error.message+' 本次照片已清理，可重新选择。';if(error.name!=='AbortError')throw error;}finally{if(task===photoTask)releasePhotoInput();pickers.forEach(input=>input.disabled=false);}
 }
 function photoCandidate(group){
   const foods=allFoods().filter(f=>f.visualGroup===group);
@@ -164,7 +174,7 @@ function trendsPage(){
 }
 function profilePage(){
   const s=state(),a=C.activeActivation(s),p=C.activePlan(s),last=s.settings.lastBackupAt;
-  return `${pageTitle('YOUR PERSONAL SPACE','数据在手，训练有数。','与 ChatGPT 交换计划，也为每一份长期记录留好备份。')}<div class="grid2"><div class="stack"><section class="card">${section('PLAN EXCHANGE','我的训练计划',tag('本地版本管理'))}<h3>${esc(p?.name??'暂无生效计划')}</h3><p class="small muted" style="margin-top:8px">${p?`版本 ${p.planVersion} · ${esc(p.planId)}`:''}</p><div class="row wrap" style="margin-top:21px">${btn('import-plan',`${icon('upload',16)} 导入新计划`,'primary')}${btn('plan-editor','编辑当前计划','outline')}</div><p class="tiny muted" style="margin-top:14px">导入后先校验、预览差异，由你确认生效日期。历史训练保留原始快照。</p><hr class="divider">${s.plans.slice().reverse().map(v=>{const activation=s.activations.filter(a=>a.planKey===v.key).at(-1);return `<div class="version"><div class="row between"><h3>${esc(v.plan.name)}</h3>${tag(a?.planKey===v.key?'当前':activation&&activation.effectiveDate>C.dateKey()?'待生效':'已保存',a?.planKey===v.key?'':'gray')}</div><p>v${v.plan.planVersion} · ${esc(v.plan.planId)}${activation?` · 最近启用 ${activation.effectiveDate}`:''}</p><div class="row gap8" style="margin-top:9px"><button class="linkbtn" data-action="export-plan" data-id="${esc(v.key)}">导出 JSON</button><button class="linkbtn" data-action="activate-plan" data-id="${esc(v.key)}">${a?.planKey===v.key?'重新安排周期':'启用 / 回滚'}</button></div></div>`;}).join('')}</section><section class="card">${section('CHATGPT READY','导出分析数据')}<p class="small muted">训练、逐组记录、饮食、营养、体重与计划版本，按日期范围导出。</p><div class="row wrap" style="margin-top:18px">${btn('export-records',`${icon('download',16)} 选择日期与格式`,'primary')}${btn('example-plan','下载计划示例','outline')}</div><p class="tiny muted" style="margin-top:14px">分析导出不等于完整备份；大体积媒体不包含在轻量 JSON 中。</p></section></div><div class="stack"><section class="card">${section('KEEP IT SAFE','完整备份与恢复',icon('shield',20))}<div class="info-list"><div class="info-line">${icon('download',18)}<div><h4>把重要记录，留一份在「文件」</h4><p>${last?`上次发起导出：${new Date(last).toLocaleString('zh-CN')}（请确认文件已保存）`:'还没有导出过完整备份。'}<br>设备内快照不代替外部备份。</p></div></div><div class="info-line">${icon('refresh',18)}<div><h4>保留恢复前版本</h4><p>最多保留 14 份本机快照，涵盖每日首次修改和计划、恢复等关键操作。清理网站数据会一并删除快照。</p></div></div></div><div class="row wrap" style="margin-top:21px">${btn('backup','导出完整备份','primary')}${btn('restore','从文件恢复','outline')}${btn('checkpoints','本机历史快照','outline')}</div></section><section class="card">${section('MAKE IT YOURS','偏好与本机状态')}<div class="form-grid">${select('theme','显示模式',[['system','跟随系统'],['light','浅色'],['dark','深色']],s.settings.theme,'data-pref="theme"')}${field('cycle-start','当前周期起点',a?.effectiveDate??'','date','disabled')}</div><div class="selectable-row"><div class="info"><h4>营养目标</h4><p>按你自己的目标设置，不自动推算热量需求。</p></div>${btn('targets','设置','secondary')}</div><div class="selectable-row"><div class="info"><h4>离线资源</h4><p data-offline>${esc(ui.offline)}</p></div>${btn('check-offline','检查','outline')}</div>${ui.update?btn('update','已下载新版本，重新打开更新','primary','style="margin-top:15px"'):''}<div class="selectable-row"><div class="info"><h4>本地存储保护</h4><p id="persist-status">可申请持久存储；仍请定期导出备份。</p></div>${btn('persist','申请','outline')}</div><button class="linkbtn" data-action="intro">查看 iPhone 安装与使用指南 ${icon('chevron',13)}</button></section><section class="card">${section('PRIVATE BY DESIGN','属于你自己的记录')}<p class="small muted">健康记录保存在当前设备的浏览器本地数据库中，无云端同步、无健康数据上传。不同浏览器或设备的数据不会自动互通。首次访问托管站点可能需要验证访问权限。</p><hr class="divider"><p class="tiny muted">BodyTrack 1.1 · 数据版本 1 · 计划 Schema 1.0<br>一般健身记录工具，不提供疾病诊断或未经评估的单侧脊柱矫正。</p></section></div></div>`;
+  return `${pageTitle('YOUR PERSONAL SPACE','数据在手，训练有数。','与 ChatGPT 交换计划，也为每一份长期记录留好备份。')}<div class="grid2"><div class="stack"><section class="card">${section('PLAN EXCHANGE','我的训练计划',tag('本地版本管理'))}<h3>${esc(p?.name??'暂无生效计划')}</h3><p class="small muted" style="margin-top:8px">${p?`版本 ${p.planVersion} · ${esc(p.planId)}`:''}</p><div class="row wrap" style="margin-top:21px">${btn('import-plan',`${icon('upload',16)} 导入新计划`,'primary')}${btn('plan-editor','编辑当前计划','outline')}</div><p class="tiny muted" style="margin-top:14px">导入后先校验、预览差异，由你确认生效日期。历史训练保留原始快照。</p><hr class="divider">${s.plans.slice().reverse().map(v=>{const activation=s.activations.filter(a=>a.planKey===v.key).at(-1);return `<div class="version"><div class="row between"><h3>${esc(v.plan.name)}</h3>${tag(a?.planKey===v.key?'当前':activation&&activation.effectiveDate>C.dateKey()?'待生效':'已保存',a?.planKey===v.key?'':'gray')}</div><p>v${v.plan.planVersion} · ${esc(v.plan.planId)}${activation?` · 最近启用 ${activation.effectiveDate}`:''}</p><div class="row gap8" style="margin-top:9px"><button class="linkbtn" data-action="export-plan" data-id="${esc(v.key)}">导出 JSON</button><button class="linkbtn" data-action="activate-plan" data-id="${esc(v.key)}">${a?.planKey===v.key?'重新安排周期':'启用 / 回滚'}</button></div></div>`;}).join('')}</section><section class="card">${section('CHATGPT READY','导出分析数据')}<p class="small muted">训练、逐组记录、饮食、营养、体重与计划版本，按日期范围导出。</p><div class="row wrap" style="margin-top:18px">${btn('export-records',`${icon('download',16)} 选择日期与格式`,'primary')}${btn('example-plan','下载计划示例','outline')}</div><p class="tiny muted" style="margin-top:14px">分析导出不等于完整备份；大体积媒体不包含在轻量 JSON 中。</p></section></div><div class="stack"><section class="card">${section('KEEP IT SAFE','完整备份与恢复',icon('shield',20))}<div class="info-list"><div class="info-line">${icon('download',18)}<div><h4>把重要记录，留一份在「文件」</h4><p>${last?`上次发起导出：${new Date(last).toLocaleString('zh-CN')}（请确认文件已保存）`:'还没有导出过完整备份。'}<br>设备内快照不代替外部备份。</p></div></div><div class="info-line">${icon('refresh',18)}<div><h4>保留恢复前版本</h4><p>最多保留 14 份本机快照，涵盖每日首次修改和计划、恢复等关键操作。清理网站数据会一并删除快照。</p></div></div></div><div class="row wrap" style="margin-top:21px">${btn('backup','导出完整备份','primary')}${btn('restore','从文件恢复','outline')}${btn('checkpoints','本机历史快照','outline')}</div></section><section class="card">${section('MAKE IT YOURS','偏好与本机状态')}<div class="form-grid">${select('theme','显示模式',[['system','跟随系统'],['light','浅色'],['dark','深色']],s.settings.theme,'data-pref="theme"')}${field('cycle-start','当前周期起点',a?.effectiveDate??'','date','disabled')}</div><div class="selectable-row"><div class="info"><h4>营养目标</h4><p>按你自己的目标设置，不自动推算热量需求。</p></div>${btn('targets','设置','secondary')}</div><div class="selectable-row"><div class="info"><h4>离线资源</h4><p data-offline>${esc(ui.offline)}</p></div>${btn('check-offline','检查','outline')}</div>${ui.update?btn('update','已下载新版本，重新打开更新','primary','style="margin-top:15px"'):''}<div class="selectable-row"><div class="info"><h4>本地存储保护</h4><p id="persist-status">可申请持久存储；仍请定期导出备份。</p></div>${btn('persist','申请','outline')}</div><button class="linkbtn" data-action="intro">查看 iPhone 安装与使用指南 ${icon('chevron',13)}</button></section><section class="card">${section('PRIVATE BY DESIGN','属于你自己的记录')}<p class="small muted">健康记录保存在当前设备的浏览器本地数据库中，无云端同步、无健康数据上传。不同浏览器或设备的数据不会自动互通。首次访问托管站点可能需要验证访问权限。</p><hr class="divider"><p class="tiny muted">BodyTrack 1.1.1 · 数据版本 1 · 计划 Schema 1.0<br>一般健身记录工具，不提供疾病诊断或未经评估的单侧脊柱矫正。</p></section></div></div>`;
 }
 
 function showIntro(){openModal(`<div class="modal-header"><h2>让 BodyTrack 留在主屏幕</h2>${ibtn('close','close','关闭')}</div><div class="modal-body"><div class="info-list"><div class="info-line">${icon('home',21)}<div><h4>01 / 用 Safari 添加到主屏幕</h4><p>打开本站 → 分享 → 添加到主屏幕；如出现「作为网页 App 打开」，请启用。之后从主屏幕图标进入。</p></div></div><div class="info-line">${icon('cloud',21)}<div><h4>02 / 等待离线资源准备完成</h4><p>在「我的」检查离线状态；首次完成后，打开飞行模式重新进入进行真机验证。首次访问及更新仍需联网。</p></div></div><div class="info-line">${icon('dumbbell',21)}<div><h4>03 / 第一天，从胸部训练开始</h4><p>漏练不会自动推进，完成或明确跳过后才进入下一天。休息日也需确认。可以调整日期，跳过后可独立补练。</p></div></div><div class="info-line">${icon('download',21)}<div><h4>04 / 每周保留一份完整备份</h4><p>点击备份后，将文件保存到 iPhone「文件」。浏览器清理、设备丢失或更换网址都可能使本机数据不可访问，备份是恢复的依据。</p></div></div></div>${callout('首次启用日作为周期起点。若要改变起点，请在「我的 → 当前计划 → 重新安排周期」设置生效日期。')}</div><div class="modal-footer">${btn('intro-done','明白了，开始记录','primary')}</div>`);}
@@ -306,14 +316,14 @@ document.addEventListener('click',async event=>{
     if(el.dataset.training){ui.training=el.dataset.training;ui.sessionId=null;render();return;}
     if(el.dataset.diet){ui.diet=el.dataset.diet;render();return;}
     if(el.dataset.range){ui.range=Number(el.dataset.range);render();return;}
-    if(el.dataset.action){el.disabled=true;try{await queue;await action(el.dataset.action,el);}finally{if(el.isConnected)el.disabled=false;}}
+    if(el.dataset.action){el.disabled=true;try{await queue;await action(el.dataset.action,el);}finally{if(el.isConnected)el.disabled=el.dataset.action==='run-photo'&&!ui.photoPixels;}}
   }catch(e){toast(e.message??'操作失败，请重试');}
 });
 document.addEventListener('toggle',event=>{const d=event.target;if(d.dataset?.exerciseDetails){if(d.open)ui.open.add(d.dataset.exerciseDetails);else ui.open.delete(d.dataset.exerciseDetails);}},true);
 document.addEventListener('change',async event=>{
   const el=event.target;
   try{
-    if(el.hasAttribute('data-photo-file')){const file=el.files?.[0];if(!file)return;const decoded=await decodePhoto(file);ui.photoPixels=decoded.pixels;ui.photoPreview=decoded.preview;const target=modal.querySelector('#photo-preview');if(target){target.hidden=false;modal.querySelector('#photo-results').innerHTML='';target.innerHTML=`<img src="${decoded.preview}" alt="本机识别的中央裁切预览"><p>模型只查看这张中央裁切图；请让主要食物在中央。</p>`;modal.querySelector('[data-action="run-photo"]').disabled=false;}return;}
+    if(el.hasAttribute('data-photo-file')){const file=el.files?.[0];if(!file)return;clearTransientPhoto();const task=photoTask;const decoded=await decodePhoto(file);if(task!==photoTask||!modal.open||!el.isConnected){decoded.pixels.fill(0);return;}ui.photoPixels=decoded.pixels;ui.photoPreview=decoded.preview;const target=modal.querySelector('#photo-preview');if(target){target.hidden=false;modal.querySelector('#photo-results').innerHTML='';target.innerHTML=`<img src="${decoded.preview}" alt="本机识别的中央裁切预览"><p>模型只查看这张中央裁切图；识别结束即自动清理。</p>`;modal.querySelector('[data-action="run-photo"]').disabled=false;modal.querySelector('[data-action="run-photo"]').textContent='开始识别';}return;}
     if(el.hasAttribute('data-portion')){const f=modal.querySelector('[data-form="meal"]'),food=allFoods().find(x=>x.id===f.elements.foodId.value);if(el.value!==''){f.elements.grams.value=food.portions[Number(el.value)].grams;f.elements.measurement.value='household-estimate';}updateMealPreview();return;}
     if(el.hasAttribute('data-meal-grams'))updateMealPreview();
     if(el.hasAttribute('data-date')){if(C.isDate(el.value)){ui.date=el.value;render();}return;}
@@ -364,6 +374,9 @@ document.addEventListener('submit',async event=>{
   }catch(e){toast(e.message??'操作失败，原有数据未被覆盖');}finally{if(submit.isConnected)submit.disabled=false;}
 });
 modal.addEventListener('click',event=>{if(event.target===modal){const r=modal.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)modal.close();}});
+modal.addEventListener('close',()=>{if(!modal.open)clearTransientPhoto();});
+window.addEventListener('pagehide',clearTransientPhoto);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')clearTransientPhoto();});
 window.addEventListener('online',()=>offlineCheck());
 window.addEventListener('offline',()=>{toast('已离线，继续在本机记录');});
 if('BroadcastChannel' in window){const channel=new BroadcastChannel('bodytrack-revisions');const original=store.change.bind(store);store.change=async(...args)=>{const r=await original(...args);channel.postMessage({revision:state().revision});return r;};channel.onmessage=event=>{if(event.data.revision!==state().revision)toast('其他窗口的数据已更新；请刷新本窗口后继续记录。');};}
