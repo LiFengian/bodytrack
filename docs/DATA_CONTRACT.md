@@ -62,7 +62,7 @@ JSON Schema 检查形状、范围和必填；`parsePlan`/`validatePlan` 另外�
 - 每条 session 的 `planKey`、`activationId` 和 `occurrenceIndex` 唯一定位周期；`makeupFor` 引用原跳过记录，原记录可能在导出范围之外。
 - `exercises[].target` 为当时完整目标快照；`targetSets` 为当次实际采用的目标组数，可能低于计划完整组数。`sets[]` 保存每组唯一 ID、目标次数、实际值、侧别和完成状态。
 - `journal` 保存主观感受。未录入数值使用 null 或省略；0 分疼痛不等于未知。
-- 每条 meal 的 `per100` 是录入当时的来源快照。`dailyNutrition` 提供实际食用重量换算后的每日汇总。
+- 每条 meal 的 `per100` 是保存的营养来源快照。自 1.2.3 起，修改自定义食物会自动按稳定 `foodId` 更正所有关联餐食的名称、状态、来源和营养快照，覆盖历史日期；不修改实际克重、日期、餐次、记录 ID、创建时间和记录方式。启动时也检查并修复旧版本遗留的快照不同步，已同步则不重复写库。更正前快照与更新在同一 IndexedDB 事务中写入。`dailyNutrition`、CSV、报告与图表根据更正后的实际食用数据重算；缺失营养仍为 null，不按同名食物猜测关联。字段结构与 Schema 版本保持不变。
 - 1.1 新条目可带 `sourceUrl`、`sourceDescription`、`catalogVersion`；`entryMethod` 为 `catalog`、`custom` 或 `photo-confirmed`；`portionBasis` 为 `weighed`、`manual-estimate` 或 `household-estimate`。选择数据库参考份量时附 `portionReference`（原始份量 ID、标签及克重）。这些均为向后兼容的可选字段，旧记录不回填、不改写；schemaVersion 保持 1.0。
 - 汇总 `value` 在部分未知时仅为已知部分，`unknownCount` 为缺失条数，`complete` 表示该项所有饮食条目是否已知。全部未知为 null。
 - `cycle.asOf` 为所选结束日；next 基于当前数据库中截至该日已完成/跳过记录计算，但日期调整是当前保存的调整，**不是完整的历史数据库时间旅行快照**。

@@ -274,6 +274,29 @@ export function mealFromFood(food,grams,date,meal) {
   assert(isDate(date)&&MEALS.includes(meal),'用餐日期或餐次无效');
   return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:clone(food.per100),grams,createdAt:nowISO(),...(food.sourceUrl?{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:1}:{})};
 }
+export function saveCustomFood(state,food) {
+  const errors=validateFood(food);assert(!errors.length,errors.join('\n'));
+  assert(str(food.id,200),'食物缺少唯一 ID');
+  const index=state.foods.findIndex(f=>f.id===food.id);
+  const updated=clone(food);
+  if(index<0)state.foods.push(updated);else state.foods[index]=updated;
+  return synchronizeFoodMeals(state,{foodId:food.id});
+}
+export function synchronizeFoodMeals(state,{foodId=null,checkOnly=false}={}) {
+  // Never match by name: raw/cooked foods and different brands may share it.
+  const foods=new Map(state.foods.filter(f=>foodId===null||f.id===foodId).map(f=>[f.id,f]));
+  let changed=0;
+  for(const meal of state.meals){
+    const food=foods.get(meal.foodId);if(!food)continue;
+    const same=['name','state','source','sourceUrl'].every(k=>(meal[k]??null)===(food[k]??null))&&Object.keys(NUTRIENTS).every(k=>(meal.per100[k]??null)===(food.per100[k]??null));
+    if(same)continue;changed++;if(checkOnly)continue;
+    for(const key of ['name','state','source','per100'])meal[key]=clone(food[key]);
+    for(const key of ['sourceUrl','sourceDescription','catalogVersion'])delete meal[key];
+    if(food.sourceUrl)Object.assign(meal,{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:1});
+    // Keep actual grams, date, meal, stable ID and entry/portion provenance.
+  }
+  return changed;
+}
 export function composeRecipe(name,source,ingredients,finalGrams) {
   assert(str(name,150)&&str(source,1000)&&ingredients.length>0,'菜谱名称、来源及食材必填');
   assert(finite(finalGrams,.1,100000),'请填写成品总重量');

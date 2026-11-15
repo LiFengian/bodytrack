@@ -16,6 +16,8 @@
 
 1.2 另验证：爬楼梯快速记录与选填项、修改稳定 ID、删除及统计更新、进行中力量训练不变、休息日和漏练不推进周期、旧数据原子迁移和原始快照、离线刷新后新增、趋势、CSV、新版备份恢复及旧快照恢复。入口为 `node scripts/cardio-browser-check.mjs`。
 
+1.2.3：`node --test tests/food-update.test.mjs` 与 `node scripts/food-update-browser-check.mjs` 验证自定义食品保存后自动更正全部关联日期、旧版本不一致自动修复、实际克重与稳定 ID 保留、同名不同食品隔离、首页与饮食总量即时重算、离线重开、取消不写入、更正前快照以及导出与备份一致性。没有同步范围选项。
+
 ## 需要用户在实际 iPhone 上确认
 
 1. Safari 打开已部署 HTTPS 链接，完成私有站点访问验证。

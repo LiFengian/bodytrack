@@ -49,9 +49,9 @@ try{
   data=await dbState();assert.equal(data.meals.length,1);assert.equal(C.calculateNutrition(data.meals[0].per100,data.meals[0].grams).kcal,90);assert.equal(data.meals[0].per100.fiber,null);
   await page.screenshot({path:fileURLToPath(new URL('diet-iphone.png',root)),fullPage:true});
   checkpoint('Manual label entry calculates 75 g correctly and preserves unknown fiber');
-  // Editing the food library must not change the existing meal snapshot.
-  await page.locator('[data-diet="foods"]').click();await click('edit-food');await page.locator('#f-n-kcal').fill('200');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.foods[0].per100.kcal,200);assert.equal(data.meals[0].per100.kcal,120);
-  checkpoint('Food-library changes leave historical nutrient snapshots intact');
+  // Custom-food corrections automatically recalculate all linked meals.
+  await page.locator('[data-diet="foods"]').click();await click('edit-food');await page.locator('#f-n-kcal').fill('200');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.foods[0].per100.kcal,200);assert.equal(data.meals[0].per100.kcal,200);assert.equal(data.meals[0].grams,75);
+  checkpoint('Food-library changes automatically correct linked meal nutrition while preserving grams');
   // Plan file preview must not mutate data before user confirmation.
   await nav('profile');let before=await dbState();
   const plan=C.builtinPlan(C.dateKey());plan.planVersion=2;plan.trainingDays[0].exercises[2].repetitions=12;
