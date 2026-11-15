@@ -18,6 +18,8 @@
 
 1.2.3：`node --test tests/food-update.test.mjs` 与 `node scripts/food-update-browser-check.mjs` 验证自定义食品保存后自动更正全部关联日期、旧版本不一致自动修复、实际克重与稳定 ID 保留、同名不同食品隔离、首页与饮食总量即时重算、离线重开、取消不写入、更正前快照以及导出与备份一致性。没有同步范围选项。
 
+1.2.4：`node --test tests/sodium.test.mjs` 与 `node scripts/sodium-browser-check.mjs` 验证按克重汇总、默认/自定义红线、80% 提示、100% 和超量、明确零与缺失数据、零上限、跨日隔离、食物参数自动更正后的进度、深色窄屏及离线重开。进度条视觉与 ARIA 数值封顶 100%，真实摄入及超出量保留；未知值不伪装为零或完整安全总量。参考来源在营养目标弹窗内可展开查看。
+
 ## 需要用户在实际 iPhone 上确认
 
 1. Safari 打开已部署 HTTPS 链接，完成私有站点访问验证。

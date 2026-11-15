@@ -269,6 +269,20 @@ export function aggregateNutrition(meals) {
     return [k,{value:unknown===meals.length && meals.length?null:known,unknownCount:unknown,complete:unknown===0}];
   }));
 }
+// WHO adult reference: less than 2,000 mg sodium/day. The early warning at
+// 80% is a display cue; a user-specified limit takes priority.
+export const SODIUM_REFERENCE_MG=2000;
+export function sodiumProgress(meals,customLimit=null) {
+  assert(customLimit===null||finite(customLimit),'钠红线数值无效');
+  const limit=customLimit??SODIUM_REFERENCE_MG,n=aggregateNutrition(meals).sodium;
+  const value=n.value,hasRecords=meals.length>0,partial=!n.complete;
+  const ratio=!hasRecords||value===null?null:limit===0?(value>0?Infinity:1):value/limit;
+  const status=!hasRecords?'empty':value===null?'unknown':value>limit?'exceeded':value===limit?'limit':ratio>=.8?'near':'normal';
+  return {value,limit,partial,unknownCount:n.unknownCount,status,reference:customLimit===null,
+    percent:Number.isFinite(ratio)?Math.round(ratio*100):null,
+    widthPercent:ratio===null?0:Math.min(100,Math.max(0,ratio*100)),
+    excess:value===null?null:Math.max(0,value-limit)};
+}
 export function mealFromFood(food,grams,date,meal) {
   assert(!validateFood(food).length,'食物数据无效'); assert(finite(grams,.1,100000),'食用重量需大于 0');
   assert(isDate(date)&&MEALS.includes(meal),'用餐日期或餐次无效');
