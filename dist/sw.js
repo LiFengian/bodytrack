@@ -1,16 +1,30 @@
 // Update this version whenever shell resources change. Old caches survive until
 // the next worker activates, allowing an interrupted update to keep working.
-const CACHE='bodytrack-shell-8dcceb87a8c3';
-const ASSETS=['./','./index.html','./styles.css','./app.mjs','./core.mjs','./store.mjs','./food-utils.mjs','./foods.json','./photo.mjs','./manifest.webmanifest','./icons/icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
+const CACHE='bodytrack-shell-194919c3e718';
+// Cache the canonical start URL. Some static hosts redirect index.html to ./;
+// requesting both used to reject the entire offline installation.
+const ASSETS=['./','./styles.css','./app.mjs','./core.mjs','./store.mjs','./food-utils.mjs','./foods.json','./photo.mjs','./manifest.webmanifest','./icons/icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
+    // A rejected worker may leave a partial cache behind. Retry from a clean
+    // release cache; the active worker's different release remains untouched.
+    await caches.delete(CACHE);
     const cache=await caches.open(CACHE);
     for(const path of ASSETS){
-      const response=await fetch(new Request(new URL(path,self.registration.scope),{cache:'reload'}));
-      if(!response.ok || response.redirected || response.type==='opaque')throw new Error('离线文件下载失败');
-      const type=response.headers.get('content-type')??'';
-      if((path.endsWith('.mjs')||path.endsWith('.js'))&&type.includes('text/html'))throw new Error('资源返回了登录页面');
-      await cache.put(path,response);
+      try{
+        const response=await fetch(new Request(new URL(path,self.registration.scope),{cache:'reload'}));
+        if(!response.ok || response.redirected || response.type==='opaque')throw new Error('离线文件下载失败');
+        const type=response.headers.get('content-type')??'';
+        if((path.endsWith('.mjs')||path.endsWith('.js'))&&!/javascript|ecmascript/i.test(type))throw new Error('离线脚本类型不正确');
+        if(path==='./'&&!type.includes('text/html'))throw new Error('离线首页类型不正确');
+        await cache.put(new URL(path,self.registration.scope),response);
+      }catch(error){
+        // Installation can fail after register() has already resolved. Tell the
+        // open app instead of leaving its status at "preparing" indefinitely.
+        const clients=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+        clients.forEach(client=>client.postMessage({type:'OFFLINE_INSTALL_FAILED',asset:path}));
+        throw error;
+      }
     }
   })());
 });
@@ -43,7 +57,7 @@ self.addEventListener('fetch',event=>{
   const base=new URL(self.registration.scope);
   const relative=url.pathname.slice(base.pathname.length);
   if(event.request.mode==='navigate'){
-    event.respondWith((async()=>await (await caches.open(CACHE)).match(new URL('index.html',base))??fetch(event.request))());return;
+    event.respondWith((async()=>await (await caches.open(CACHE)).match(base)??fetch(event.request))());return;
   }
   if(ASSETS.some(p=>p.replace('./','')===relative))event.respondWith((async()=>await (await caches.open(CACHE)).match(new Request(url.origin+url.pathname))??fetch(event.request))());
 });
