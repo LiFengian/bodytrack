@@ -50,6 +50,7 @@ const sessionProperties={id,activationId:id,planKey:id,occurrenceIndex:{type:'in
 const sessionDef=obj(sessionProperties);
 const version=obj({key:id,plan:obj(planProperties),importedAt:datetime});
 const activation=obj({id,planKey:id,effectiveDate:date,createdAt:datetime});
+activation.properties.dayOverrides={type:'object',propertyNames:{pattern:'^(0|[1-9][0-9]*)$'},additionalProperties:text(100)};
 const body=obj({id,date,weight:{type:'number',minimum:1,maximum:500},notes:{type:'string'},createdAt:datetime});
 const cardio={...obj({id,type:{const:'stair-climbing'},date,mode:{enum:['stairs','stair-machine']},durationMinutes:{type:'number',minimum:.1,maximum:1440},floors:nullable({type:'integer',minimum:1,maximum:10000}),level:nullable({type:'integer',minimum:1,maximum:100}),effort:nullable({enum:Object.keys(C.CARDIO_EFFORT)}),notes:{type:'string',maxLength:10000},createdAt:datetime,updatedAt:datetime}),additionalProperties:false,allOf:[{if:{properties:{mode:{const:'stairs'}}},then:{properties:{level:{type:'null'}}}}]};
 const totals=obj(Object.fromEntries(Object.keys(C.NUTRIENTS).map(k=>[k,obj({value:nullable({type:'number',minimum:0}),unknownCount:{type:'integer',minimum:0},complete:{type:'boolean'}})])));

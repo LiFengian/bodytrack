@@ -146,9 +146,9 @@ export function activeActivation(state, day=dateKey()) {
 export function activePlan(state, day=dateKey()) {
   const a=activeActivation(state,day); return a ? state.plans.find(p=>p.key===a.planKey)?.plan : null;
 }
-export function cycleDay(plan,index) {
+export function cycleDay(plan,index,activation=null) {
   assert(integer(index,0,1e7),'周期序号无效');
-  const dayId=plan.cycleDefinition.trainingDayIds[index % plan.cycleDefinition.length];
+  const dayId=activation?.dayOverrides?.[index] ?? plan.cycleDefinition.trainingDayIds[index % plan.cycleDefinition.length];
   return dayId === null ? null : plan.trainingDays.find(d=>d.id===dayId);
 }
 export function nextOccurrence(state, day=dateKey()) {
@@ -161,8 +161,40 @@ export function nextOccurrence(state, day=dateKey()) {
   const previous=resolved.find(s=>s.occurrenceIndex===index-1);
   if(previous && addDays(previous.date,1)>plannedDate) plannedDate=addDays(previous.date,1);
   plannedDate=state.adjustments[`${a.id}:${index}`] ?? plannedDate;
-  const trainingDay=cycleDay(p,index);
+  const trainingDay=cycleDay(p,index,a);
   return {activation:a,plan:p,index,cycleNumber:Math.floor(index/p.cycleDefinition.length)+1,dayNumber:index%p.cycleDefinition.length+1,trainingDay,plannedDate};
+}
+export function swapCandidates(state,occ,day=dateKey()) {
+  if(!occ?.trainingDay || state.sessions.some(s=>s.status==='inProgress')) return [];
+  const {activation,plan,index}=occ, length=plan.cycleDefinition.length;
+  const recorded=new Set(state.sessions.filter(s=>s.activationId===activation.id&&!s.makeupFor).map(s=>s.occurrenceIndex));
+  if(recorded.has(index)) return [];
+  const nextActivation=state.activations.map(a=>a.effectiveDate).filter(date=>date>day).sort()[0];
+  let earliest=occ.plannedDate>day?occ.plannedDate:day;
+  const candidates=[];
+  for(let i=index+1;i<occ.cycleNumber*length;i++){
+    earliest=addDays(earliest,1);
+    const adjusted=state.adjustments[`${activation.id}:${i}`];
+    if(adjusted>earliest) earliest=adjusted;
+    if(nextActivation && earliest>=nextActivation) break;
+    const trainingDay=cycleDay(plan,i,activation);
+    if(trainingDay && trainingDay.id!==occ.trainingDay.id && !recorded.has(i))
+      candidates.push({index:i,dayNumber:i%length+1,trainingDay});
+  }
+  return candidates;
+}
+export function swapTrainingDays(state,activationId,fromIndex,toIndex,day=dateKey()) {
+  const occ=nextOccurrence(state,day);
+  assert(occ?.activation.id===activationId && occ.index===fromIndex,'训练安排已更新，请重新选择');
+  const target=swapCandidates(state,occ,day).find(item=>item.index===toIndex);
+  assert(target,'请选择本轮尚未开始的其他训练日');
+  const overrides={...occ.activation.dayOverrides};
+  for(const [index,id] of [[fromIndex,target.trainingDay.id],[toIndex,occ.trainingDay.id]]){
+    if(cycleDay(occ.plan,index).id===id) delete overrides[index];
+    else overrides[index]=id;
+  }
+  if(Object.keys(overrides).length) occ.activation.dayOverrides=overrides;
+  else delete occ.activation.dayOverrides;
 }
 export function newSession(occ,date=dateKey(),reduced=false) {
   assert(isDate(date), '训练日期无效');
@@ -331,7 +363,23 @@ export function validateState(s) {
   const keys=new Set();
   for(const entry of s.cardio){addId(entry.id);const errors=validateCardio(entry);assert(!errors.length,errors.join('\n'));}
   for(const p of s.plans) {assert(object(p)&&!validatePlan(p.plan).length&&p.key===planKey(p.plan),'备份内计划无效');assert(!keys.has(p.key),'计划版本重复');keys.add(p.key);}
-  for(const a of s.activations) {addId(a.id);assert(keys.has(a.planKey)&&isDate(a.effectiveDate),'启用记录无效');}
+  for(const a of s.activations) {
+    addId(a.id);assert(keys.has(a.planKey)&&isDate(a.effectiveDate),'启用记录无效');
+    if(a.dayOverrides===undefined) continue;
+    assert(object(a.dayOverrides),'训练日交换记录无效');
+    const plan=s.plans.find(p=>p.key===a.planKey).plan, base=plan.cycleDefinition.trainingDayIds;
+    const rounds=new Set();
+    for(const [key,id] of Object.entries(a.dayOverrides)){
+      const index=Number(key);
+      assert(integer(index,0,1e7)&&String(index)===key&&base[index%base.length]!==null&&plan.trainingDays.some(d=>d.id===id),'训练日交换引用无效');
+      rounds.add(Math.floor(index/base.length));
+    }
+    const expected=JSON.stringify(base.filter(id=>id!==null).sort());
+    for(const round of rounds){
+      const actual=base.map((id,i)=>a.dayOverrides[round*base.length+i]??id);
+      assert(JSON.stringify(actual.filter(id=>id!==null).sort())===expected,'同一轮内交换的训练日不匹配');
+    }
+  }
   for(const item of s.sessions) {
     addId(item.id);assert(isDate(item.date)&&isDate(item.scheduledDate)&&keys.has(item.planKey)&&s.activations.some(a=>a.id===item.activationId&&a.planKey===item.planKey),'训练引用或日期无效');
     assert(integer(item.occurrenceIndex,0,1e7)&&['inProgress','completed','skipped'].includes(item.status)&&Array.isArray(item.exercises)&&item.exercises.length<=40&&str(item.name,100),'训练记录无效');

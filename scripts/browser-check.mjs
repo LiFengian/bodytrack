@@ -44,6 +44,19 @@ try{
   await click('finish');await page.locator('#f-energy').selectOption('4');await page.locator('#f-neck').selectOption('2');await page.locator('#f-warmup').fill('轻柔完成，无颈部后仰');await page.locator('#f-diary').fill('自动化验证记录');await page.locator('#modal [type=submit]').click();
   await page.waitForSelector('#modal', {state:'hidden'});data=await dbState();assert.equal(data.sessions[0].status,'completed');assert.equal(data.sessions[0].journal.neck,2);assert.deepEqual(data.sessions[0].exercises.at(-1).sets.slice(0,2).map(x=>x.reps),[9,10]);
   checkpoint('Set actuals, left/right differences and neck diary persist across reload');
+  await click('swap-days');
+  assert.equal(await page.locator('#f-targetIndex option:checked').innerText(),'第 4 天 · 背部日');
+  await page.locator('#modal [data-action="close"]').last().click();
+  assert.equal((await dbState()).activations[0].dayOverrides,undefined);
+  await click('swap-days');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal',{state:'hidden'});
+  assert.equal(await page.locator('.training-header h2').innerText(),'背部日');
+  assert.match(await page.locator('.exercise-mini').allInnerTexts().then(x=>x.join(' ')),/胸托划船/);
+  await context.setOffline(true);await page.reload();await page.waitForSelector('.dashboard');
+  assert.match(await page.locator('.hero h2').innerText(),/背部日/);
+  assert.deepEqual((await page.locator('.cycle-cell .type').allInnerTexts()).slice(0,4),['胸','背','休','肩']);
+  assert.deepEqual((await dbState()).sessions,data.sessions);
+  await context.setOffline(false);
+  checkpoint('A shoulder/back swap updates exercises and both cycle positions, survives offline reload and preserves the diary');
   await nav('diet');await click('add-meal');await click('new-food-quick');
   await page.locator('#f-name').fill('测试标签食物');await page.locator('#f-source').fill('测试夹具，非真实食品');await page.locator('#f-n-kcal').fill('120');await page.locator('#f-n-protein').fill('8');await page.locator('#f-n-carbs').fill('15');await page.locator('#f-n-fat').fill('3');await page.locator('#f-n-sodium').fill('50');await page.locator('#f-grams').fill('75');await page.locator('#modal [type=submit]').click();await page.waitForSelector('#modal', {state:'hidden'});
   data=await dbState();assert.equal(data.meals.length,1);assert.equal(C.calculateNutrition(data.meals[0].per100,data.meals[0].grams).kcal,90);assert.equal(data.meals[0].per100.fiber,null);
@@ -70,6 +83,7 @@ try{
   await p2.goto('http://127.0.0.1:4173');await p2.waitForSelector('.dashboard');await p2.locator('.bottomnav [data-page="profile"]').click();
   const restoreChooser=p2.waitForEvent('filechooser');await p2.locator('[data-action="restore"]').click();await (await restoreChooser).setFiles(backupPath);await p2.waitForSelector('[data-form="confirm-restore"]');await p2.locator('[name="confirmed"]').check();await p2.locator('#modal [type=submit]').click();await p2.waitForSelector('#modal', {state:'hidden'});
   assert.match(await p2.locator('body').innerText(),/版本 2/);await p2.locator('.bottomnav [data-page="training"]').click();await p2.locator('[data-training="history"]').click();assert.match(await p2.locator('body').innerText(),/已结束/);
+  assert.deepEqual(await p2.evaluate(async()=>{const {LocalStore}=await import('./store.mjs');const s=new LocalStore();await s.open();s.db.close();return s.state.activations[0].dayOverrides;}),{'1':'back','3':'shoulder'});
   await fresh.close();checkpoint('Complete backup downloads and restores in a clean browser database');
   await nav('trends');await page.screenshot({path:fileURLToPath(new URL('trends-iphone.png',root)),fullPage:true});
   await nav('profile');await page.locator('[data-pref="theme"]').selectOption('dark');await page.waitForFunction(()=>document.documentElement.dataset.theme==='dark');assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()),'#131d20');await page.screenshot({path:fileURLToPath(new URL('profile-dark-iphone.png',root)),fullPage:true});

@@ -364,6 +364,17 @@
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
+              },
+              "dayOverrides": {
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^(0|[1-9][0-9]*)$"
+                },
+                "additionalProperties": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
               }
             }
           },

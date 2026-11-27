@@ -18,6 +18,57 @@ test('15-day cycle matches requested split; day 16 starts with chest',()=>{
 test('calendar passage cannot advance an uncompleted cycle',()=>{
   const s=C.initialState(start),old=C.nextOccurrence(s,start),future=C.nextOccurrence(s,'2027-01-30');assert.equal(old.index,future.index);assert.equal(future.plannedDate,start);
 });
+test('swap shoulder and back once, keeping dates, rest, history and the next round intact',()=>{
+  const s=C.initialState(start),a=s.activations[0],plan=s.plans[0].plan;
+  const chest=C.startSession(s,start);C.completeSession(s,chest.id);
+  const history=C.clone(chest),day=C.addDays(start,1),original=C.clone(plan);
+  s.adjustments[`${a.id}:1`]=day;
+  C.swapTrainingDays(s,a.id,1,3,day);
+  assert.deepEqual(C.nextOccurrence(s,day).trainingDay,plan.trainingDays.find(d=>d.id==='back'));
+  assert.equal(C.nextOccurrence(s,day).plannedDate,day);
+  assert.equal(C.cycleDay(plan,16,a).id,'shoulder');
+  assert.deepEqual(s.plans[0].plan,original);assert.deepEqual(s.sessions,[history]);
+  const restored=C.parseBackup(JSON.stringify(C.createBackup(s)));
+  const back=C.startSession(restored,day);
+  assert.equal(back.dayId,'back');assert(back.exercises.some(e=>e.exerciseId==='back-row'));
+  C.completeSession(restored,back.id);
+  const rest=C.startSession(restored,C.addDays(start,2));assert.equal(rest.dayId,null);C.completeSession(restored,rest.id);
+  const later=C.addDays(start,3),skipped=C.skipOccurrence(restored,later);
+  assert.equal(skipped.dayId,'shoulder');assert.equal(C.makeupSession(restored,skipped.id,later).dayId,'shoulder');
+  const records=C.exportRecords(restored,start,later);
+  assert.deepEqual(records.activations[0].dayOverrides,{'1':'back','3':'shoulder'});
+  assert.deepEqual(records.sessions.map(s=>s.dayId),['chest','back',null,'shoulder','shoulder']);
+});
+test('swaps compose using the actual schedule, reverse cleanly and reset on reactivation',()=>{
+  const s=C.initialState(start),a=s.activations[0],p=s.plans[0].plan;
+  C.swapTrainingDays(s,a.id,0,1,start);
+  C.swapTrainingDays(s,a.id,0,3,start);
+  assert.deepEqual([0,1,3].map(i=>C.cycleDay(p,i,a).id),['back','chest','shoulder']);
+  C.validateState(s);
+  C.swapTrainingDays(s,a.id,0,3,start);C.swapTrainingDays(s,a.id,0,1,start);
+  assert.equal(a.dayOverrides,undefined);
+  C.swapTrainingDays(s,a.id,0,1,start);C.activatePlan(s,s.plans[0].key,start,start);
+  assert.equal(C.nextOccurrence(s,start).trainingDay.id,'chest');
+  assert.throws(()=>C.swapTrainingDays(s,a.id,0,1,start),/已更新/);
+});
+test('only pending different training days before the next activation can be exchanged',()=>{
+  const s=C.initialState(start),a=s.activations[0];
+  C.activatePlan(s,s.plans[0].key,C.addDays(start,4),start);
+  const choices=()=>C.swapCandidates(s,C.nextOccurrence(s,start),start).map(o=>o.index);
+  assert.deepEqual(choices(),[1,3]);
+  for(const target of [0,2,4,7,16])assert.throws(()=>C.swapTrainingDays(s,a.id,0,target,start));
+  const session=C.startSession(s,start);
+  assert.deepEqual(choices(),[]);assert.throws(()=>C.swapTrainingDays(s,a.id,0,1,start));
+  C.completeSession(s,session.id);assert.throws(()=>C.swapTrainingDays(s,a.id,0,1,start));
+  const skip=C.skipOccurrence(s,C.addDays(start,1));C.makeupSession(s,skip.id,C.addDays(start,1));
+  assert.deepEqual(C.swapCandidates(s,C.nextOccurrence(s,C.addDays(start,1)),C.addDays(start,1)),[]);
+});
+test('backup validation rejects an unknown day, a rest replacement, or an unbalanced exchange',()=>{
+  for(const overrides of [{'0':'unknown'},{'2':'back'},{'1':'back'},{'1':'back','18':'shoulder'},{'-1':'back'}]){
+    const s=C.initialState(start);s.activations[0].dayOverrides=overrides;
+    assert.throws(()=>C.validateState(s),/交换/);
+  }
+});
 test('late completion shifts the next day and does not skip rest days',()=>{
   const s=C.initialState(start),session=C.startSession(s,'2026-11-20');C.completeSession(s,session.id);
   const next=C.nextOccurrence(s,'2026-11-20');assert.equal(next.index,1);assert.equal(next.plannedDate,'2026-11-21');
