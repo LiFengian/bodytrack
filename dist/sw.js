@@ -1,6 +1,6 @@
 // Update this version whenever shell resources change. Old caches survive until
 // the next worker activates, allowing an interrupted update to keep working.
-const CACHE='bodytrack-shell-5b3ad2be5fe9';
+const CACHE='bodytrack-shell-01dff95d5639';
 // Cache the canonical start URL. Some static hosts redirect index.html to ./;
 // requesting both used to reject the entire offline installation.
 const ASSETS=['./','./styles.css','./app.mjs','./core.mjs','./store.mjs','./food-utils.mjs','./foods.json','./photo.mjs','./manifest.webmanifest','./icons/icon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
@@ -29,7 +29,7 @@ self.addEventListener('install',event=>{
   })());
 });
 self.addEventListener('message',event=>{
-  if(event.data==='ACTIVATE_UPDATE')self.skipWaiting();
+  if(event.data==='ACTIVATE_UPDATE')event.waitUntil(self.skipWaiting());
   if(event.data==='CHECK_SHELL')event.waitUntil((async()=>{
     const cache=await caches.open(CACHE);const found=await Promise.all(ASSETS.map(p=>cache.match(p)));
     event.ports[0]?.postMessage({complete:found.every(Boolean),version:CACHE});

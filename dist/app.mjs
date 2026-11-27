@@ -7,7 +7,7 @@ const allFoods=()=>combineFoods(builtInFoods,store.state?.foods??[]);
 
 const app=document.querySelector('#app'), modal=document.querySelector('#modal');
 const store=new LocalStore();
-const ui={page:'home',training:'today',diet:'diary',date:C.dateKey(),range:30,sessionId:null,open:new Set(),effortDetails:false,foodQuery:'',foodCategory:'全部',pendingPlan:null,pendingBackup:null,recipe:[],offline:'正在准备',update:null};
+const ui={page:'home',training:'today',diet:'diary',date:C.dateKey(),range:30,sessionId:null,open:new Set(),effortDetails:false,foodQuery:'',foodCategory:'全部',pendingPlan:null,pendingBackup:null,recipe:[],offline:'正在准备',update:null,updateStatus:''};
 const icons={stairs:'M3 21h18M4 18h4v-5h5V8h5V3h3',camera:'M3 7h4l2-3h6l2 3h4v14H3zM16 13a4 4 0 1 1-8 0 4 4 0 0 1 8 0',search:'m21 21-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',home:'M3 10 12 3l9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z',dumbbell:'m6 6 12 12M4 9l5-5M15 20l5-5M2 7l5-5M17 22l5-5',food:'M4 3v6a3 3 0 0 0 6 0V3M7 3v18M19 21V3c-5 3-5 10 0 10',chart:'M3 3v18h18M7 15l4-5 4 3 6-8',user:'M20 21a8 8 0 0 0-16 0M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0',arrow:'M4 12h16m-6-6 6 6-6 6',chevron:'m9 5 7 7-7 7',left:'m15 5-7 7 7 7',plus:'M12 5v14M5 12h14',check:'m5 12 4 4 10-10',shield:'M12 3 3 7v5c0 5 9 10 9 10s9-5 9-10V7zM8 12l3 3 5-5',leaf:'M20 4c-12-3-20 9-12 14 6 4 13-2 12-14ZM6 20l10-11',flame:'M12 3c2 5 6 5 6 11a6 6 0 0 1-12 0c0-3 1-5 3-7 0 3 2 4 3 4z',calendar:'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2ZM7 3v4M17 3v4M3 11h18',clock:'M12 7v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',download:'M12 3v12m-5-5 5 5 5-5M3 16v5h18v-5',upload:'M12 16V3m-5 5 5-5 5 5M3 16v5h18v-5',close:'m6 6 12 12M6 18 18 6',sun:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1',heart:'M20 5a5 5 0 0 0-8 2 5 5 0 0 0-8-2c-5 6 3 12 8 16 5-4 13-10 8-16',edit:'m16 3 5 5-12 12-6 1 1-6zM13 6l5 5',trash:'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7',file:'M14 2H5v20h14V7zM14 2v6h5M8 12h8M8 16h8',refresh:'M20 7V3l-4 4M4 17v4l4-4M4 9a8 8 0 0 1 14-3M20 15a8 8 0 0 1-14 3',info:'M12 11v6M12 7h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',weight:'M4 6h16l2 15H2zM8 6V3h8v3M12 9v4',cloud:'M7 18a6 6 0 1 1 2-12 7 7 0 0 1 12 5 4 4 0 0 1-1 7M12 13v8m-3-3 3 3 3-3',coffee:'M4 8h12v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM16 8h2a3 3 0 0 1 0 6h-2M6 3v2M11 2v3'};
 const icon=(name,size=18)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${icons[name]??icons.info}"/></svg>`;
 const esc=value=>String(value??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
@@ -49,10 +49,13 @@ function render(){
   const today=C.dateKey(),title=pages.find(p=>p[0]===ui.page)?.[2];
   const content=({home:homePage,training:trainingPage,diet:dietPage,trends:trendsPage,profile:profilePage})[ui.page]();
   app.innerHTML=`<aside class="sidebar"><div class="brand"><div class="brand-mark">b.</div><div><div class="brand-name">BodyTrack</div></div></div><nav aria-label="主导航">${pages.map(([id,i,l])=>`<button class="nav-item ${ui.page===id?'active':''}" data-page="${id}" ${ui.page===id?'aria-current="page"':''}>${icon(i,19)}${l}</button>`).join('')}</nav><div class="sidebar-foot"><div class="local-label"><span class="dot"></span><span data-save-status>已保存到本机</span></div></div></aside>
-    <main class="shell"><header class="topbar"><div class="breadcrumb">个人空间 ${icon('chevron',11)}<span>${title}</span></div><div class="brand mobile-brand"><div class="brand-mark">b.</div><span class="brand-name">BodyTrack</span></div><div class="row gap8"><div class="date-pill">${icon('calendar',14)}${new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'short'}).format(new Date())}</div>${ibtn('backup','download','导出完整备份')}</div></header>${content}</main>
+    <main class="shell"><header class="topbar"><div class="breadcrumb">个人空间 ${icon('chevron',11)}<span>${title}</span></div><div class="brand mobile-brand"><div class="brand-mark">b.</div><span class="brand-name">BodyTrack</span></div><div class="row gap8"><div class="date-pill">${icon('calendar',14)}${new Intl.DateTimeFormat('zh-CN',{month:'long',day:'numeric',weekday:'short'}).format(new Date())}</div>${ibtn('backup','download','导出完整备份')}</div></header>${updateBanner()}${content}</main>
     <nav class="bottomnav" aria-label="底部导航">${pages.map(([id,i,l])=>`<button class="${ui.page===id?'active':''}" data-page="${id}" ${ui.page===id?'aria-current="page"':''}>${icon(i,21)}${l}</button>`).join('')}</nav>`;
 }
 function pageTitle(title,action=''){return `<div class="page-title"><h1>${title}</h1>${action}</div>`;}
+function updateBanner(){
+  return `<aside class="update-banner" data-update-ready ${ui.update?'':'hidden'}><span>新版本已就绪</span>${btn('update','立即更新','primary',activatingUpdate?'disabled':'')}</aside>`;
+}
 const disclosure=(label,body)=>`<details class="inline-help"><summary>${label}</summary><div>${body}</div></details>`;
 function currentSession(){return state().sessions.find(s=>s.status==='inProgress');}
 function volume(e){return `${e.perSide?'每侧 ':''}${e.sets} × ${e.repetitions}${e.holdSeconds?` · ${e.holdSeconds}秒`:''}`;}
@@ -207,7 +210,7 @@ function trendsPage(){
 }
 function profilePage(){
   const s=state(),a=C.activeActivation(s),p=C.activePlan(s),last=s.settings.lastBackupAt;
-  return `${pageTitle('我的')}<div class="grid2"><div class="stack"><section class="card">${section('我的训练计划')}<h3>${esc(p?.name??'暂无生效计划')}</h3><div class="row wrap" style="margin-top:21px">${btn('import-plan',`${icon('upload',16)} 导入新计划`,'primary')}${btn('plan-editor','编辑当前计划','outline')}</div><hr class="divider">${s.plans.slice().reverse().map(v=>{const activation=s.activations.filter(a=>a.planKey===v.key).at(-1);return `<div class="version"><div class="row between"><h3>${esc(v.plan.name)}</h3>${tag(a?.planKey===v.key?'当前':activation&&activation.effectiveDate>C.dateKey()?'待生效':'已保存',a?.planKey===v.key?'':'gray')}</div><p>版本 ${v.plan.planVersion}${activation?` · 最近启用 ${activation.effectiveDate}`:''}</p><div class="row gap8" style="margin-top:9px"><button class="linkbtn" data-action="export-plan" data-id="${esc(v.key)}">导出 JSON</button><button class="linkbtn" data-action="activate-plan" data-id="${esc(v.key)}">${a?.planKey===v.key?'重新安排周期':'启用 / 回滚'}</button></div></div>`;}).join('')}</section><section class="card">${section('导出分析数据')}<div class="row wrap" style="margin-top:18px">${btn('export-records',`${icon('download',16)} 选择日期与格式`,'primary')}${btn('example-plan','下载计划示例','outline')}</div></section></div><div class="stack"><section class="card">${section('完整备份与恢复',icon('shield',20))}<div class="info-list"><div class="info-line">${icon('download',18)}<div><h4>完整备份</h4><p>${last?`上次发起导出：${new Date(last).toLocaleString('zh-CN')}（请确认文件已保存）`:'还没有导出过完整备份。'}</p></div></div><div class="info-line">${icon('refresh',18)}<div><h4>保留恢复前版本</h4><p>最近 14 份本机快照</p></div></div></div><div class="row wrap" style="margin-top:21px">${btn('backup','导出完整备份','primary')}${btn('restore','从文件恢复','outline')}${btn('checkpoints','本机历史快照','outline')}</div></section><section class="card">${section('偏好与本机状态')}<div class="form-grid profile-preferences">${select('theme','显示模式',[['system','跟随系统'],['light','浅色'],['dark','深色']],s.settings.theme,'data-pref="theme"')}<div class="field"><span class="field-label" id="cycle-start-label">当前周期起点</span><output id="f-cycle-start" class="setting-value" aria-labelledby="cycle-start-label">${esc(a?.effectiveDate??'—')}</output></div></div><div class="selectable-row"><div class="info"><h4>营养目标</h4></div>${btn('targets','设置','secondary')}</div><div class="selectable-row"><div class="info"><h4>离线资源</h4><p data-offline>${esc(ui.offline)}</p></div>${btn('check-offline','检查','outline')}</div>${ui.update?btn('update','已下载新版本，重新打开更新','primary','style="margin-top:15px"'):''}<div class="selectable-row"><div class="info"><h4>本地存储保护</h4><p id="persist-status">申请减少被浏览器自动清理的可能</p></div>${btn('persist','申请','outline')}</div></section><section class="card">${section('关于 BodyTrack')}<p class="small muted">记录只保存在本机，请定期备份。</p>${disclosure('隐私与使用范围','<p>记录不上传，不同设备或浏览器之间不会自动同步。清理网站数据会删除记录与本机快照；请将完整备份另存到「文件」。</p><p>用于一般健身记录，不提供疾病诊断或未经评估的单侧脊柱矫正。</p><p>数据版本 3 · 计划 Schema 1.0</p>')}<p class="small muted">BodyTrack 1.2.6</p></section></div></div>`;
+  return `${pageTitle('我的')}<div class="grid2"><div class="stack"><section class="card">${section('我的训练计划')}<h3>${esc(p?.name??'暂无生效计划')}</h3><div class="row wrap" style="margin-top:21px">${btn('import-plan',`${icon('upload',16)} 导入新计划`,'primary')}${btn('plan-editor','编辑当前计划','outline')}</div><hr class="divider">${s.plans.slice().reverse().map(v=>{const activation=s.activations.filter(a=>a.planKey===v.key).at(-1);return `<div class="version"><div class="row between"><h3>${esc(v.plan.name)}</h3>${tag(a?.planKey===v.key?'当前':activation&&activation.effectiveDate>C.dateKey()?'待生效':'已保存',a?.planKey===v.key?'':'gray')}</div><p>版本 ${v.plan.planVersion}${activation?` · 最近启用 ${activation.effectiveDate}`:''}</p><div class="row gap8" style="margin-top:9px"><button class="linkbtn" data-action="export-plan" data-id="${esc(v.key)}">导出 JSON</button><button class="linkbtn" data-action="activate-plan" data-id="${esc(v.key)}">${a?.planKey===v.key?'重新安排周期':'启用 / 回滚'}</button></div></div>`;}).join('')}</section><section class="card">${section('导出分析数据')}<div class="row wrap" style="margin-top:18px">${btn('export-records',`${icon('download',16)} 选择日期与格式`,'primary')}${btn('example-plan','下载计划示例','outline')}</div></section></div><div class="stack"><section class="card">${section('完整备份与恢复',icon('shield',20))}<div class="info-list"><div class="info-line">${icon('download',18)}<div><h4>完整备份</h4><p>${last?`上次发起导出：${new Date(last).toLocaleString('zh-CN')}（请确认文件已保存）`:'还没有导出过完整备份。'}</p></div></div><div class="info-line">${icon('refresh',18)}<div><h4>保留恢复前版本</h4><p>最近 14 份本机快照</p></div></div></div><div class="row wrap" style="margin-top:21px">${btn('backup','导出完整备份','primary')}${btn('restore','从文件恢复','outline')}${btn('checkpoints','本机历史快照','outline')}</div></section><section class="card">${section('偏好与本机状态')}<div class="form-grid profile-preferences">${select('theme','显示模式',[['system','跟随系统'],['light','浅色'],['dark','深色']],s.settings.theme,'data-pref="theme"')}<div class="field"><span class="field-label" id="cycle-start-label">当前周期起点</span><output id="f-cycle-start" class="setting-value" aria-labelledby="cycle-start-label">${esc(a?.effectiveDate??'—')}</output></div></div><div class="selectable-row"><div class="info"><h4>营养目标</h4></div>${btn('targets','设置','secondary')}</div><div class="selectable-row"><div class="info"><h4>离线资源</h4><p data-offline>${esc(ui.offline)}</p><p data-update-status role="status">${esc(ui.updateStatus)}</p></div>${btn('check-offline','检查更新','outline')}</div><div data-update-ready ${ui.update?'':'hidden'}>${btn('update','立即更新','primary',activatingUpdate?'disabled':'')}</div><div class="selectable-row"><div class="info"><h4>本地存储保护</h4><p id="persist-status">申请减少被浏览器自动清理的可能</p></div>${btn('persist','申请','outline')}</div></section><section class="card">${section('关于 BodyTrack')}<p class="small muted">记录只保存在本机，请定期备份。</p>${disclosure('隐私与使用范围','<p>记录不上传，不同设备或浏览器之间不会自动同步。清理网站数据会删除记录与本机快照；请将完整备份另存到「文件」。</p><p>用于一般健身记录，不提供疾病诊断或未经评估的单侧脊柱矫正。</p><p>数据版本 3 · 计划 Schema 1.0</p>')}<p class="small muted">BodyTrack 1.2.7</p></section></div></div>`;
 }
 
 function journalForm(id,finishing=false){
@@ -352,8 +355,11 @@ async function action(name,el){
     case 'checkpoints':await store.loadCheckpoints();showCheckpoints();break;
     case 'restore-checkpoint':showRestore(C.migrateState(store.checkpoints.find(c=>c.id===id).data));break;
     case 'persist':{const granted=await navigator.storage?.persist?.();toast(granted?'已获得持久存储保护，仍请保留外部备份':'浏览器未授予持久存储，请定期导出备份');document.querySelector('#persist-status').textContent=granted?'已获得持久存储保护；手动清理仍会删除数据。':'未获持久存储保护；请定期备份。';break;}
-    case 'check-offline':if(offlineInstallFailed)await setupOffline();await offlineCheck();break;
-    case 'update':if(ui.update){ui.update.postMessage('ACTIVATE_UPDATE');toast('正在切换已下载的新版本…');}break;
+    case 'check-offline':
+      if(!registration||(offlineInstallFailed&&!registration.active))await setupOffline();
+      await Promise.all([checkForUpdate({manual:true}),offlineCheck()]);
+      break;
+    case 'update':await activateUpdate();break;
   }
 }
 
@@ -364,7 +370,7 @@ document.addEventListener('click',async event=>{
     if(el.dataset.training){ui.training=el.dataset.training;ui.sessionId=null;render();return;}
     if(el.dataset.diet){ui.diet=el.dataset.diet;render();return;}
     if(el.dataset.range){ui.range=Number(el.dataset.range);render();return;}
-    if(el.dataset.action){el.disabled=true;try{await queue;await action(el.dataset.action,el);}finally{if(el.isConnected)el.disabled=el.dataset.action==='run-photo'&&!ui.photoPixels;}}
+    if(el.dataset.action){el.disabled=true;try{await queue;await action(el.dataset.action,el);}finally{if(el.isConnected)el.disabled=(el.dataset.action==='run-photo'&&!ui.photoPixels)||(el.dataset.action==='update'&&activatingUpdate);}}
   }catch(e){toast(e.message??'操作失败，请重试');}
 });
 document.addEventListener('toggle',event=>{const d=event.target;if(d.dataset?.exerciseDetails){if(d.open)ui.open.add(d.dataset.exerciseDetails);else ui.open.delete(d.dataset.exerciseDetails);}},true);
@@ -446,13 +452,77 @@ document.addEventListener('submit',async event=>{
 modal.addEventListener('click',event=>{if(event.target===modal){const r=modal.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)modal.close();}});
 modal.addEventListener('close',()=>{if(!modal.open)clearTransientPhoto();});
 window.addEventListener('pagehide',clearTransientPhoto);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')clearTransientPhoto();});
-window.addEventListener('online',()=>offlineCheck());
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden')clearTransientPhoto();
+  else checkForUpdate();
+});
+window.addEventListener('pageshow',()=>checkForUpdate());
+window.addEventListener('online',()=>{
+  if(offlineInstallFailed&&!registration?.active)setupOffline();
+  else{offlineCheck();checkForUpdate({force:true});}
+});
 window.addEventListener('offline',()=>{toast('已离线，继续在本机记录');});
 if('BroadcastChannel' in window){const channel=new BroadcastChannel('bodytrack-revisions');const original=store.change.bind(store);store.change=async(...args)=>{const r=await original(...args);channel.postMessage({revision:state().revision});return r;};channel.onmessage=event=>{if(event.data.revision!==state().revision)toast('其他窗口的数据已更新；请刷新本窗口后继续记录。');};}
 let registration,offlineInstallFailed=false,offlineSetup;
+let updateCheck,lastUpdateCheck=0,activatingUpdate=false,activationTimer,controllingWorker;
 const watchedWorkers=new WeakSet(),watchedRegistrations=new WeakSet();
 function offlineStatus(text){ui.offline=text;document.querySelectorAll('[data-offline]').forEach(el=>el.textContent=text);}
+function updateStatus(text){
+  ui.updateStatus=text;
+  for(const el of document.querySelectorAll('[data-update-status]'))el.textContent=text;
+}
+function syncUpdateControls(){
+  for(const el of document.querySelectorAll('[data-update-ready]'))el.hidden=!ui.update;
+  for(const button of document.querySelectorAll('[data-action="update"]'))button.disabled=activatingUpdate;
+}
+function updateReady(worker){
+  if(!worker||ui.update===worker)return;
+  ui.update=worker;
+  updateStatus('新版本已就绪');
+  syncUpdateControls();
+  if(!activatingUpdate)toast('新版本已就绪，点「立即更新」');
+}
+async function checkForUpdate({manual=false,force=manual}={}){
+  if(!registration)return;
+  if(registration.waiting)updateReady(registration.waiting);
+  if(ui.update||activatingUpdate)return;
+  if(updateCheck)return updateCheck;
+  if(registration.installing){if(manual)updateStatus('正在下载应用资源…');return;}
+  if(!navigator.onLine){if(manual)updateStatus('联网后可检查更新');return;}
+  if(!force&&Date.now()-lastUpdateCheck<30_000)return;
+  lastUpdateCheck=Date.now();
+  if(manual)updateStatus('正在检查更新…');
+  updateCheck=(async()=>{
+    try{
+      await registration.update();
+      if(registration.waiting)updateReady(registration.waiting);
+      else if(!ui.update&&registration.installing)updateStatus('正在下载应用资源…');
+      else if(!ui.update&&manual&&registration.active)updateStatus('已是最新版本');
+    }catch{
+      if(!ui.update&&manual)updateStatus('暂时无法检查更新，请联网重试');
+    }
+  })();
+  try{await updateCheck;}finally{updateCheck=null;}
+}
+async function activateUpdate(){
+  if(!ui.update||activatingUpdate)return;
+  await queue;
+  const worker=registration.waiting??ui.update;
+  if(worker===navigator.serviceWorker.controller){location.reload();return;}
+  if(!['installed','activating'].includes(worker.state)){
+    ui.update=null;syncUpdateControls();await checkForUpdate({manual:true});return;
+  }
+  activatingUpdate=true;syncUpdateControls();
+  updateStatus('正在切换版本…');toast('正在切换版本…');
+  activationTimer=setTimeout(()=>{
+    activatingUpdate=false;syncUpdateControls();updateStatus('切换尚未完成，请重试');
+  },8000);
+  try{worker.postMessage('ACTIVATE_UPDATE');}
+  catch{
+    clearTimeout(activationTimer);
+    activatingUpdate=false;syncUpdateControls();updateStatus('切换尚未完成，请重试');
+  }
+}
 async function offlineCheck(){
   if(!registration?.active || !navigator.serviceWorker.controller){offlineStatus(offlineInstallFailed?'离线准备失败，请联网后点检查重试':'准备中，请稍后检查');}
   else{
@@ -465,20 +535,34 @@ async function setupOffline(){
   if(offlineSetup)return offlineSetup;
   offlineSetup=(async()=>{try{
     offlineInstallFailed=false;
-    registration=await navigator.serviceWorker.register('./sw.js',{scope:'./'});
-    const downloaded=worker=>{ui.update=worker;toast('新版本已下载，可在「我的」中更新');if(ui.page==='profile')render();};
+    registration=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});
     const watch=worker=>{if(!worker||watchedWorkers.has(worker))return;watchedWorkers.add(worker);worker.addEventListener('statechange',()=>{
       if(worker.state==='redundant'&&!registration.active){offlineInstallFailed=true;offlineStatus('离线准备失败，请联网后点检查重试');}
-      if(worker.state==='installed'&&navigator.serviceWorker.controller)downloaded(worker);
-      if(worker.state==='activated'){offlineInstallFailed=false;offlineCheck();}
+      if(worker.state==='redundant'&&ui.update===worker){ui.update=null;syncUpdateControls();}
+      if(worker.state==='installed'&&navigator.serviceWorker.controller)updateReady(worker);
+      if(worker.state==='activated'){offlineInstallFailed=false;if(!ui.update)updateStatus('');offlineCheck();}
     });};
     watch(registration.installing);
     if(!setupOffline.listening){setupOffline.listening=true;
-      navigator.serviceWorker.addEventListener('message',event=>{if(event.data?.type==='OFFLINE_INSTALL_FAILED'){offlineInstallFailed=true;if(!registration?.active)offlineStatus('离线准备失败，请联网后点检查重试');}});
-      navigator.serviceWorker.addEventListener('controllerchange',()=>{if(ui.update)location.reload();else{offlineInstallFailed=false;offlineCheck();}});
+      controllingWorker=navigator.serviceWorker.controller;
+      navigator.serviceWorker.addEventListener('message',event=>{
+        if(event.data?.type!=='OFFLINE_INSTALL_FAILED')return;
+        if(registration?.active)updateStatus('更新下载未完成，可重新检查');
+        else{offlineInstallFailed=true;offlineStatus('离线准备失败，请联网后点检查重试');}
+      });
+      navigator.serviceWorker.addEventListener('controllerchange',async()=>{
+        const previous=controllingWorker;
+        controllingWorker=navigator.serviceWorker.controller;
+        if(!controllingWorker)return;
+        offlineInstallFailed=false;
+        if(activatingUpdate){clearTimeout(activationTimer);await queue;location.reload();return;}
+        if(previous&&previous!==controllingWorker)updateReady(controllingWorker);
+        offlineCheck();
+      });
     }
-    if(registration.waiting)downloaded(registration.waiting);
+    if(registration.waiting)updateReady(registration.waiting);
     if(!watchedRegistrations.has(registration)){watchedRegistrations.add(registration);registration.addEventListener('updatefound',()=>watch(registration.installing));}
+    if(navigator.serviceWorker.controller)checkForUpdate();
     await offlineCheck();
   }catch{offlineInstallFailed=true;offlineStatus('离线准备失败，请联网后点检查重试');}})();
   try{await offlineSetup;}finally{offlineSetup=null;}
