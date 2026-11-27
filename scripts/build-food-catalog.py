@@ -63,23 +63,12 @@ selected=[
 ids={str(x[0]) for x in selected}
 foods={r['fdc_id']:r for r in rows('food.csv') if r['fdc_id'] in ids}
 assert len(foods)==len(selected), 'A selected USDA record is missing'
-mapping={'1008':'kcal','1003':'protein','1005':'carbs','1004':'fat','1079':'fiber','1093':'sodium','1087':'calcium','1089':'iron','1095':'zinc','1090':'magnesium','1092':'potassium','1162':'vitaminC','1114':'vitaminD','2000':'totalSugars','1235':'addedSugars'}
+mapping={'1008':'kcal','1003':'protein','1005':'carbs','1004':'fat','1079':'fiber','1093':'sodium','1087':'calcium','1089':'iron','1095':'zinc','1090':'magnesium','1092':'potassium','1162':'vitaminC','1114':'vitaminD','2000':'totalSugars'}
 values={fid:{k:None for k in mapping.values()} for fid in ids}
 for r in rows('food_nutrient.csv'):
     if r['fdc_id'] in ids and r['nutrient_id'] in mapping:
         # Preserve a missing amount as unknown, never replace it with zero.
         values[r['fdc_id']][mapping[r['nutrient_id']]]=float(r['amount']) if r['amount'].strip() else None
-# These specific FDC entries describe plain foods with no added sweetener.
-# Leave the added component unknown for ambiguous foods such as commercial bread and peanut butter.
-plain_food_ids={
-    171477,171478,173424,171287,172183,174030,174031,172173,172170,175167,175168,
-    171269,171267,169283,169757,169756,169704,169703,173904,173905,168482,168484,
-    170440,169999,169998,168928,168927,168917,168874,173944,171688,171705,169967,
-    170379,168462,168463,170457,168409,170567,170187,171413,171890,
-}
-for fid,nutrients in values.items():
-    if nutrients['addedSugars'] is None and (int(fid) in plain_food_ids or nutrients['totalSugars']==0):
-        nutrients['addedSugars']=0
 portions={fid:[] for fid in ids}
 translations={'large':'大号','medium':'中等','small':'小号','extra large':'特大号','jumbo':'超大号','cup':'量杯','slice':'片','tablespoon':'汤匙','tbsp':'汤匙','teaspoon':'茶匙','tsp':'茶匙','oz':'盎司','fl oz':'液量盎司','egg':'鸡蛋','banana':'香蕉','apple':'苹果','whole':'整个','chopped':'切碎','sliced':'切片','mashed':'压泥','cubes':'切块','shelled':'去壳','drained':'沥干','nfs':'大小未注明'}
 for r in rows('food_portion.csv'):
@@ -97,7 +86,7 @@ for fid,name,state,category,visual in selected:
      'source':f'USDA FoodData Central · SR Legacy 2018 · FDC {fid}',
      'sourceUrl':f'https://fdc.nal.usda.gov/food-details/{fid}/nutrients','sourceDescription':desc,'per100':values[k],
      'portions':portions[k][:5]})
-result={'version':2,'dataset':'USDA FoodData Central SR Legacy, April 2018','license':'CC0-1.0','sourceUrl':'https://fdc.nal.usda.gov/download-datasets/','archiveSha256':hashlib.sha256(archive_path.read_bytes()).hexdigest(),'note':'一般食物平均参考值，不等同于具体品牌或实际菜肴；可食部克重。烹调油、盐和酱料另记。总糖来自 USDA；确认无甜味配料的原味食材或总糖为零的条目，添加糖记为 0。','foods':entries}
+result={'version':3,'dataset':'USDA FoodData Central SR Legacy, April 2018','license':'CC0-1.0','sourceUrl':'https://fdc.nal.usda.gov/download-datasets/','archiveSha256':hashlib.sha256(archive_path.read_bytes()).hexdigest(),'note':'一般食物平均参考值，不等同于具体品牌或实际菜肴；可食部克重。烹调油、盐和酱料另记。总糖来自 USDA。','foods':entries}
 dest=root/'dist/foods.json';dest.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-print(f'Built {len(entries)} traced USDA foods including total and added sugars.')
+print(f'Built {len(entries)} traced USDA foods including total sugars.')
 print('Portion examples:',json.dumps({e['name']:e['portions'][:2] for e in entries if e['visualGroup'] in ['banana','eggs','rice']},ensure_ascii=False))

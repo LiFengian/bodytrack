@@ -1,19 +1,18 @@
 // Pure domain logic. No browser globals, network, or persistence side effects.
 export const DATA_VERSION = 3;
 export const SCHEMA_VERSION = '1.0';
-export const RECORDS_SCHEMA_VERSION = '1.2';
+export const RECORDS_SCHEMA_VERSION = '1.3';
 export const BACKUP_SCHEMA_VERSION = '1.2';
 export const CARDIO_EFFORT = {easy:'轻松',moderate:'适中',hard:'吃力',veryHard:'很吃力'};
 export const NUTRIENTS = {
   kcal: ['热量', 'kcal'], protein: ['蛋白质', 'g'], carbs: ['碳水', 'g'], fat: ['脂肪', 'g'],
   fiber: ['膳食纤维', 'g'], sodium: ['钠', 'mg'], calcium: ['钙', 'mg'], iron: ['铁', 'mg'],
   zinc: ['锌', 'mg'], magnesium: ['镁', 'mg'], potassium: ['钾', 'mg'], vitaminC: ['维生素 C', 'mg'], vitaminD: ['维生素 D', 'μg'],
-  totalSugars: ['总糖', 'g'], addedSugars: ['添加糖', 'g']
+  totalSugars: ['总糖', 'g']
 };
 export const REQUIRED_NUTRIENTS = ['kcal', 'protein', 'carbs', 'fat', 'fiber', 'sodium'];
-export const SUGAR_NUTRIENTS = ['totalSugars', 'addedSugars'];
-export const DAILY_NUTRIENTS = [...REQUIRED_NUTRIENTS, ...SUGAR_NUTRIENTS];
-export const NUTRITION_LIMITS = {sodium:2000,addedSugars:25};
+export const DAILY_NUTRIENTS = [...REQUIRED_NUTRIENTS, 'totalSugars'];
+export const NUTRITION_LIMITS = {sodium:2000,totalSugars:null};
 export const MEALS = ['早餐', '午餐', '晚餐', '加餐'];
 export const uid = () => globalThis.crypto.randomUUID();
 export const clone = value => structuredClone(value);
@@ -279,6 +278,13 @@ export function planDiff(old,p) {
   for(const [id,e] of before) if(!after.has(id)) lines.push(`移除 ${e.name}`);
   return lines.length?lines:['动作与训练量一致（计划标识、名称或日期可能变化）'];
 }
+// Preserve values entered in older versions in full backups.
+const withoutLegacySugar=({addedSugars,...nutrients})=>nutrients;
+function replaceTrackedNutrients(current,previous={}){
+  const nutrients=withoutLegacySugar(current);
+  if(Object.hasOwn(previous,'addedSugars'))nutrients.addedSugars=previous.addedSugars;
+  return nutrients;
+}
 export function validateFood(f) {
   const errors=[];
   if(!object(f)) return ['食物记录无效'];
@@ -290,9 +296,7 @@ export function validateFood(f) {
   if(!object(f.per100)) errors.push('每 100 g 营养数据无效');
   else {
     for(const k of REQUIRED_NUTRIENTS) if(!(k in f.per100)) errors.push(`缺少 ${k}，未知请用 null`);
-    for(const [k,v] of Object.entries(f.per100)) if(!(k in NUTRIENTS) || !(v===null || finite(v))) errors.push(`${k} 数值无效；未知请留空`);
-    const {totalSugars,addedSugars}=f.per100;
-    if(finite(totalSugars)&&finite(addedSugars)&&addedSugars-totalSugars>1e-9) errors.push('添加糖不能超过总糖');
+    for(const [k,v] of Object.entries(f.per100)) if(!(Object.hasOwn(NUTRIENTS,k)||k==='addedSugars') || !(v===null || finite(v))) errors.push(`${k} 数值无效；未知请留空`);
   }
   return errors;
 }
@@ -318,23 +322,24 @@ export function nutritionLimitProgress(key,n,mealCount,customLimit=null) {
   assert(customLimit===null||finite(customLimit),`${NUTRIENTS[key][0]}红线数值无效`);
   const limit=customLimit??NUTRITION_LIMITS[key];
   const value=n.value,hasRecords=mealCount>0,partial=!n.complete;
-  const ratio=!hasRecords||value===null?null:limit===0?(value>0?Infinity:1):value/limit;
-  const status=!hasRecords?'empty':value===null?'unknown':value>limit?'exceeded':value===limit?'limit':ratio>=.8?'near':'normal';
-  return {value,limit,partial,unknownCount:n.unknownCount,status,reference:customLimit===null,
+  const ratio=!hasRecords||value===null||limit===null?null:limit===0?(value>0?Infinity:1):value/limit;
+  const status=!hasRecords?'empty':value===null?'unknown':limit===null?'unconfigured':value>limit?'exceeded':value===limit?'limit':ratio>=.8?'near':'normal';
+  return {value,limit,partial,unknownCount:n.unknownCount,status,reference:limit!==null&&customLimit===null,
     percent:Number.isFinite(ratio)?Math.round(ratio*100):null,
     widthPercent:ratio===null?0:Math.min(100,Math.max(0,ratio*100)),
-    excess:value===null?null:Math.max(0,value-limit)};
+    excess:value===null||limit===null?null:Math.max(0,value-limit)};
 }
 export function mealFromFood(food,grams,date,meal) {
   assert(!validateFood(food).length,'食物数据无效'); assert(finite(grams,.1,100000),'食用重量需大于 0');
   assert(isDate(date)&&MEALS.includes(meal),'用餐日期或餐次无效');
-  return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:clone(food.per100),grams,createdAt:nowISO(),...(food.sourceUrl?{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:food.catalogVersion??1}:{})};
+  return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:withoutLegacySugar(food.per100),grams,createdAt:nowISO(),...(food.sourceUrl?{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:food.catalogVersion??1}:{})};
 }
 export function saveCustomFood(state,food) {
   const errors=validateFood(food);assert(!errors.length,errors.join('\n'));
   assert(str(food.id,200),'食物缺少唯一 ID');
   const index=state.foods.findIndex(f=>f.id===food.id);
   const updated=clone(food);
+  updated.per100=replaceTrackedNutrients(food.per100,state.foods[index]?.per100);
   if(index<0)state.foods.push(updated);else state.foods[index]=updated;
   return synchronizeFoodMeals(state,{foodId:food.id});
 }
@@ -346,7 +351,8 @@ export function synchronizeFoodMeals(state,{foodId=null,checkOnly=false}={}) {
     const food=foods.get(meal.foodId);if(!food)continue;
     const same=['name','state','source','sourceUrl'].every(k=>(meal[k]??null)===(food[k]??null))&&Object.keys(NUTRIENTS).every(k=>(meal.per100[k]??null)===(food.per100[k]??null));
     if(same)continue;changed++;if(checkOnly)continue;
-    for(const key of ['name','state','source','per100'])meal[key]=clone(food[key]);
+    for(const key of ['name','state','source'])meal[key]=food[key];
+    meal.per100=replaceTrackedNutrients(food.per100,meal.per100);
     for(const key of ['sourceUrl','sourceDescription','catalogVersion'])delete meal[key];
     if(food.sourceUrl)Object.assign(meal,{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:1});
     // Keep actual grams, date, meal, stable ID and entry/portion provenance.
@@ -359,20 +365,17 @@ export function composeRecipe(name,source,ingredients,finalGrams) {
   const total=aggregateNutrition(ingredients);
   return {id:uid(),name,source,state:'cooked',per100:Object.fromEntries(Object.entries(total).map(([k,v])=>[k,v.complete?v.value/finalGrams*100:null])),ingredients:clone(ingredients),finalGrams};
 }
-export function fillCatalogSugars(state,foods,{checkOnly=false}={}) {
+export function fillCatalogTotalSugars(state,foods,{checkOnly=false}={}) {
   const byId=new Map(foods.map(f=>[f.id,f]));
   let changed=0;
   for(const meal of state.meals){
     const food=byId.get(meal.foodId);
     if(!food?.sourceUrl || meal.sourceUrl!==food.sourceUrl || meal.source!==food.source ||
        meal.state!==food.state || meal.sourceDescription!==food.sourceDescription) continue;
-    const missing=SUGAR_NUTRIENTS.filter(k=>!Object.hasOwn(meal.per100,k)&&food.per100[k]!=null);
-    if(!missing.length) continue;
-    const per100={...meal.per100,...Object.fromEntries(missing.map(k=>[k,food.per100[k]]))};
-    if(validateFood({...meal,per100}).length) continue;
+    if(Object.hasOwn(meal.per100,'totalSugars')||food.per100.totalSugars==null) continue;
     changed++;
     if(!checkOnly){
-      meal.per100=per100;
+      meal.per100.totalSugars=food.per100.totalSugars;
       meal.catalogVersion=food.catalogVersion??meal.catalogVersion;
     }
   }
@@ -384,7 +387,7 @@ export function validateState(s) {
   for(const key of ['plans','activations','sessions','cardio','foods','meals','body']) assert(Array.isArray(s[key])&&s[key].length<=100000,`${key} 数据无效或过多`);
   assert(s.plans.length>0&&s.activations.length>0&&integer(s.revision,0,1e12),'备份缺少计划、启用记录或修订号');
   assert(object(s.settings)&&['light','dark','system'].includes(s.settings.theme)&&typeof s.settings.introSeen==='boolean'&&typeof s.settings.reducedVolume==='boolean'&&object(s.settings.targets),'设置无效');
-  for(const [k,v] of Object.entries(s.settings.targets)) assert(k in NUTRIENTS && (v===null||finite(v)), '营养目标无效');
+  for(const [k,v] of Object.entries(s.settings.targets)) assert((Object.hasOwn(NUTRIENTS,k)||k==='addedSugars') && (v===null||finite(v)), '营养目标无效');
   assert(s.settings.lastBackupAt===null || typeof s.settings.lastBackupAt==='string'&&Number.isFinite(Date.parse(s.settings.lastBackupAt)),'备份日期无效');
   assert(object(s.adjustments)&&Object.values(s.adjustments).every(isDate),'日期调整无效');
   const allIds=[];
@@ -467,13 +470,13 @@ export function exportRecords(state,from,to) {
   assert(isDate(from)&&isDate(to)&&from<=to,'导出日期范围无效');
   const within=x=>x.date>=from&&x.date<=to;
   const sessions=state.sessions.filter(within).map(s=>({...clone(s),completion:completion(s)}));
-  const meals=state.meals.filter(within);
+  const meals=state.meals.filter(within).map(m=>({...clone(m),per100:withoutLegacySugar(m.per100)}));
   const dates=[...new Set(meals.map(x=>x.date))].sort();
   const planned=sessions.filter(s=>s.dayId&&!s.makeupFor&&s.status!=='inProgress');
   const completed=planned.filter(s=>s.status==='completed').length;
   return {schemaVersion:RECORDS_SCHEMA_VERSION,type:'bodytrack.records',exportedAt:nowISO(),range:{from,to},
     plans:clone(state.plans),activations:clone(state.activations),cycleAdjustments:clone(state.adjustments),
-    cycle:{asOf:to,next:nextOccurrence(state,to)},sessions,cardio:clone(state.cardio.filter(within)),meals:clone(meals),body:clone(state.body.filter(within)),nutritionTargets:clone(state.settings.targets),
+    cycle:{asOf:to,next:nextOccurrence(state,to)},sessions,cardio:clone(state.cardio.filter(within)),meals,body:clone(state.body.filter(within)),nutritionTargets:withoutLegacySugar(state.settings.targets),
     dailyNutrition:dates.map(date=>({date,nutrients:aggregateNutrition(meals.filter(x=>x.date===date))})),
     completion:{completed,plannedResolved:planned.length,ratio:planned.length?completed/planned.length:null,definition:'仅统计范围内已结束或明确跳过的周期训练日；休息、补练及未处理日期不进入分母。逐组完成率另列。'},
     mediaIncluded:false};

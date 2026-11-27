@@ -1,11 +1,11 @@
-# BodyTrack 数据协议：计划 1.0 / 记录与备份 1.2
+# BodyTrack 数据协议：计划 1.0、记录 1.3、备份 1.2
 
 三个独立文件类型：
 
 | 用途 | 类型标记 | Schema | 示例 |
 | --- | --- | --- | --- |
 | 导入训练建议 | `schemaVersion: "1.0"`，无 type | `dist/schemas/plan.schema.json` | `dist/examples/plan-v1.json`、`plan-v2.json` |
-| 导出分析记录 | `type: "bodytrack.records"`，Schema 1.2 | `dist/schemas/records.schema.json` | `dist/examples/records-v1.2.json` |
+| 导出分析记录 | `type: "bodytrack.records"`，Schema 1.3 | `dist/schemas/records.schema.json` | `dist/examples/records-v1.3.json` |
 | 完整备份恢复 | `type: "bodytrack.backup"`，Schema 1.2 | `dist/schemas/backup.schema.json` | `dist/examples/backup-v3.json` |
 
 旧版记录和备份样本保留在 `dist/examples/`。备份 Schema 1.0、1.1、1.2 分别对应数据版本 1、2、3，恢复时校验两者的对应关系。
@@ -67,7 +67,7 @@ JSON Schema 检查形状、范围和必填；`parsePlan`/`validatePlan` 另外�
 - 每条 meal 的 `per100` 是保存的营养来源快照。自 1.2.3 起，修改自定义食物会自动按稳定 `foodId` 更正所有关联餐食的名称、状态、来源和营养快照，覆盖历史日期；不修改实际克重、日期、餐次、记录 ID、创建时间和记录方式。启动时也检查并修复旧版本遗留的快照不同步，已同步则不重复写库。更正前快照与更新在同一 IndexedDB 事务中写入。`dailyNutrition`、CSV、报告与图表根据更正后的实际食用数据重算；缺失营养仍为 null，不按同名食物猜测关联。字段结构与 Schema 版本保持不变。
 - 1.1 新条目可带 `sourceUrl`、`sourceDescription`、`catalogVersion`；`entryMethod` 为 `catalog`、`custom` 或 `photo-confirmed`；`portionBasis` 为 `weighed`、`manual-estimate` 或 `household-estimate`。选择数据库参考份量时附 `portionReference`（原始份量 ID、标签及克重）。这些均为向后兼容的可选字段，旧记录不回填、不改写；schemaVersion 保持 1.0。
 - 汇总 `value` 在部分未知时仅为已知部分，`unknownCount` 为缺失条数，`complete` 表示该项所有饮食条目是否已知。全部未知为 null。
-- `per100.totalSugars` 和 `per100.addedSugars` 是每 100 g 的总糖和添加糖（g）。未提供时按未知处理。两者都已知时，添加糖须小于或等于总糖。汇总、饮食 CSV 和报告分别列出两项。`settings.targets.addedSugars` 保存用户设置的每日添加糖红线（g），分析导出中对应 `nutritionTargets.addedSugars`。省略或留空时使用默认 25 g。
+- `per100.totalSugars` 是每 100 g 的总糖（g）。未提供时按未知处理。汇总、饮食 CSV 和报告使用总糖。`settings.targets.totalSugars` 是用户设置的每日总糖上限（g），分析导出中对应 `nutritionTargets.totalSugars`。留空时仅统计摄入。旧版 `addedSugars` 值保存在完整备份中，当前餐食计算和分析导出使用总糖。
 - `cycle.asOf` 为所选结束日；next 基于当前数据库中截至该日已完成/跳过记录计算，但日期调整是当前保存的调整，**不是完整的历史数据库时间旅行快照**。
 - `mediaIncluded: false`，首版不管理媒体。
 

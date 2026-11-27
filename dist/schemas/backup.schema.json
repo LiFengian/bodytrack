@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "BodyTrack full backup v1.2 / legacy v1.0–1.1",
-  "description": "包含独立有氧记录和可选糖数据。运行时还校验唯一 ID、引用和总糖与添加糖关系。设备内快照不包含在外部备份中。",
+  "description": "包含独立有氧记录和可选糖数据。运行时还校验唯一 ID 和引用。设备内快照独立保存。",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -1139,7 +1139,8 @@
                       {
                         "type": "null"
                       }
-                    ]
+                    ],
+                    "description": "旧版已保存的添加糖，仅供完整备份恢复。"
                   }
                 },
                 "additionalProperties": false
@@ -1377,7 +1378,8 @@
                       {
                         "type": "null"
                       }
-                    ]
+                    ],
+                    "description": "旧版已保存的添加糖，仅供完整备份恢复。"
                   }
                 },
                 "additionalProperties": false

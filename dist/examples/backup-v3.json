@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.2",
   "type": "bodytrack.backup",
-  "exportedAt": "2026-11-27T09:31:49.146Z",
+  "exportedAt": "2026-11-27T10:14:28.957Z",
   "data": {
     "dataVersion": 3,
     "revision": 0,
-    "createdAt": "2026-11-27T09:31:49.138Z",
+    "createdAt": "2026-11-27T10:14:28.951Z",
     "settings": {
       "theme": "system",
       "introSeen": false,
@@ -18,7 +18,7 @@
         "fat": null,
         "fiber": null,
         "sodium": null,
-        "addedSugars": 25
+        "totalSugars": 40
       }
     },
     "plans": [
@@ -587,21 +587,21 @@
             }
           ]
         },
-        "importedAt": "2026-11-27T09:31:49.139Z"
+        "importedAt": "2026-11-27T10:14:28.952Z"
       }
     ],
     "activations": [
       {
-        "id": "269be8fa-7421-4ad1-8176-5fbb4ac655ab",
+        "id": "72f2b6f7-52b1-4637-b1a0-5c6941623dcc",
         "planKey": "bodytrack-foundation@1",
         "effectiveDate": "2026-11-14",
-        "createdAt": "2026-11-27T09:31:49.143Z"
+        "createdAt": "2026-11-27T10:14:28.955Z"
       }
     ],
     "sessions": [
       {
-        "id": "ce66e6c9-2a6a-4bbe-a098-60d756463ec4",
-        "activationId": "269be8fa-7421-4ad1-8176-5fbb4ac655ab",
+        "id": "4c99e786-e0f3-4142-80e2-fe733c553db4",
+        "activationId": "72f2b6f7-52b1-4637-b1a0-5c6941623dcc",
         "planKey": "bodytrack-foundation@1",
         "occurrenceIndex": 0,
         "dayId": "chest",
@@ -609,13 +609,13 @@
         "date": "2026-11-14",
         "scheduledDate": "2026-11-14",
         "status": "completed",
-        "createdAt": "2026-11-27T09:31:49.143Z",
-        "completedAt": "2026-11-27T09:31:49.143Z",
+        "createdAt": "2026-11-27T10:14:28.955Z",
+        "completedAt": "2026-11-27T10:14:28.955Z",
         "reducedVolume": false,
         "makeupFor": null,
         "exercises": [
           {
-            "id": "2ec5e509-1ebc-4a3e-9c9f-4d12a49561a5",
+            "id": "db841151-4dee-4cbb-ad3e-ecd01dc37c8b",
             "exerciseId": "chest-chin",
             "target": {
               "id": "chest-chin",
@@ -637,7 +637,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "b6761736-5670-441a-9c4a-4ee4227d2d55",
+                "id": "3845a85d-80d9-47a6-b424-4e94abc11600",
                 "number": 1,
                 "side": "both",
                 "targetReps": 10,
@@ -648,7 +648,7 @@
                 "done": true
               },
               {
-                "id": "09594ee8-8bab-4e09-b038-d9543ce9e48b",
+                "id": "1f15525d-7640-4edd-b90c-ff021b938ccd",
                 "number": 2,
                 "side": "both",
                 "targetReps": 10,
@@ -661,7 +661,7 @@
             ]
           },
           {
-            "id": "f16b7136-351d-4c06-aef4-3532695589ec",
+            "id": "c4f51c59-262b-4a3b-9f28-e57687661b60",
             "exerciseId": "chest-thoracic",
             "target": {
               "id": "chest-thoracic",
@@ -683,7 +683,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "793cee25-47fa-4134-9d50-d63972f002fc",
+                "id": "78a57ba4-5e9d-46c5-b391-24ac27c55d2c",
                 "number": 1,
                 "side": "both",
                 "targetReps": 10,
@@ -694,7 +694,7 @@
                 "done": false
               },
               {
-                "id": "25fcef3d-888b-430b-af9f-20cbe6dc50fd",
+                "id": "480bb660-b610-4e08-86ba-4f00798365a3",
                 "number": 2,
                 "side": "both",
                 "targetReps": 10,
@@ -707,7 +707,7 @@
             ]
           },
           {
-            "id": "359370cc-3539-40e2-9fb4-c8e1fdb44f19",
+            "id": "1dfc95b5-084d-436e-8184-86a05cb197ab",
             "exerciseId": "chest-incline",
             "target": {
               "id": "chest-incline",
@@ -729,7 +729,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "ebbff072-451a-4df5-93f6-8c79065a2df4",
+                "id": "e86394ea-4870-44f5-9d6e-e1f16e9dc8a5",
                 "number": 1,
                 "side": "both",
                 "targetReps": 10,
@@ -740,7 +740,7 @@
                 "done": false
               },
               {
-                "id": "b9a794cf-a38e-4c0b-89b5-a9d8ff45714b",
+                "id": "07761d9d-93c0-4e1b-b891-3a73792c952d",
                 "number": 2,
                 "side": "both",
                 "targetReps": 10,
@@ -751,7 +751,7 @@
                 "done": false
               },
               {
-                "id": "66f8f0a1-8730-4e0f-b83a-03b7fb9eadaa",
+                "id": "49ca2833-618c-4fc9-8687-e9d2ac88ac22",
                 "number": 3,
                 "side": "both",
                 "targetReps": 10,
@@ -764,7 +764,7 @@
             ]
           },
           {
-            "id": "67243505-8d25-4ad1-9f08-bea2b71b40d2",
+            "id": "a5dc3b04-faf9-4ffd-9da8-0f3923d45ddb",
             "exerciseId": "chest-flat",
             "target": {
               "id": "chest-flat",
@@ -786,7 +786,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "37ad5499-db3a-467d-ad8a-e6420b2fa562",
+                "id": "96be7fbf-bfd1-4dec-aad0-eac1d7780f74",
                 "number": 1,
                 "side": "both",
                 "targetReps": 10,
@@ -797,7 +797,7 @@
                 "done": false
               },
               {
-                "id": "8405d59f-eabf-4b59-ad19-e7caada6b0ae",
+                "id": "1906f972-35de-4926-98c7-a2f66c6edbc8",
                 "number": 2,
                 "side": "both",
                 "targetReps": 10,
@@ -810,7 +810,7 @@
             ]
           },
           {
-            "id": "81ec5ce3-82eb-4745-91b4-bf1ac1cc8d59",
+            "id": "8d42aae4-257a-430a-989b-f9a2c25248a4",
             "exerciseId": "chest-fly",
             "target": {
               "id": "chest-fly",
@@ -832,7 +832,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "90b94809-5057-4f02-8cd7-ecd2c3704598",
+                "id": "7f1e5c78-7d2d-44f8-86d6-48664b4f067b",
                 "number": 1,
                 "side": "both",
                 "targetReps": 12,
@@ -843,7 +843,7 @@
                 "done": false
               },
               {
-                "id": "6813bd28-70ec-468b-aee3-88c21faeb5c0",
+                "id": "c0695ff5-5cbe-4072-96fb-aa83045cc386",
                 "number": 2,
                 "side": "both",
                 "targetReps": 12,
@@ -856,7 +856,7 @@
             ]
           },
           {
-            "id": "3d21c23b-88de-4ffc-8cf0-e1265880cd34",
+            "id": "44251046-3307-4a84-b29a-90994b23e868",
             "exerciseId": "chest-plus",
             "target": {
               "id": "chest-plus",
@@ -878,7 +878,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "02ec14de-1af4-4a0a-a9d5-912b9b3e2b87",
+                "id": "8fc608d4-fabb-4184-9d8f-c0f02fa87f55",
                 "number": 1,
                 "side": "both",
                 "targetReps": 12,
@@ -889,7 +889,7 @@
                 "done": false
               },
               {
-                "id": "2823ade3-c4fd-42f0-8fa8-bc008e3d6b08",
+                "id": "200afe7b-93a3-4e5c-8c44-033b61d21cff",
                 "number": 2,
                 "side": "both",
                 "targetReps": 12,
@@ -900,7 +900,7 @@
                 "done": false
               },
               {
-                "id": "859ac3db-b500-49ab-a8f5-10fb5e48d1b1",
+                "id": "b696092b-39bf-45ec-8750-2abaaefab6e7",
                 "number": 3,
                 "side": "both",
                 "targetReps": 12,
@@ -913,7 +913,7 @@
             ]
           },
           {
-            "id": "8f53c224-3ecf-4b42-afbc-1bfa6f22420d",
+            "id": "3ac4dc65-f015-4d01-b53c-a8912c704737",
             "exerciseId": "chest-deadbug",
             "target": {
               "id": "chest-deadbug",
@@ -935,7 +935,7 @@
             "sideDifference": "",
             "sets": [
               {
-                "id": "a316912d-1213-470a-9e38-a6962a4c7459",
+                "id": "229d3a81-3ff6-4ce6-83f9-054b133256bf",
                 "number": 1,
                 "side": "left",
                 "targetReps": 10,
@@ -946,7 +946,7 @@
                 "done": false
               },
               {
-                "id": "24e6d7df-c836-491c-b31e-69c036bf1591",
+                "id": "ced343bb-c784-4029-982b-6ffb005c1156",
                 "number": 1,
                 "side": "right",
                 "targetReps": 10,
@@ -957,7 +957,7 @@
                 "done": false
               },
               {
-                "id": "457a73b8-5fd3-47cb-8442-b0ec7b1eff6b",
+                "id": "9c07ff61-bea4-4c9b-9727-04b32fdd19e7",
                 "number": 2,
                 "side": "left",
                 "targetReps": 10,
@@ -968,7 +968,7 @@
                 "done": false
               },
               {
-                "id": "01857d68-f8bb-47c7-80df-530e97e4e83e",
+                "id": "9df60b79-5a04-4db3-a9b6-3273564fdce9",
                 "number": 2,
                 "side": "right",
                 "targetReps": 10,
@@ -991,7 +991,7 @@
     ],
     "cardio": [
       {
-        "id": "5308b57b-480f-49da-8e53-501af0a5237d",
+        "id": "dd8b1e76-3710-4a9b-9a83-ab1cb71946b2",
         "type": "stair-climbing",
         "date": "2026-11-14",
         "mode": "stair-machine",
@@ -1000,13 +1000,13 @@
         "level": 5,
         "effort": "moderate",
         "notes": "纯虚构有氧测试记录，不是训练建议。",
-        "createdAt": "2026-11-27T09:31:49.144Z",
-        "updatedAt": "2026-11-27T09:31:49.144Z"
+        "createdAt": "2026-11-27T10:14:28.956Z",
+        "updatedAt": "2026-11-27T10:14:28.956Z"
       }
     ],
     "foods": [
       {
-        "id": "2e438067-4373-4d45-aa0a-bb0c88ff7d9c",
+        "id": "5103c0a8-0e05-4072-bef4-e6e76e5a8fa2",
         "name": "虚构测试食品（不可用作营养参考）",
         "state": "packaged",
         "source": "软件测试夹具，非真实食品数据",
@@ -1017,17 +1017,16 @@
           "fat": 3,
           "fiber": null,
           "sodium": 50,
-          "totalSugars": 10,
-          "addedSugars": 5
+          "totalSugars": 10
         }
       }
     ],
     "meals": [
       {
-        "id": "8abb4b80-b56c-4d45-ab45-48237119943a",
+        "id": "2b2ebff2-2b39-4c08-bc01-644e5949d029",
         "date": "2026-11-14",
         "meal": "早餐",
-        "foodId": "2e438067-4373-4d45-aa0a-bb0c88ff7d9c",
+        "foodId": "5103c0a8-0e05-4072-bef4-e6e76e5a8fa2",
         "name": "虚构测试食品（不可用作营养参考）",
         "state": "packaged",
         "source": "软件测试夹具，非真实食品数据",
@@ -1038,20 +1037,19 @@
           "fat": 3,
           "fiber": null,
           "sodium": 50,
-          "totalSugars": 10,
-          "addedSugars": 5
+          "totalSugars": 10
         },
         "grams": 75,
-        "createdAt": "2026-11-27T09:31:49.144Z"
+        "createdAt": "2026-11-27T10:14:28.956Z"
       }
     ],
     "body": [
       {
-        "id": "0b7f967e-2bcd-479b-85cc-53906ba77f09",
+        "id": "d455bf51-dd95-49d5-ad53-1ce970261200",
         "date": "2026-11-14",
         "weight": 70,
         "notes": "纯虚构测试体重",
-        "createdAt": "2026-11-27T09:31:49.144Z"
+        "createdAt": "2026-11-27T10:14:28.956Z"
       }
     ],
     "adjustments": {}
