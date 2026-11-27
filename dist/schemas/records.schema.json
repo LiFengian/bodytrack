@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "BodyTrack records export v1.1",
-  "description": "用于分析，不可用于恢复。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期，并非当时的历史数据库快照。",
+  "title": "BodyTrack records export v1.2",
+  "description": "用于分析，不可用于恢复。糖含量分总糖与添加糖。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期。",
   "type": "object",
   "required": [
     "schemaVersion",
@@ -23,7 +23,7 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": "1.1"
+      "const": "1.2"
     },
     "type": {
       "const": "bodytrack.records"
@@ -1523,6 +1523,30 @@
                     "type": "null"
                   }
                 ]
+              },
+              "totalSugars": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "addedSugars": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "additionalProperties": false
@@ -1700,7 +1724,9 @@
               "magnesium",
               "potassium",
               "vitaminC",
-              "vitaminD"
+              "vitaminD",
+              "totalSugars",
+              "addedSugars"
             ],
             "properties": {
               "kcal": {
@@ -2040,6 +2066,62 @@
                 }
               },
               "vitaminD": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "totalSugars": {
+                "type": "object",
+                "required": [
+                  "value",
+                  "unknownCount",
+                  "complete"
+                ],
+                "properties": {
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "unknownCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "complete": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "addedSugars": {
                 "type": "object",
                 "required": [
                   "value",

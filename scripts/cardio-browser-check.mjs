@@ -19,7 +19,7 @@ try{
   legacy.sessions[0].status='inProgress';legacy.sessions[0].completedAt=null;
   await page.evaluate(data=>new Promise((resolve,reject)=>{const r=indexedDB.open('bodytrack-local');r.onsuccess=()=>{const db=r.result,tx=db.transaction('vault','readwrite'),os=tx.objectStore('vault');os.put(data,'state');os.put([],'checkpoints');tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>reject(tx.error);};}),legacy);
   await page.reload();await page.waitForSelector('.dashboard');
-  let state=await dbRead('state');assert.equal(state.dataVersion,2);assert.equal(state.revision,legacy.revision+1);assert.deepEqual(state.cardio,[]);
+  let state=await dbRead('state');assert.equal(state.dataVersion,C.DATA_VERSION);assert.equal(state.revision,legacy.revision+1);assert.deepEqual(state.cardio,[]);
   assert.deepEqual(state.sessions,legacy.sessions);assert.deepEqual(state.meals,legacy.meals);assert.deepEqual(state.plans,legacy.plans);
   const snapshots=await dbRead('checkpoints');assert.equal(snapshots.length,1);assert.deepEqual(snapshots[0].data,legacy);assert.match(snapshots[0].label,/升级前/);
   console.log('PASS Durable v1 migration preserves existing records and an exact pre-upgrade snapshot');
@@ -56,7 +56,7 @@ try{
   state=await dbRead('state');assert.equal(state.cardio.length,1);assert.deepEqual(state.sessions,legacy.sessions);
   await nav('profile');await click('checkpoints');await page.locator(`[data-action="restore-checkpoint"][data-id="${snapshots[0].id}"]`).click();
   await page.locator('[name="confirmed"]').check();await page.locator('[data-form="confirm-restore"] [type="submit"]').click();await page.locator('#modal').waitFor({state:'hidden'});
-  state=await dbRead('state');assert.equal(state.dataVersion,2);assert.deepEqual(state.cardio,[]);assert.deepEqual(state.sessions,legacy.sessions);
+  state=await dbRead('state');assert.equal(state.dataVersion,C.DATA_VERSION);assert.deepEqual(state.cardio,[]);assert.deepEqual(state.sessions,legacy.sessions);
   console.log('PASS New backups restore, delete preserves strength, and pre-upgrade v1 checkpoints remain recoverable');
   await nav('training');await page.locator('[data-training="cardio"]').click();await click('cardio');await page.locator('#f-mode').selectOption('stair-machine');await page.locator('#modal .inline-help > summary').click();await page.locator('#f-level').fill('7');await page.locator('#f-mode').selectOption('stairs');assert(await page.locator('#f-level').isDisabled());assert.equal(await page.locator('#f-level').inputValue(),'');
   for(const width of [320,393,430]){await page.setViewportSize({width,height:852});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}

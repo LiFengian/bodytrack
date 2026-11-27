@@ -82,7 +82,8 @@ try{
   const fresh=await browser.newContext({viewport:{width:393,height:852},timezoneId:'Asia/Shanghai'}),p2=await fresh.newPage();
   await p2.goto('http://127.0.0.1:4173');await p2.waitForSelector('.dashboard');await p2.locator('.bottomnav [data-page="profile"]').click();
   const restoreChooser=p2.waitForEvent('filechooser');await p2.locator('[data-action="restore"]').click();await (await restoreChooser).setFiles(backupPath);await p2.waitForSelector('[data-form="confirm-restore"]');await p2.locator('[name="confirmed"]').check();await p2.locator('#modal [type=submit]').click();await p2.waitForSelector('#modal', {state:'hidden'});
-  assert.match(await p2.locator('body').innerText(),/版本 2/);await p2.locator('.bottomnav [data-page="training"]').click();await p2.locator('[data-training="history"]').click();assert.match(await p2.locator('body').innerText(),/已结束/);
+  assert.equal(await p2.evaluate(async()=>{const {LocalStore}=await import('./store.mjs');const s=new LocalStore();await s.open();s.db.close();return s.state.dataVersion;}),C.DATA_VERSION);
+  await p2.locator('.bottomnav [data-page="training"]').click();await p2.locator('[data-training="history"]').click();assert.match(await p2.locator('body').innerText(),/已结束/);
   assert.deepEqual(await p2.evaluate(async()=>{const {LocalStore}=await import('./store.mjs');const s=new LocalStore();await s.open();s.db.close();return s.state.activations[0].dayOverrides;}),{'1':'back','3':'shoulder'});
   await fresh.close();checkpoint('Complete backup downloads and restores in a clean browser database');
   await nav('trends');await page.screenshot({path:fileURLToPath(new URL('trends-iphone.png',root)),fullPage:true});

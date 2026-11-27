@@ -1,10 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "dataset": "USDA FoodData Central SR Legacy, April 2018",
   "license": "CC0-1.0",
   "sourceUrl": "https://fdc.nal.usda.gov/download-datasets/",
   "archiveSha256": "b80817294b8850530aaedf2e515c02593b1824f763a0ff356e5c2081643e6fd0",
-  "note": "一般食物平均参考值，不等同于具体品牌或实际菜肴；可食部克重。烹调油、盐和酱料另记。",
+  "note": "一般食物平均参考值，不等同于具体品牌或实际菜肴；可食部克重。烹调油、盐和酱料另记。总糖来自 USDA；确认无甜味配料的原味食材或总糖为零的条目，添加糖记为 0。",
   "foods": [
     {
       "id": "usda-sr-171477",
@@ -28,7 +28,9 @@
         "magnesium": 29.0,
         "potassium": 256.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.1
+        "vitaminD": 0.1,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -67,7 +69,9 @@
         "magnesium": 24.0,
         "potassium": 187.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.1
+        "vitaminD": 0.1,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -106,7 +110,9 @@
         "magnesium": 10.0,
         "potassium": 126.0,
         "vitaminC": 0.0,
-        "vitaminD": 2.2
+        "vitaminD": 2.2,
+        "totalSugars": 1.12,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -151,7 +157,9 @@
         "magnesium": 12.0,
         "potassium": 138.0,
         "vitaminC": 0.0,
-        "vitaminD": 2.0
+        "vitaminD": 2.0,
+        "totalSugars": 0.37,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -208,7 +216,9 @@
         "magnesium": 11.0,
         "potassium": 163.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.71,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -247,7 +257,9 @@
         "magnesium": 20.0,
         "potassium": 321.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.1
+        "vitaminD": 0.1,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -280,7 +292,9 @@
         "magnesium": 22.0,
         "potassium": 333.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -313,7 +327,9 @@
         "magnesium": 25.0,
         "potassium": 375.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.1
+        "vitaminD": 0.1,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -352,7 +368,9 @@
         "magnesium": 25.0,
         "potassium": 371.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.1
+        "vitaminD": 0.1,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -391,7 +409,9 @@
         "magnesium": 27.0,
         "potassium": 363.0,
         "vitaminC": 3.9,
-        "vitaminD": 11.0
+        "vitaminD": 11.0,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -430,7 +450,9 @@
         "magnesium": 30.0,
         "potassium": 384.0,
         "vitaminC": 3.7,
-        "vitaminD": 13.1
+        "vitaminD": 13.1,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -469,7 +491,9 @@
         "magnesium": 39.0,
         "potassium": 259.0,
         "vitaminC": null,
-        "vitaminD": null
+        "vitaminD": null,
+        "totalSugars": null,
+        "addedSugars": null
       },
       "portions": [
         {
@@ -502,7 +526,9 @@
         "magnesium": 23.0,
         "potassium": 179.0,
         "vitaminC": 0.0,
-        "vitaminD": 1.2
+        "vitaminD": 1.2,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -559,7 +585,9 @@
         "magnesium": 58.0,
         "potassium": 237.0,
         "vitaminC": 0.2,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": null,
+        "addedSugars": null
       },
       "portions": [
         {
@@ -598,7 +626,9 @@
         "magnesium": 11.0,
         "potassium": 156.0,
         "vitaminC": 0.0,
-        "vitaminD": 1.2
+        "vitaminD": 1.2,
+        "totalSugars": 5.09,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -643,7 +673,9 @@
         "magnesium": 11.0,
         "potassium": 140.0,
         "vitaminC": 0.2,
-        "vitaminD": 1.2
+        "vitaminD": 1.2,
+        "totalSugars": 5.06,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -688,7 +720,9 @@
         "magnesium": 11.0,
         "potassium": 141.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 3.24,
+        "addedSugars": null
       },
       "portions": [
         {
@@ -721,7 +755,9 @@
         "magnesium": 60.0,
         "potassium": 539.0,
         "vitaminC": 17.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": null,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -754,7 +790,9 @@
         "magnesium": 12.0,
         "potassium": 35.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.05,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -787,7 +825,9 @@
         "magnesium": 25.0,
         "potassium": 115.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.12,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -820,7 +860,9 @@
         "magnesium": 39.0,
         "potassium": 86.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.24,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -853,7 +895,9 @@
         "magnesium": 116.0,
         "potassium": 250.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.66,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -886,7 +930,9 @@
         "magnesium": 138.0,
         "potassium": 362.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.99,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -925,7 +971,9 @@
         "magnesium": 27.0,
         "potassium": 70.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.27,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -970,7 +1018,9 @@
         "magnesium": 25.0,
         "potassium": 337.0,
         "vitaminC": 2.4,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 4.18,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1009,7 +1059,9 @@
         "magnesium": 18.0,
         "potassium": 230.0,
         "vitaminC": 12.8,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 5.74,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1048,7 +1100,9 @@
         "magnesium": 20.0,
         "potassium": 328.0,
         "vitaminC": 7.4,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.89,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1099,7 +1153,9 @@
         "magnesium": 26.0,
         "potassium": 218.0,
         "vitaminC": 5.5,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 4.54,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1156,7 +1212,9 @@
         "magnesium": 37.0,
         "potassium": 270.0,
         "vitaminC": 6.8,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 6.26,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1195,7 +1253,9 @@
         "magnesium": 75.0,
         "potassium": 254.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 4.34,
+        "addedSugars": null
       },
       "portions": [
         {
@@ -1234,7 +1294,9 @@
         "magnesium": 18.0,
         "potassium": 44.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.56,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1291,7 +1353,9 @@
         "magnesium": 53.0,
         "potassium": 223.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 2.67,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1348,7 +1412,9 @@
         "magnesium": 64.0,
         "potassium": 172.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.87,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1381,7 +1447,9 @@
         "magnesium": 197.0,
         "potassium": 563.0,
         "vitaminC": null,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": null,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1414,7 +1482,9 @@
         "magnesium": 27.0,
         "potassium": 358.0,
         "vitaminC": 8.7,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 12.23,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1471,7 +1541,9 @@
         "magnesium": 5.0,
         "potassium": 107.0,
         "vitaminC": 4.6,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 10.39,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1528,7 +1600,9 @@
         "magnesium": 29.0,
         "potassium": 485.0,
         "vitaminC": 10.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.66,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1585,7 +1659,9 @@
         "magnesium": 21.0,
         "potassium": 293.0,
         "vitaminC": 64.9,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 1.39,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1642,7 +1718,9 @@
         "magnesium": 21.0,
         "potassium": 316.0,
         "vitaminC": 89.2,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 1.7,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1699,7 +1777,9 @@
         "magnesium": 79.0,
         "potassium": 558.0,
         "vitaminC": 28.1,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.42,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1750,7 +1830,9 @@
         "magnesium": 87.0,
         "potassium": 466.0,
         "vitaminC": 9.8,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.43,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1783,7 +1865,9 @@
         "magnesium": 11.0,
         "potassium": 237.0,
         "vitaminC": 13.7,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 2.63,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1840,7 +1924,9 @@
         "magnesium": 13.0,
         "potassium": 147.0,
         "vitaminC": 2.8,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 1.67,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1879,7 +1965,9 @@
         "magnesium": 270.0,
         "potassium": 733.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 4.35,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1936,7 +2024,9 @@
         "magnesium": 158.0,
         "potassium": 441.0,
         "vitaminC": 1.3,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 2.61,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -1993,7 +2083,9 @@
         "magnesium": 168.0,
         "potassium": 558.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 10.49,
+        "addedSugars": null
       },
       "portions": [
         {
@@ -2032,7 +2124,9 @@
         "magnesium": 0.0,
         "potassium": 1.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {
@@ -2077,7 +2171,9 @@
         "magnesium": 3.0,
         "potassium": 49.0,
         "vitaminC": 0.0,
-        "vitaminD": 0.0
+        "vitaminD": 0.0,
+        "totalSugars": 0.0,
+        "addedSugars": 0
       },
       "portions": [
         {

@@ -36,7 +36,7 @@ test('invalid cardio is rejected before mutation, including future dates and ina
 test('legacy v1 migration preserves every existing record and does not mutate its source',async()=>{
   const backup=JSON.parse(await readFile(new URL('../dist/examples/backup-v1.json',import.meta.url),'utf8'));
   const before=C.clone(backup.data),migrated=C.parseBackup(JSON.stringify(backup));
-  assert.equal(migrated.dataVersion,2);assert.deepEqual(migrated.cardio,[]);assert.deepEqual(backup.data,before);
+  assert.equal(migrated.dataVersion,C.DATA_VERSION);assert.deepEqual(migrated.cardio,[]);assert.deepEqual(backup.data,before);
   const {dataVersion,cardio,...rest}=migrated;assert.deepEqual(rest,((({dataVersion,...rest})=>rest)(before)));
   assert.deepEqual(C.migrateState(migrated),migrated);
   const bad=C.clone(before);bad.unknownRecords=[{id:'keep-me'}];assert.throws(()=>C.migrateState(bad),/无法识别/);assert.equal(bad.dataVersion,1);
@@ -45,7 +45,7 @@ test('legacy v1 migration preserves every existing record and does not mutate it
 
 test('cardio survives full backup and rejects invalid or mismatched backup versions',()=>{
   const s=C.initialState(day);C.saveCardio(s,values({floors:35,notes:'稳定完成'}),null,day);
-  const backup=C.createBackup(s);assert.equal(backup.schemaVersion,'1.1');assert.deepEqual(C.parseBackup(JSON.stringify(backup)),s);
+  const backup=C.createBackup(s);assert.equal(backup.schemaVersion,C.BACKUP_SCHEMA_VERSION);assert.deepEqual(C.parseBackup(JSON.stringify(backup)),s);
   const bad=C.clone(backup);bad.data.cardio[0].durationMinutes=-1;assert.throws(()=>C.parseBackup(JSON.stringify(bad)),/时长/);
   bad.data=C.clone(s);bad.schemaVersion='1.0';assert.throws(()=>C.parseBackup(JSON.stringify(bad)),/版本不匹配/);
   bad.schemaVersion='99';assert.throws(()=>C.parseBackup(JSON.stringify(bad)),/完整备份/);
@@ -55,7 +55,7 @@ test('date-range JSON, separate cardio CSV and ChatGPT report retain actuals wit
   const s=C.initialState(day),baseline=C.exportRecords(s,day,day);
   const entry=C.saveCardio(s,values({floors:24,effort:'moderate',notes:'=SUM(1,2)\n如实记录'}),null,day);
   C.saveCardio(s,values({date:'2026-11-15',durationMinutes:15}),null,'2026-11-15');
-  const r=C.exportRecords(s,day,day);assert.equal(r.schemaVersion,'1.1');assert.equal(r.cardio.length,1);assert.equal(r.cardio[0].id,entry.id);
+  const r=C.exportRecords(s,day,day);assert.equal(r.schemaVersion,C.RECORDS_SCHEMA_VERSION);assert.equal(r.cardio.length,1);assert.equal(r.cardio[0].id,entry.id);
   assert.deepEqual(r.completion,baseline.completion);assert.deepEqual(r.dailyNutrition,baseline.dailyNutrition);assert.equal(r.sessions.length,0);
   const exported=C.cardioCSV(r);assert.match(exported,new RegExp(entry.id));assert.match(exported,/'=SUM/);assert.match(exported,/适中/);assert.match(C.summaryReport(r),/共 1 次，20 分钟/);
   assert.match(C.summaryReport(r),/不推进力量训练周期/);r.cardio[0].durationMinutes=99;assert.equal(s.cardio[0].durationMinutes,20);

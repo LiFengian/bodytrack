@@ -12,12 +12,13 @@ await write(out,'plan-v2.json',v2);
 await write(out,'invalid-plan.json',{...plan,schemaVersion:'99.0',effectiveDate:'2026-02-30'});
 const data=C.initialState('2026-11-14');
 const session=C.startSession(data,'2026-11-14');session.exercises[0].sets[0].reps=10;session.exercises[0].sets[0].done=true;session.journal={neck:2,fatigue:4,pain:0,diary:'纯虚构测试记录，不代表用户真实训练。'};C.completeSession(data,session.id);
-data.foods.push({id:C.uid(),name:'虚构测试食品（不可用作营养参考）',state:'packaged',source:'软件测试夹具，非真实食品数据',per100:{kcal:120,protein:8,carbs:15,fat:3,fiber:null,sodium:50}});
+data.foods.push({id:C.uid(),name:'虚构测试食品（不可用作营养参考）',state:'packaged',source:'软件测试夹具，非真实食品数据',per100:{kcal:120,protein:8,carbs:15,fat:3,fiber:null,sodium:50,totalSugars:10,addedSugars:5}});
 data.meals.push(C.mealFromFood(data.foods[0],75,'2026-11-14','早餐'));
 data.body.push({id:C.uid(),date:'2026-11-14',weight:70,notes:'纯虚构测试体重',createdAt:new Date().toISOString()});
 C.saveCardio(data,{date:'2026-11-14',mode:'stair-machine',durationMinutes:20,floors:35,level:5,effort:'moderate',notes:'纯虚构有氧测试记录，不是训练建议。'},null,'2026-11-14');
-await write(out,'records-v1.1.json',C.exportRecords(data,'2026-11-14','2026-11-30'));
-await write(out,'backup-v2.json',C.createBackup(data));
+data.settings.targets.addedSugars=25;
+await write(out,'records-v1.2.json',C.exportRecords(data,'2026-11-14','2026-11-30'));
+await write(out,'backup-v3.json',C.createBackup(data));
 }
 
 const text=(maxLength=2000)=>({type:'string',minLength:1,maxLength});
@@ -56,10 +57,19 @@ const cardio={...obj({id,type:{const:'stair-climbing'},date,mode:{enum:['stairs'
 const totals=obj(Object.fromEntries(Object.keys(C.NUTRIENTS).map(k=>[k,obj({value:nullable({type:'number',minimum:0}),unknownCount:{type:'integer',minimum:0},complete:{type:'boolean'}})])));
 const adjustments={type:'object',additionalProperties:date};
 const records=obj({schemaVersion:{const:C.RECORDS_SCHEMA_VERSION},type:{const:'bodytrack.records'},exportedAt:datetime,range:obj({from:date,to:date}),plans:arr(version,1),activations:arr(activation,1),cycleAdjustments:adjustments,cycle:obj({asOf:date,next:nullable(obj({activation,plan:obj(planProperties),index:{type:'integer',minimum:0},cycleNumber:{type:'integer',minimum:1},dayNumber:{type:'integer',minimum:1},trainingDay:nullable(obj({id:text(100),name:text(100),focus:text(1000),exercises:arr(exercise,1,40)})),plannedDate:date}))}),sessions:arr(obj({...sessionProperties,completion})),cardio:arr(cardio),meals:arr(meal),body:arr(body),nutritionTargets:{type:'object',additionalProperties:nullable(nonnegative)},dailyNutrition:arr(obj({date,nutrients:totals})),completion:obj({completed:{type:'integer',minimum:0},plannedResolved:{type:'integer',minimum:0},ratio:nullable({type:'number',minimum:0,maximum:1}),definition:text()}),mediaIncluded:{const:false}});
-await write(schemas,'records.schema.json',{...header('BodyTrack records export v1.1','用于分析，不可用于恢复。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期，并非当时的历史数据库快照。'),...records});
+await write(schemas,'records.schema.json',{...header('BodyTrack records export v1.2','用于分析，不可用于恢复。糖含量分总糖与添加糖。date 为本地日历日期，时间戳为 ISO。未知营养用 null；不完整汇总仅为已知部分。周期快照截至所选结束日期。'),...records});
 const state=obj({dataVersion:{const:C.DATA_VERSION},revision:{type:'integer',minimum:0},createdAt:datetime,settings:obj({theme:{enum:['system','light','dark']},introSeen:{type:'boolean'},reducedVolume:{type:'boolean'},lastBackupAt:nullable(datetime),targets:{type:'object',additionalProperties:nullable(nonnegative)}}),plans:arr(version,1),activations:arr(activation,1),sessions:arr(sessionDef),cardio:arr(cardio),foods:arr(food),meals:arr(meal),body:arr(body),adjustments});
 state.additionalProperties=false;
-state.properties.dataVersion={enum:[1,C.DATA_VERSION]};state.required=state.required.filter(k=>k!=='cardio');
-state.allOf=[{if:{properties:{dataVersion:{const:2}}},then:{required:['cardio']},else:{not:{required:['cardio']}}}];
-await write(schemas,'backup.schema.json',{...header('BodyTrack full backup v1.1 / legacy v1.0','新版备份包含独立有氧记录；旧版通过迁移补充空有氧列表。运行时还校验唯一 ID 和引用。设备内快照不包含在外部备份中。'),...obj({schemaVersion:{enum:['1.0',C.BACKUP_SCHEMA_VERSION]},type:{const:'bodytrack.backup'},exportedAt:datetime,data:state}),allOf:[{if:{properties:{schemaVersion:{const:'1.0'}}},then:{properties:{data:{properties:{dataVersion:{const:1}}}}},else:{properties:{data:{properties:{dataVersion:{const:2}}}}}}]});
+const backupVersions={'1.0':1,'1.1':2,[C.BACKUP_SCHEMA_VERSION]:C.DATA_VERSION};
+state.properties.dataVersion={enum:Object.values(backupVersions)};
+state.required=state.required.filter(k=>k!=='cardio');
+state.allOf=[{if:{properties:{dataVersion:{const:1}}},then:{not:{required:['cardio']}},else:{required:['cardio']}}];
+await write(schemas,'backup.schema.json',{
+  ...header('BodyTrack full backup v1.2 / legacy v1.0–1.1','包含独立有氧记录和可选糖数据。运行时还校验唯一 ID、引用和总糖与添加糖关系。设备内快照不包含在外部备份中。'),
+  ...obj({schemaVersion:{enum:Object.keys(backupVersions)},type:{const:'bodytrack.backup'},exportedAt:datetime,data:state}),
+  allOf:Object.entries(backupVersions).map(([schemaVersion,dataVersion])=>({
+    if:{properties:{schemaVersion:{const:schemaVersion}}},
+    then:{properties:{data:{properties:{dataVersion:{const:dataVersion}}}}},
+  })),
+});
 console.log(process.argv.includes('--schemas-only')?'Updated 3 JSON schemas; existing sample files preserved.':'Generated 5 current example fixtures (legacy samples preserved) and 3 separate JSON schemas. All sample records are fictitious.');

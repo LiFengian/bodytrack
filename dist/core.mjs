@@ -1,15 +1,19 @@
 // Pure domain logic. No browser globals, network, or persistence side effects.
-export const DATA_VERSION = 2;
+export const DATA_VERSION = 3;
 export const SCHEMA_VERSION = '1.0';
-export const RECORDS_SCHEMA_VERSION = '1.1';
-export const BACKUP_SCHEMA_VERSION = '1.1';
+export const RECORDS_SCHEMA_VERSION = '1.2';
+export const BACKUP_SCHEMA_VERSION = '1.2';
 export const CARDIO_EFFORT = {easy:'轻松',moderate:'适中',hard:'吃力',veryHard:'很吃力'};
 export const NUTRIENTS = {
   kcal: ['热量', 'kcal'], protein: ['蛋白质', 'g'], carbs: ['碳水', 'g'], fat: ['脂肪', 'g'],
   fiber: ['膳食纤维', 'g'], sodium: ['钠', 'mg'], calcium: ['钙', 'mg'], iron: ['铁', 'mg'],
-  zinc: ['锌', 'mg'], magnesium: ['镁', 'mg'], potassium: ['钾', 'mg'], vitaminC: ['维生素 C', 'mg'], vitaminD: ['维生素 D', 'μg']
+  zinc: ['锌', 'mg'], magnesium: ['镁', 'mg'], potassium: ['钾', 'mg'], vitaminC: ['维生素 C', 'mg'], vitaminD: ['维生素 D', 'μg'],
+  totalSugars: ['总糖', 'g'], addedSugars: ['添加糖', 'g']
 };
 export const REQUIRED_NUTRIENTS = ['kcal', 'protein', 'carbs', 'fat', 'fiber', 'sodium'];
+export const SUGAR_NUTRIENTS = ['totalSugars', 'addedSugars'];
+export const DAILY_NUTRIENTS = [...REQUIRED_NUTRIENTS, ...SUGAR_NUTRIENTS];
+export const NUTRITION_LIMITS = {sodium:2000,addedSugars:25};
 export const MEALS = ['早餐', '午餐', '晚餐', '加餐'];
 export const uid = () => globalThis.crypto.randomUUID();
 export const clone = value => structuredClone(value);
@@ -287,6 +291,8 @@ export function validateFood(f) {
   else {
     for(const k of REQUIRED_NUTRIENTS) if(!(k in f.per100)) errors.push(`缺少 ${k}，未知请用 null`);
     for(const [k,v] of Object.entries(f.per100)) if(!(k in NUTRIENTS) || !(v===null || finite(v))) errors.push(`${k} 数值无效；未知请留空`);
+    const {totalSugars,addedSugars}=f.per100;
+    if(finite(totalSugars)&&finite(addedSugars)&&addedSugars-totalSugars>1e-9) errors.push('添加糖不能超过总糖');
   }
   return errors;
 }
@@ -295,19 +301,23 @@ export function calculateNutrition(per100,grams) {
   return Object.fromEntries(Object.keys(NUTRIENTS).map(k=>[k,per100[k] == null ? null : per100[k]*grams/100]));
 }
 export function aggregateNutrition(meals) {
+  const amounts=meals.map(m=>calculateNutrition(m.per100,m.grams));
   return Object.fromEntries(Object.keys(NUTRIENTS).map(k=> {
     let known=0,unknown=0;
-    for(const m of meals) { const v=calculateNutrition(m.per100,m.grams)[k];if(v===null) unknown++;else known+=v; }
+    for(const amount of amounts) {const v=amount[k];if(v===null) unknown++;else known+=v;}
     return [k,{value:unknown===meals.length && meals.length?null:known,unknownCount:unknown,complete:unknown===0}];
   }));
 }
 // WHO adult reference: less than 2,000 mg sodium/day. The early warning at
 // 80% is a display cue; a user-specified limit takes priority.
-export const SODIUM_REFERENCE_MG=2000;
+export const SODIUM_REFERENCE_MG=NUTRITION_LIMITS.sodium;
 export function sodiumProgress(meals,customLimit=null) {
-  assert(customLimit===null||finite(customLimit),'钠红线数值无效');
-  const limit=customLimit??SODIUM_REFERENCE_MG,n=aggregateNutrition(meals).sodium;
-  const value=n.value,hasRecords=meals.length>0,partial=!n.complete;
+  return nutritionLimitProgress('sodium',aggregateNutrition(meals).sodium,meals.length,customLimit);
+}
+export function nutritionLimitProgress(key,n,mealCount,customLimit=null) {
+  assert(customLimit===null||finite(customLimit),`${NUTRIENTS[key][0]}红线数值无效`);
+  const limit=customLimit??NUTRITION_LIMITS[key];
+  const value=n.value,hasRecords=mealCount>0,partial=!n.complete;
   const ratio=!hasRecords||value===null?null:limit===0?(value>0?Infinity:1):value/limit;
   const status=!hasRecords?'empty':value===null?'unknown':value>limit?'exceeded':value===limit?'limit':ratio>=.8?'near':'normal';
   return {value,limit,partial,unknownCount:n.unknownCount,status,reference:customLimit===null,
@@ -318,7 +328,7 @@ export function sodiumProgress(meals,customLimit=null) {
 export function mealFromFood(food,grams,date,meal) {
   assert(!validateFood(food).length,'食物数据无效'); assert(finite(grams,.1,100000),'食用重量需大于 0');
   assert(isDate(date)&&MEALS.includes(meal),'用餐日期或餐次无效');
-  return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:clone(food.per100),grams,createdAt:nowISO(),...(food.sourceUrl?{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:1}:{})};
+  return {id:uid(),date,meal,foodId:food.id??null,name:food.name,state:food.state,source:food.source,per100:clone(food.per100),grams,createdAt:nowISO(),...(food.sourceUrl?{sourceUrl:food.sourceUrl,sourceDescription:food.sourceDescription??'',catalogVersion:food.catalogVersion??1}:{})};
 }
 export function saveCustomFood(state,food) {
   const errors=validateFood(food);assert(!errors.length,errors.join('\n'));
@@ -348,6 +358,25 @@ export function composeRecipe(name,source,ingredients,finalGrams) {
   assert(finite(finalGrams,.1,100000),'请填写成品总重量');
   const total=aggregateNutrition(ingredients);
   return {id:uid(),name,source,state:'cooked',per100:Object.fromEntries(Object.entries(total).map(([k,v])=>[k,v.complete?v.value/finalGrams*100:null])),ingredients:clone(ingredients),finalGrams};
+}
+export function fillCatalogSugars(state,foods,{checkOnly=false}={}) {
+  const byId=new Map(foods.map(f=>[f.id,f]));
+  let changed=0;
+  for(const meal of state.meals){
+    const food=byId.get(meal.foodId);
+    if(!food?.sourceUrl || meal.sourceUrl!==food.sourceUrl || meal.source!==food.source ||
+       meal.state!==food.state || meal.sourceDescription!==food.sourceDescription) continue;
+    const missing=SUGAR_NUTRIENTS.filter(k=>!Object.hasOwn(meal.per100,k)&&food.per100[k]!=null);
+    if(!missing.length) continue;
+    const per100={...meal.per100,...Object.fromEntries(missing.map(k=>[k,food.per100[k]]))};
+    if(validateFood({...meal,per100}).length) continue;
+    changed++;
+    if(!checkOnly){
+      meal.per100=per100;
+      meal.catalogVersion=food.catalogVersion??meal.catalogVersion;
+    }
+  }
+  return changed;
 }
 export function validateState(s) {
   assert(object(s)&&s.dataVersion===DATA_VERSION,'不支持的数据版本');
@@ -417,21 +446,21 @@ export function validateState(s) {
   return s;
 }
 export function migrateState(s) {
-  assert(s?.dataVersion===1||s?.dataVersion===DATA_VERSION,'数据版本高于或不同于当前版本，请升级应用；未修改本地数据');
+  assert([1,2,DATA_VERSION].includes(s?.dataVersion),'数据版本高于或不同于当前版本，请升级应用；未修改本地数据');
   if(s.dataVersion===1){
     assert(!Object.hasOwn(s,'cardio'),'版本 1 数据不应包含有氧字段，请检查备份版本');
-    // Never mutate the supplied backup or the pre-upgrade snapshot.
-    return validateState({...clone(s),dataVersion:2,cardio:[]});
+    return validateState({...clone(s),dataVersion:DATA_VERSION,cardio:[]});
   }
+  if(s.dataVersion===2) return validateState({...clone(s),dataVersion:DATA_VERSION});
   return validateState(s);
 }
 export function createBackup(state) {validateState(state);return {schemaVersion:BACKUP_SCHEMA_VERSION,type:'bodytrack.backup',exportedAt:nowISO(),data:clone(state)};}
 export function parseBackup(text) {
   assert(typeof text==='string'&&text.length<=50_000_000,'备份超过 50 MB');
   let data;try{data=JSON.parse(text);}catch{throw new Error('备份 JSON 格式无效');}
-  assert(data?.type==='bodytrack.backup'&&['1.0',BACKUP_SCHEMA_VERSION].includes(data.schemaVersion),'请选择 BodyTrack 完整备份，分析导出不能用于恢复');
-  assert(data.schemaVersion!=='1.0'||data.data?.dataVersion===1,'旧备份 Schema 与数据版本不匹配');
-  assert(data.schemaVersion!=='1.1'||data.data?.dataVersion===2,'备份 Schema 与数据版本不匹配');
+  const versions={'1.0':1,'1.1':2,[BACKUP_SCHEMA_VERSION]:DATA_VERSION};
+  assert(data?.type==='bodytrack.backup'&&Object.hasOwn(versions,data.schemaVersion),'请选择 BodyTrack 完整备份，分析导出不能用于恢复');
+  assert(versions[data.schemaVersion]===data.data?.dataVersion,'备份 Schema 与数据版本不匹配');
   return migrateState(data.data);
 }
 export function exportRecords(state,from,to) {
@@ -482,7 +511,7 @@ export function summaryReport(r) {
   lines.push('## 有氧 · 爬楼梯',`共 ${cardio.count} 次，${cardio.totalMinutes} 分钟；独立记录，不推进力量训练周期。`,
     ...(r.cardio??[]).map(x=>`${x.date} ${x.mode==='stairs'?'楼梯':'楼梯机'} ${x.durationMinutes} 分钟${x.floors===null?'':` · ${x.floors} 层`}${x.level===null?'':` · 档位 ${x.level}`}${x.effort===null?'':` · ${CARDIO_EFFORT[x.effort]}`} · 备注：${x.notes}`),'');
   lines.push('## 每日营养（不完整数据仅为已知部分，未知不作 0）');
-  for(const d of r.dailyNutrition) lines.push(`${d.date}：${REQUIRED_NUTRIENTS.map(k=>`${NUTRIENTS[k][0]} ${d.nutrients[k].value??'未知'}${NUTRIENTS[k][1]}${d.nutrients[k].complete?'':'（有缺失）'}`).join('，')}`);
+  for(const d of r.dailyNutrition) lines.push(`${d.date}：${DAILY_NUTRIENTS.map(k=>`${NUTRIENTS[k][0]} ${d.nutrients[k]?.value??'未知'}${NUTRIENTS[k][1]}${d.nutrients[k]?.complete?'':'（有缺失）'}`).join('，')}`);
   lines.push('','## 食物来源与份量依据','营养为数据库或标签参考值，非照片实测。照片辅助条目经用户确认；参考份量和用户估重都属于估算。',...r.meals.map(m=>`${m.date} ${m.meal} ${m.name} ${m.grams}g · ${m.portionBasis??'重量依据未注明'} · ${m.entryMethod??'手动'} · ${m.source}`));
   lines.push('','## 体重与用户描述',...r.body.map(x=>`${x.date} ${x.weight}kg ${x.notes}`),'','分析建议：结合实际完成率、疲劳、疼痛、颈部紧张及动作感受调整一般训练。新的训练建议请遵守 plan.schema.json；不要自动指定单侧脊柱矫正。');
   return lines.join('\n');

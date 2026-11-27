@@ -1,14 +1,14 @@
-# BodyTrack 数据协议：计划 1.0 / 记录与备份 1.1
+# BodyTrack 数据协议：计划 1.0 / 记录与备份 1.2
 
 三个独立文件类型：
 
 | 用途 | 类型标记 | Schema | 示例 |
 | --- | --- | --- | --- |
 | 导入训练建议 | `schemaVersion: "1.0"`，无 type | `dist/schemas/plan.schema.json` | `dist/examples/plan-v1.json`、`plan-v2.json` |
-| 导出分析记录 | `type: "bodytrack.records"`，Schema 1.1 | `dist/schemas/records.schema.json` | `dist/examples/records-v1.1.json` |
-| 完整备份恢复 | `type: "bodytrack.backup"`，Schema 1.1 | `dist/schemas/backup.schema.json` | `dist/examples/backup-v2.json` |
+| 导出分析记录 | `type: "bodytrack.records"`，Schema 1.2 | `dist/schemas/records.schema.json` | `dist/examples/records-v1.2.json` |
+| 完整备份恢复 | `type: "bodytrack.backup"`，Schema 1.2 | `dist/schemas/backup.schema.json` | `dist/examples/backup-v3.json` |
 
-旧版 `records-v1.json`、`backup-v1.json` 保留为兼容测试样本。备份 Schema 同时描述旧版 1.0 / 数据版本 1 和新版 1.1 / 数据版本 2；版本不匹配会拒绝恢复。
+旧版记录和备份样本保留在 `dist/examples/`。备份 Schema 1.0、1.1、1.2 分别对应数据版本 1、2、3，恢复时校验两者的对应关系。
 
 记录和备份示例是纯虚构测试数据，不是用户记录，食品数值不应作为营养参考。示例不会自动导入应用。`invalid-plan.json` 是必须拒绝的测试文件。
 
@@ -67,6 +67,7 @@ JSON Schema 检查形状、范围和必填；`parsePlan`/`validatePlan` 另外�
 - 每条 meal 的 `per100` 是保存的营养来源快照。自 1.2.3 起，修改自定义食物会自动按稳定 `foodId` 更正所有关联餐食的名称、状态、来源和营养快照，覆盖历史日期；不修改实际克重、日期、餐次、记录 ID、创建时间和记录方式。启动时也检查并修复旧版本遗留的快照不同步，已同步则不重复写库。更正前快照与更新在同一 IndexedDB 事务中写入。`dailyNutrition`、CSV、报告与图表根据更正后的实际食用数据重算；缺失营养仍为 null，不按同名食物猜测关联。字段结构与 Schema 版本保持不变。
 - 1.1 新条目可带 `sourceUrl`、`sourceDescription`、`catalogVersion`；`entryMethod` 为 `catalog`、`custom` 或 `photo-confirmed`；`portionBasis` 为 `weighed`、`manual-estimate` 或 `household-estimate`。选择数据库参考份量时附 `portionReference`（原始份量 ID、标签及克重）。这些均为向后兼容的可选字段，旧记录不回填、不改写；schemaVersion 保持 1.0。
 - 汇总 `value` 在部分未知时仅为已知部分，`unknownCount` 为缺失条数，`complete` 表示该项所有饮食条目是否已知。全部未知为 null。
+- `per100.totalSugars` 和 `per100.addedSugars` 是每 100 g 的总糖和添加糖（g）。未提供时按未知处理。两者都已知时，添加糖须小于或等于总糖。汇总、饮食 CSV 和报告分别列出两项。`settings.targets.addedSugars` 保存用户设置的每日添加糖红线（g），分析导出中对应 `nutritionTargets.addedSugars`。省略或留空时使用默认 25 g。
 - `cycle.asOf` 为所选结束日；next 基于当前数据库中截至该日已完成/跳过记录计算，但日期调整是当前保存的调整，**不是完整的历史数据库时间旅行快照**。
 - `mediaIncluded: false`，首版不管理媒体。
 
@@ -100,9 +101,9 @@ CSV 使用 UTF-8 BOM、CRLF、双引号转义，防止以 `= + - @` 开头的文
 
 恢复仅接受 `bodytrack.backup`，最大 50 MB。先 `parseBackup` → `migrateState` → `validateState`，预览记录数量，确认后原子替换。ID、计划/启用引用、侧别组序号、实际次数、RPE/RIR、营养数据、生熟状态、来源和设置都必须有效。
 
-当前数据版本是 2。从版本 1 迁移时只补充空 `cardio` 列表并更新 `dataVersion`，不改写已有记录或 ID。首次打开旧数据库时，原始数据作为「升级前」快照与新状态在同一事务中写入，修订号加一，仍最多保留 14 份快照。失败会中止事务，绝不初始化空库。纯 `migrateState` 和旧备份预览不修改输入对象；实际恢复仍需用户确认。旧版本 1 快照恢复时同样迁移，升级后的新记录在恢复前另留快照。
+当前数据版本是 3。版本 1 迁移会补充空 `cardio` 列表，版本 2 迁移会保留原有记录。首次打开旧数据库时，原始数据作为「升级前」快照与新状态在同一事务中写入，修订号加一，最多保留 14 份快照。目录加载后，按稳定食物 ID、食用状态和来源补录旧 USDA 餐食缺少的糖字段。旧自定义食物的糖值可在食物库补填，关联餐食会自动重算。
 
-完整备份不包含设备内快照，以免递归膨胀。新版备份 Schema 1.1 / 数据版本 2 无法由旧版应用恢复，需更新应用。
+完整备份可在支持相应 Schema 的应用版本中恢复。设备内快照独立存放。
 
 ## 发给 ChatGPT 的建议提示词
 
